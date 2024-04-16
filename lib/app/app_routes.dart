@@ -1,0 +1,30 @@
+abstract class Paths {
+  Paths._();
+  static const HOME = '/home';
+  static const Password = '/password';
+  static const ConfirmPassword = '/confirmpassword';
+  static const Intro = '/intro';
+  static const SignIn = '/SignIn';
+  static const SignUpUserPage = '/SignUpUserPage';
+  static const FirstSplash = '/FirstSplash';
+  static const SignUpInfluencer = '/SignUpInfluencer';
+  static const SignUpCompany = '/SignUpCompany';
+  static const WebsiteCompany = '/WebsiteCompany';
+  static const Setting = '/Setting ';
+  static const Menu = '/Menu ';
+  static const Profile = '/Profile ';
+  static const EditProfile = '/EditProfile ';
+  static const AppPage = '/AppPage';
+  static const Content = '/Content';
+  static const Report = '/Report';
+  static const Search = '/Search';
+  static const CHAT_PAGE = '/chat-page';
+  static const CONVERSATION_PAGE = '/conversation-page';
+  static const HOMEPOST = '/homePost';
+  static const BRAND_PAGE = '/brand-page';
+  static const HAYA = '/haya';
+  static const SETTING_PAGE = '/setting-page';
+  static const PRODUCT_PAGE = '/product-page';
+  static const HELP_PAGEE = '/help-pagee';
+  static const PERMISSIONS_PAGE = '/permissions-page';
+}
