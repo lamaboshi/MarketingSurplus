@@ -4,7 +4,7 @@ abstract class Paths {
   static const Password = '/password';
   static const ConfirmPassword = '/confirmpassword';
   static const Intro = '/intro';
-  static const SignIn = '/SignIn';
+  static const LogIn = '/LogIn';
   static const SignUpUserPage = '/SignUpUserPage';
   static const FirstSplash = '/FirstSplash';
   static const SignUpInfluencer = '/SignUpInfluencer';

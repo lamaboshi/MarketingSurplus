@@ -12,13 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
-      title: "Markting suplus",
-      key: key,
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.cupertino,
-      getPages: AppPages.routes,
-      enableLog: true,
-      theme: ThemeData(fontFamily: 'Uchen'),
-    );
+        title: "Markting suplus",
+        key: key,
+        debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.cupertino,
+        getPages: AppPages.routes,
+        enableLog: true);
   }
 }
