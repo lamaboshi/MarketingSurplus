@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:marketing_surplus/app/app_pages.dart';
+import 'package:marketing_surplus/app/routes/app_pages.dart';
 
 void main() {
   runApp(const MyApp());
