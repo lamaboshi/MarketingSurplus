@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/passowd_controller.dart';
-import 'confirm_passwod.dart';
 
 class PasswordPageView extends GetView<PasswordController> {
   const PasswordPageView({Key? key}) : super(key: key);
@@ -71,7 +70,9 @@ class PasswordPageView extends GetView<PasswordController> {
                       const Text(
                           'Please enter your email so that we can obtain your information to complete the password change procedure'),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          controller.email.value = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Email',
                       ),
@@ -83,7 +84,7 @@ class PasswordPageView extends GetView<PasswordController> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      Get.to(const Confirmpassword());
+                      controller.getEmail();
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple.shade100,

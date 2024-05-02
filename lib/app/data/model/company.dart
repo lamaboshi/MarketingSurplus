@@ -10,7 +10,8 @@ class Company {
   String? telePhone;
   Uint8List? image;
   String? description;
-
+  String? licenseNumber;
+  int? companyTypeId;
   Company({
     this.id,
     this.name,
@@ -20,6 +21,7 @@ class Company {
     this.password,
     this.telePhone,
     this.image,
+    this.companyTypeId,
     this.description,
   });
 
@@ -32,6 +34,8 @@ class Company {
     password = json['password'];
     telePhone = json['telePhone'];
     description = json['description'];
+    companyTypeId = json['companyTypeId'];
+    licenseNumber = json['licenseNumber'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
@@ -47,6 +51,9 @@ class Company {
     json['password'] = password;
     json['telePhone'] = telePhone;
     json['description'] = description;
+    json['companyTypeId'] = companyTypeId;
+    json['licenseNumber'] = licenseNumber;
+
     json['image'] = image == null ? null : Uint8List.fromList(image!);
     return json;
   }

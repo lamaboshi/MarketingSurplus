@@ -67,12 +67,16 @@ class LogInView extends GetView<LogInController> {
                   child: Column(
                     children: [
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          controller.email.value = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Email',
                       ),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          controller.password.value = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Password',
                       ),
@@ -80,10 +84,12 @@ class LogInView extends GetView<LogInController> {
                   ),
                 ),
                 const SizedBox(
-                  height: 80,
+                  height: 40,
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await controller.logIn();
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple.shade100,
                         shape: const StadiumBorder()),

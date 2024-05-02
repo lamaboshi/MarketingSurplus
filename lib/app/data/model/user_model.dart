@@ -9,8 +9,9 @@ class UserModel {
   int? age;
   String? password;
   String? userName;
+  String? address;
   Uint8List? image;
-
+  Uint8List? qRCode;
   UserModel({
     this.id,
     this.name,
@@ -28,13 +29,17 @@ class UserModel {
     name = json['name'];
     phone = json['phone'];
     email = json['email'];
-    paypal = json['paypal'];
+    paypal = json['payPal'];
+    address = json['address'];
     age = json['age'];
     password = json['password'];
     userName = json['userName'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
+    qRCode = json['qrCode'] == null
+        ? null
+        : Uint8List.fromList(List<int>.from(json['qrCode']!));
   }
 
   Map<String, dynamic> toJson() {
@@ -43,11 +48,14 @@ class UserModel {
     json['name'] = name;
     json['phone'] = phone;
     json['email'] = email;
-    json['paypal'] = paypal;
+    json['payPal'] = paypal;
+    json['address'] = address;
     json['age'] = age;
     json['password'] = password;
     json['userName'] = userName;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
+    json['qrCode'] = image == null ? null : Uint8List.fromList(qRCode!);
+
     return json;
   }
 }

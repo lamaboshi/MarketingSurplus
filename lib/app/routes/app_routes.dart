@@ -13,6 +13,7 @@ abstract class Paths {
   static const Setting = '/Setting ';
   static const Menu = '/Menu ';
   static const Profile = '/Profile ';
+  static const SettingProfile = '/settingProfile';
   static const EditProfile = '/EditProfile ';
   static const AppPage = '/AppPage';
   static const Content = '/Content';
@@ -27,4 +28,6 @@ abstract class Paths {
   static const PRODUCT_PAGE = '/product-page';
   static const HELP_PAGEE = '/help-pagee';
   static const PERMISSIONS_PAGE = '/permissions-page';
+  static const FAVORITES = '/favorites';
+  static const ADMIN = '/admin';
 }

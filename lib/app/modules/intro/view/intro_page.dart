@@ -60,7 +60,7 @@ PageViewModel interProductPage(context) {
             Get.rootDelegate.toNamed(Paths.LogIn);
           },
           child: const Text(
-            'Log In',
+            'Skip',
             style: TextStyle(fontSize: 18, color: Colors.purple),
           ),
         ),
@@ -110,7 +110,7 @@ PageViewModel interDeliveryPage(context) {
             Get.rootDelegate.toNamed(Paths.LogIn);
           },
           child: const Text(
-            'Log In',
+            'Skip',
             style: TextStyle(fontSize: 18, color: Colors.purple),
           ),
         ),
@@ -161,7 +161,7 @@ PageViewModel interPaymentPage(context) {
             Get.rootDelegate.toNamed(Paths.LogIn);
           },
           child: const Text(
-            'Log In',
+            'Skip',
             style: TextStyle(fontSize: 18, color: Colors.purple),
           ),
         ),

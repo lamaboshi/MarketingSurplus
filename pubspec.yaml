@@ -39,6 +39,9 @@ dependencies:
   introduction_screen: ^3.1.14
   shared_preferences: ^2.2.3
   dio: ^5.4.3+1
+  font_awesome_flutter: ^10.7.0
+  image_picker: ^1.1.1
+  overlayment: ^0.2.1
 
 dev_dependencies:
   flutter_test:

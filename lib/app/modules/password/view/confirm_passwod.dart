@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/passowd_controller.dart';
@@ -67,12 +68,16 @@ class Confirmpassword extends GetView<PasswordController> {
                   child: Column(
                     children: [
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          controller.resrtpassword.value = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Password',
                       ),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          controller.password.value = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Confirm Password',
                       ),
@@ -83,7 +88,23 @@ class Confirmpassword extends GetView<PasswordController> {
                   height: 80,
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (controller.password.value.length ==
+                          controller.resrtpassword.value.length) {
+                        await controller.resetPassword();
+                      } else {
+                        OverPanel(
+                            alignment: Alignment.bottomCenter,
+                            width: 40,
+                            height: 40,
+                            child: Container(
+                              child: Text(
+                                'Comfirmfromtheentervalue'.tr,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            )).show();
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple.shade100,
                         shape: const StadiumBorder()),

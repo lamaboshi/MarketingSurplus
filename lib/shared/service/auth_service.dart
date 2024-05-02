@@ -10,7 +10,7 @@ import '../../app/data/model/company_type_model.dart';
 import '../../app/data/model/user_model.dart';
 import '../../app/routes/app_routes.dart';
 
-enum Auth { user, comapny, infulonser, none }
+enum Auth { user, comapny, none }
 
 class AuthService {
   final _dio = Get.find<Dio>();
@@ -28,8 +28,6 @@ class AuthService {
         return Auth.user;
       case 'comapny':
         return Auth.comapny;
-      case 'infulonser':
-        return Auth.infulonser;
     }
     return Auth.none;
   }
@@ -49,7 +47,7 @@ class AuthService {
 
   Future<CompanyTypeModel?> logInType(String type, String password) async {
     var result = await _dio.get(
-        'https://localhost:7192/api/CompanyType/Existing',
+        'https://localhost:7092/api/CompanyType/Existing',
         queryParameters: {"Type": type, "password": password});
     print(result.data);
     if (result.statusCode == 200) {
@@ -61,7 +59,7 @@ class AuthService {
   }
 
   Future<Object?> logIn(String email, String password) async {
-    var result = await _dio.get('https://localhost:7192/api/Auth/GetAuth',
+    var result = await _dio.get('https://localhost:7092/api/Auth/GetAuth',
         queryParameters: {"email": email, "password": password});
     print(result.data);
     if (result.statusCode == 200) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/company_type_model.dart';
 import 'package:marketing_surplus/app/routes/app_routes.dart';
 
 import '../../../../shared/widgets/textfield_widget.dart';
@@ -62,79 +63,127 @@ class SignUpView extends GetView<SignUpController> {
                 const SizedBox(
                   height: 30,
                 ),
+                SizedBox(
+                  child: CheckboxListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    title: const Text("is Company"), //    <-- label
+                    value: controller.isCompany.value,
+                    onChanged: (newValue) {
+                      controller.isCompany.value = newValue!;
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                    activeColor: Colors.purpleAccent,
+                    checkboxShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        value: controller.isCompany.value
+                            ? controller.company.value.email
+                            : controller.user.value.email,
+                        onChanged: (value) {
+                          controller.isCompany.value
+                              ? controller.company.value.email = value
+                              : controller.user.value.email = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Email',
                       ),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        value: controller.isCompany.value
+                            ? controller.company.value.name
+                            : controller.user.value.name,
+                        onChanged: (value) {
+                          controller.isCompany.value
+                              ? controller.company.value.name = value
+                              : controller.user.value.name = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Name',
                       ),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        value: controller.isCompany.value
+                            ? controller.company.value.password
+                            : controller.user.value.password,
+                        onChanged: (value) {
+                          controller.isCompany.value
+                              ? controller.company.value.password = value
+                              : controller.user.value.password = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Password',
                       ),
                       TextFieldWidget(
-                        onChanged: (value) {},
+                        value: controller.isCompany.value
+                            ? controller.company.value.address
+                            : controller.user.value.address,
+                        onChanged: (value) {
+                          controller.isCompany.value
+                              ? controller.company.value.address = value
+                              : controller.user.value.address = value;
+                        },
                         textInputType: TextInputType.emailAddress,
                         label: 'Enter Your Address',
                       ),
                       Obx(
                         () => Column(
                           children: [
-                            SizedBox(
-                              child: CheckboxListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                title: const Text("is Company"), //    <-- label
-                                value: controller.isCompany.value,
-                                onChanged: (newValue) {
-                                  controller.isCompany.value = newValue!;
-                                },
-                                controlAffinity:
-                                    ListTileControlAffinity.leading,
-                                activeColor: Colors.purpleAccent,
-                                checkboxShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                              ),
-                            ),
                             controller.isCompany.value
                                 ? Column(
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: DropdownButton(
-                                          isExpanded: true,
-                                          hint: const Text(
-                                              'Please choose a Type'), // Not necessary for Option 1
-                                          value: 'Food',
-                                          onChanged: (newValue) {},
-                                          items: ['Food', 'Cloths', 'Midcal']
-                                              .map((location) {
-                                            return DropdownMenuItem(
-                                              value: location,
-                                              child: Text(location),
-                                            );
-                                          }).toList(),
+                                        child: Obx(
+                                          () =>
+                                              DropdownButton<CompanyTypeModel>(
+                                            isExpanded: true,
+                                            hint: const Text(
+                                                'Please choose a Type'), // Not necessary for Option 1
+                                            value: controller.companyTypes
+                                                .where((p0) =>
+                                                    p0.id ==
+                                                    controller.company.value
+                                                        .companyTypeId)
+                                                .first,
+                                            onChanged: (newValue) {
+                                              controller.company.value
+                                                  .companyTypeId = newValue!.id;
+                                            },
+                                            items: controller.companyTypes
+                                                .map((e) {
+                                              return DropdownMenuItem(
+                                                value: e,
+                                                child: Text(e.type!),
+                                              );
+                                            }).toList(),
+                                          ),
                                         ),
                                       ),
                                       TextFieldWidget(
-                                        onChanged: (value) {},
+                                        value: controller
+                                            .company.value.licenseNumber,
+                                        onChanged: (value) {
+                                          controller.company.value
+                                              .licenseNumber = value;
+                                        },
                                         textInputType:
                                             TextInputType.emailAddress,
                                         label: 'License Number',
                                       ),
                                       TextFieldWidget(
-                                        onChanged: (value) {},
+                                        value:
+                                            controller.company.value.telePhone,
+                                        onChanged: (value) {
+                                          controller.company.value.telePhone =
+                                              value;
+                                        },
                                         textInputType:
                                             TextInputType.emailAddress,
-                                        label: 'PayPal Code',
+                                        label: 'Tele Phone ',
                                       ),
                                     ],
                                   )
@@ -146,7 +195,11 @@ class SignUpView extends GetView<SignUpController> {
                   ),
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      controller.isCompany.value
+                          ? await controller.signUpCompany()
+                          : await controller.signUpUser();
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple.shade100,
                         shape: const StadiumBorder()),
