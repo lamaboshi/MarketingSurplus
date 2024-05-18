@@ -1,146 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
+import 'package:marketing_surplus/app/data/model/company_type_model.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 
+import '../../../../shared/widgets/auth_bottom_sheet.dart';
 import '../../../routes/app_routes.dart';
 
 // ignore: must_be_immutable
 class MainView extends GetView<HomeController> {
-  var myarr_product = [
-    {
-      "pro_id": "1",
-      "pro_name": "product1",
-      "pro_desc":
-          "desc product1 desc product1 desc product1 desc product1 desc product1",
-      "pro_image": 'assets/images/post_2.jpg',
-    },
-    {
-      "pro_id": "2",
-      "pro_name": "product2",
-      "pro_desc":
-          "desc product2 desc product2 desc product2 desc product2 desc product2",
-      "pro_image": 'assets/images/post_3.jpg',
-    },
-    {
-      "pro_id": "3",
-      "pro_name": "product3",
-      "pro_desc":
-          "desc product3 desc product3 desc product3 desc product3 desc product3",
-      "pro_image": 'assets/images/pos_4.jpg',
-    },
-  ];
-
-  var myarr_category = [
-    {"cat_id": "1", "cat_name": "cat1", 'image': 'assets/images/cat_1.jpg'},
-    {"cat_id": "2", "cat_name": "cat2", 'image': 'assets/images/cat_2.jpg'},
-  ];
-
-  MainView({super.key});
+  const MainView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Padding(
+    return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-                alignment: Alignment.bottomLeft,
-                margin: const EdgeInsets.only(top: 30.0),
-                padding: const EdgeInsets.only(right: 15.0),
-                child: const Text(
-                  'deliverd to',
-                  style: TextStyle(color: Colors.grey),
-                )),
-            Row(
-              children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: const Text(
-                      'Your Location',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0),
-                    )),
-                IconButton(
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.purple.shade200,
-                    ),
-                    onPressed: () {})
-              ],
-            ),
-          ],
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.only(right: 10.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(25.0)),
-                child: const TextField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Search",
-                      suffixIcon: Icon(Icons.search)),
+        child: Column(children: [
+          Expanded(
+            child: Obx(
+              () => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  child: controller.companyTypes.isEmpty
+                      ? const CircularProgressIndicator()
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              children: controller.companyTypes
+                                  .map((element) => SingleCatrgory(
+                                        type: element,
+                                      ))
+                                  .toList()),
+                        ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 110.0,
-          child: ListView.builder(
-              itemCount: myarr_category.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return SingleCatrgory(
-                  caId: myarr_category[index]["cat_id"],
-                  catName: myarr_category[index]["cat_name"],
-                  image: myarr_category[index]['image'],
-                );
-              }),
-        ),
-      ),
-      SizedBox(
-        height: Get.height / 1.8,
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-            itemCount: myarr_product.length,
-            itemBuilder: (BuildContext context, int index) {
-              return SigleProduct(
-                pro_id: myarr_product[index]["pro_id"],
-                pro_name: myarr_product[index]["pro_name"],
-                pro_image: myarr_product[index]["pro_image"],
-                pro_decs: myarr_product[index]["pro_desc"],
-              );
-            }),
-      )
-    ]);
+          ),
+          Expanded(
+            flex: 10,
+            child: Obx(
+              () => SizedBox(
+                child: controller.listPosts.isEmpty
+                    ? const Text('No Company To Show')
+                    : SingleChildScrollView(
+                        child: Column(
+                            children: controller.listPosts
+                                .map((element) => SingleCompany(
+                                      product: element,
+                                    ))
+                                .toList()),
+                      ),
+              ),
+            ),
+          )
+        ]));
   }
 }
 
-class SigleProduct extends StatelessWidget {
-  final String? pro_id;
-  final String? pro_name;
-  final String? pro_decs;
-  final String? pro_image;
+class SingleCompany extends GetView<HomeController> {
+  final CompanyProductDto product;
 
-  const SigleProduct(
-      {super.key, this.pro_id, this.pro_name, this.pro_decs, this.pro_image});
+  const SingleCompany({super.key, required this.product});
   @override
   Widget build(BuildContext context) {
+    final companyPro = product.companyProduct;
     return InkWell(
-      onTap: () {
-        Get.rootDelegate.toNamed(Paths.PRODUCT_PAGE);
+      onTap: () async {
+        if (!controller.auth.isAuth()) {
+          await AuthBottomSheet().modalBottomSheet(context);
+        } else {
+          await controller.saveSelectedCompany(product);
+          await Get.rootDelegate.toNamed(Paths.COMPANY_PAGE);
+        }
       },
       child: Card(
         child: Container(
@@ -149,23 +80,95 @@ class SigleProduct extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 4,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: AssetImage(pro_image!))),
+              Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 5.5,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.purpleAccent.shade100,
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: companyPro!.company!.image == null
+                                ? const AssetImage('assets/images/post_2.jpg')
+                                : const AssetImage(
+                                    'assets/images/post_2.jpg'))),
+                  ),
+                  product.subscription == null && controller.isAll.value
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 5.5,
+                          decoration: BoxDecoration(
+                            color: Colors.purple.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  product.subscription == null && controller.isAll.value
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () async {
+                              if (!controller.auth.isAuth()) {
+                                await AuthBottomSheet()
+                                    .modalBottomSheet(context);
+                              } else {
+                                await controller
+                                    .addSubscription(companyPro.company!.id!);
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Chip(
+                                  backgroundColor: Colors.white,
+                                  label: Text(
+                                    'Subscription',
+                                    style: TextStyle(
+                                      color: Colors.purple.shade200,
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
               ),
-              Text(
-                pro_name!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      companyPro.company!.name == null
+                          ? ''
+                          : companyPro.company!.name!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    RatingBar.builder(
+                      initialRating: product.rateNumber == null
+                          ? 0.0
+                          : product.rateNumber! < 6
+                              ? double.parse(product.rateNumber.toString())
+                              : 5.0,
+                      itemSize: 22,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      },
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                pro_decs!,
-                style: const TextStyle(color: Colors.grey),
-              )
             ],
           ),
         ),
@@ -174,36 +177,49 @@ class SigleProduct extends StatelessWidget {
   }
 }
 
-class SingleCatrgory extends StatelessWidget {
-  final String? caId;
-  final String? catName;
-  final String? image;
-  const SingleCatrgory({super.key, this.caId, this.catName, this.image});
+class SingleCatrgory extends GetView<HomeController> {
+  final CompanyTypeModel type;
+  const SingleCatrgory({
+    super.key,
+    required this.type,
+  });
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () async {
+        if (!controller.auth.isAuth()) {
+          await AuthBottomSheet().modalBottomSheet(context);
+        } else {
+          if (controller.selecetType.value == type) {
+            await controller.getPosts();
+            await controller.getAllCompanyType();
+            controller.selecetType.value = CompanyTypeModel();
+          } else {
+            controller.selecetType.value = type;
+            await controller.filterByType();
+          }
+        }
+      },
       child: Container(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.purple.shade200),
-                child: Image.asset(
-                  image!,
-                  height: 45,
-                  width: 45,
+          padding: const EdgeInsets.all(5),
+          child: Obx(
+            () => Chip(
+                side: BorderSide(
+                    color: controller.selecetType.value.id == type.id
+                        ? Colors.white
+                        : Colors.purple.shade200),
+                backgroundColor: controller.selecetType.value.id == type.id
+                    ? Colors.purple.shade200
+                    : Colors.white,
+                label: Text(
+                  type.type == null ? '' : type.type!,
+                  style: TextStyle(
+                    color: controller.selecetType.value.id == type.id
+                        ? Colors.white
+                        : Colors.purple.shade200,
+                  ),
                 )),
-            Text(
-              catName!,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

@@ -1,18 +1,20 @@
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:marketing_surplus/app/modules/admin/data/charity_repo.dart';
+import 'package:marketing_surplus/app/modules/admin/data/user_repo.dart';
 
 import '../../../../shared/service/auth_service.dart';
 import '../../../../shared/service/util.dart';
+import '../../../data/model/charity.dart';
 import '../../../data/model/company.dart';
 import '../../../data/model/company_type_model.dart';
 import '../../../data/model/user_model.dart';
 import '../../../routes/app_routes.dart';
+import '../../admin/data/company_repo.dart';
 import '../../admin/data/company_type_repo.dart';
-import '../data/companu_repo.dart';
-import '../data/user_repo.dart';
 
 class SignUpController extends GetxController {
-  final isCompany = false.obs;
+  final authType = Auth.user.obs;
   final companyTypes = <CompanyTypeModel>[].obs;
   final typeRepo = CompanyTypeRepository();
 
@@ -65,10 +67,20 @@ class SignUpController extends GetxController {
     phone: '09468468',
     userName: 'User13',
   ).obs;
-
+  final charity = Charity(
+    id: 0,
+    associationLicense: '2435',
+    address: 'Al Hamadanieh exmp',
+    email: 'Al-Ihsan@testexmp.com ',
+    name: 'Al-Ihsan exmp',
+    password: 'Al-Ihsan789 exmp',
+    goals: 'childern exmp',
+    phone: '0215789147 exmp',
+    targetGroup: 'Rich Pepole exmp',
+  ).obs;
   final companyRpo = CompanyRepository();
-  final userRpo = UserRepository();
-
+  final userRpo = UsersDataRepository();
+  final charityRepo = CharityRepository();
   final auth = Get.find<AuthService>();
 
   Future<void> signUpCompany() async {
@@ -89,9 +101,37 @@ class SignUpController extends GetxController {
     }
   }
 
+  Future<void> signUpCharity() async {
+    // user.value.image = Utility.dataFromBase64String(stringPickImage.value);
+    var data = await charityRepo.regierterCharity(charity.value);
+    if (data) {
+      await auth.logIn(charity.value.email!, charity.value.password!);
+      Get.rootDelegate.toNamed(Paths.HOME);
+    }
+  }
+
   Future<void> getAllCompanyType() async {
+    // companyTypes.assignAll([
+    //   CompanyTypeModel(type: 'Medicines', id: 1),
+    //   CompanyTypeModel(type: 'Sports', id: 2),
+    //   CompanyTypeModel(type: 'Clothes', id: 3),
+    //   CompanyTypeModel(type: 'Food', id: 4)
+    // ]);
     var data = await typeRepo.getCompanyType();
     companyTypes.assignAll(data);
+  }
+
+  dynamic getObject() {
+    switch (authType.value) {
+      case Auth.user:
+        return user;
+      case Auth.comapny:
+        return company;
+      case Auth.charity:
+        return charity;
+      case Auth.none:
+      // TODO: Handle this case.
+    }
   }
 
   @override

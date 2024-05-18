@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/admin/binding/admin_binding.dart';
 import 'package:marketing_surplus/app/modules/admin/view/admin_page.dart';
-import 'package:marketing_surplus/app/modules/favorites/binding/favorites_binding.dart';
+import 'package:marketing_surplus/app/modules/bills/binding/bills_binding.dart';
+import 'package:marketing_surplus/app/modules/company/binding/company_binding.dart';
+import 'package:marketing_surplus/app/modules/company/view/company_view.dart';
 import 'package:marketing_surplus/app/modules/product/binding/product_binding.dart';
 import 'package:marketing_surplus/app/modules/product/view/produtc_page.dart';
 import 'package:marketing_surplus/app/modules/profile/view/profile_page.dart';
@@ -12,6 +14,7 @@ import '../modules/first_spalsh/binding/first_splash_binding.dart';
 import '../modules/first_spalsh/view/first_spalsh_page.dart';
 import '../modules/home/binding/home_binding.dart';
 import '../modules/home/view/home_page.dart';
+import '../modules/intro/binding/intro_binding.dart';
 import '../modules/intro/view/intro_page.dart';
 import '../modules/log_in/binding/log_in_binding.dart';
 import '../modules/log_in/view/log_in_page.dart';
@@ -28,17 +31,18 @@ class AppPages {
   AppPages._();
 
   static final routes = [
+    GetPage(name: Paths.HOME, page: () => const HomeView(), bindings: [
+      HomeBinding(),
+      BillsBinding(),
+      ProfileBinding(),
+      MenuBinding()
+    ]),
     GetPage(
       name: Paths.FirstSplash,
       page: () => const FiestSplashView(),
       binding: FirstSplashBinding(),
     ),
-    GetPage(name: Paths.HOME, page: () => const HomeView(), bindings: [
-      HomeBinding(),
-      FavoritesBinding(),
-      ProfileBinding(),
-      MenuBinding()
-    ]),
+
     GetPage(
       name: Paths.Profile,
       page: () => const ProfileView(),
@@ -66,9 +70,9 @@ class AppPages {
         binding: SignUpBinding()),
 
     GetPage(
-      name: Paths.Intro,
-      page: () => const IntroPage(),
-    ),
+        name: Paths.Intro,
+        page: () => const IntroPage(),
+        binding: IntroBinding()),
 
     GetPage(
       name: Paths.LogIn,
@@ -84,6 +88,11 @@ class AppPages {
       name: Paths.PRODUCT_PAGE,
       page: () => const ProductView(),
       binding: ProductBinding(),
+    ),
+    GetPage(
+      name: Paths.COMPANY_PAGE,
+      page: () => const CompanyView(),
+      binding: CompanyBinding(),
     ),
     // GetPage(
     //   name: _Paths.Content,

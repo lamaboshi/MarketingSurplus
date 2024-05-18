@@ -9,7 +9,7 @@ class UserWidget extends GetView<AdminController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       child: Card(
         child: Column(
           children: [
@@ -24,24 +24,65 @@ class UserWidget extends GetView<AdminController> {
                 )
               ],
             ),
-            Obx(
-              () => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: controller.users
-                      .map((element) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Chip(
-                              label: Text(element.name!),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
+            Obx(() => SizedBox(
+                  width: Get.width / 1.3,
+                  child: DataTable(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.purple),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    columns: getColumn(),
+                    rows: getRows(),
+                  ),
+                )),
+            const SizedBox(
+              height: 30,
             )
           ],
         ),
       ),
     );
   }
+
+  List<DataColumn> getColumn() => controller.userColumn
+      .map((e) => DataColumn(
+          label: Text(e,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))))
+      .toList()
+    ..addAll([
+      const DataColumn(
+          label: Text('Edit',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))),
+      const DataColumn(
+          label: Text('Delete',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))),
+    ]);
+  List<DataRow> getRows() => controller.users
+      .map((element) => DataRow(cells: [
+            DataCell(Text(element.id.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.name.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.phone.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.email.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.address.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.edit,
+                color: Colors.blueGrey,
+              ),
+            )),
+            DataCell(IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.delete, color: Colors.red),
+            )),
+          ]))
+      .toList();
 }

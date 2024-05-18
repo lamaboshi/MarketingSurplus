@@ -26,6 +26,7 @@ abstract class Paths {
   static const HAYA = '/haya';
   static const SETTING_PAGE = '/setting-page';
   static const PRODUCT_PAGE = '/product-page';
+  static const COMPANY_PAGE = '/company-page';
   static const HELP_PAGEE = '/help-pagee';
   static const PERMISSIONS_PAGE = '/permissions-page';
   static const FAVORITES = '/favorites';

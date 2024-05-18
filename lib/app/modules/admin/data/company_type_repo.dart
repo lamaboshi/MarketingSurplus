@@ -34,4 +34,12 @@ class CompanyTypeRepository extends ICompanyTypeRepository {
     }
     return list;
   }
+
+  @override
+  Future<bool> updateCompanyType(CompanyTypeModel companyType) async {
+    var result = await _dio.put(
+        'https://localhost:7092/api/CompanyType/Put/${companyType.id}',
+        data: companyType.toJson());
+    return result.statusCode == 200;
+  }
 }

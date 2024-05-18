@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../routes/app_routes.dart';
 import '../controller/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -11,38 +10,6 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      appBar: AppBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        backgroundColor: Colors.purple.shade200,
-        title: const Row(
-          children: [
-            Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              'Name User',
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await Get.rootDelegate.toNamed(Paths.SettingProfile);
-              },
-              icon: const Icon(
-                Icons.settings,
-                color: Colors.white,
-              ))
-        ],
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

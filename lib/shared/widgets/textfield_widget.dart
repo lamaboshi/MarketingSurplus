@@ -12,6 +12,8 @@ class TextFieldWidget extends StatefulWidget {
   final InputBorder? enabledBorder;
   final TextEditingController? controller;
   final bool? isNumberFormat;
+  final IconData? icon;
+  final bool isReadOnly;
   const TextFieldWidget(
       {this.value,
       this.label,
@@ -22,7 +24,9 @@ class TextFieldWidget extends StatefulWidget {
       this.width,
       this.controller,
       this.minLines,
+      this.icon,
       this.isNumberFormat = false,
+      this.isReadOnly = false,
       Key? key})
       : super(key: key);
   @override
@@ -49,6 +53,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         child: TextFormField(
           key: Key(widget.label!),
           focusNode: FocusNode(),
+          readOnly: widget.isReadOnly,
           controller: _controller,
           keyboardType: widget.textInputType,
           textAlignVertical: TextAlignVertical.center,
@@ -58,6 +63,16 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               ? [FilteringTextInputFormatter.digitsOnly]
               : null,
           decoration: InputDecoration(
+            icon: widget.icon == null
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      widget.icon!,
+                      color: Colors.purple.shade100,
+                    ), // icon is 48px widget.
+                  ),
+
             // focusedBorder: const UnderlineInputBorder(
             //     borderSide: BorderSide(color: Colors.white)),
             enabledBorder: const UnderlineInputBorder(
@@ -65,7 +80,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 color: Colors.white,
               ),
             ),
-            label: Text(widget.label!),
+            label: Text(
+              widget.label!,
+              style: const TextStyle(fontSize: 18),
+            ),
           ),
           onChanged: widget.onChanged,
         ),

@@ -15,7 +15,7 @@ class AdminView extends GetView<AdminController> {
               Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,48 +114,61 @@ class AdminView extends GetView<AdminController> {
                   ),
                 ],
               ),
-              Obx(() => Column(
+              Obx(() => Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      controller.getTypeResource(),
-                      Column(
-                        children: controller.listTabs
-                            .map(
-                              (e) => ListTile(
-                                title: ElevatedButton(
-                                    onPressed: () {
-                                      final index =
-                                          controller.listTabs.indexOf(e);
-                                      final res =
-                                          controller.setResourceEnum(index);
-                                      if (res ==
-                                          controller.setResourceEnum(index)) {
-                                        controller.typeRsource.value =
-                                            Resource.non;
-                                      }
-                                      controller.typeRsource.value = res;
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shape: const StadiumBorder()),
-                                    child: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(
-                                          e,
-                                          style: TextStyle(
-                                              color: Colors.purple.shade200,
-                                              fontSize: 19),
+                      Expanded(
+                        child: Column(
+                          children: controller.listTabs
+                              .map(
+                                (e) => ListTile(
+                                  title: ElevatedButton(
+                                      onPressed: () {
+                                        final index =
+                                            controller.listTabs.indexOf(e);
+                                        final res =
+                                            controller.setResourceEnum(index);
+                                        if (res ==
+                                            controller.setResourceEnum(index)) {
+                                          controller.typeRsource.value =
+                                              Resource.non;
+                                        }
+                                        controller.typeRsource.value = res;
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: isSelected(e)
+                                              ? Colors.purple.shade400
+                                              : Colors.white,
+                                          shape: const StadiumBorder()),
+                                      child: SizedBox(
+                                        height: 60,
+                                        child: Center(
+                                          child: Text(
+                                            e,
+                                            style: TextStyle(
+                                                color: isSelected(e)
+                                                    ? Colors.white
+                                                    : Colors.purple.shade200,
+                                                fontSize: 18),
+                                          ),
                                         ),
-                                      ),
-                                    )),
-                              ),
-                            )
-                            .toList(),
-                      )
+                                      )),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      Expanded(flex: 4, child: controller.getTypeResource()),
                     ],
                   )),
             ],
           ),
         ));
+  }
+
+  bool isSelected(String e) {
+    final index = controller.listTabs.indexOf(e);
+    final res = controller.setResourceEnum(index);
+    return controller.typeRsource.value == res;
   }
 }

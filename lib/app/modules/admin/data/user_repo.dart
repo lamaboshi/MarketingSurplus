@@ -5,6 +5,18 @@ import 'package:marketing_surplus/app/modules/admin/data/adapter/user_adapter.da
 
 class UsersDataRepository extends IUsersDataRepository {
   final _dio = Get.find<Dio>();
+  @override
+  Future<bool> regierterUser(UserModel object) async {
+    final map = object.toJson();
+    var data =
+        await _dio.post('https://localhost:7092/api/User/AddUser', data: map);
+    if (data.statusCode == 200) {
+      return true;
+    } else {
+      print(data.statusMessage);
+    }
+    return false;
+  }
 
   @override
   Future<List<UserModel>> getUsers() async {
@@ -15,5 +27,21 @@ class UsersDataRepository extends IUsersDataRepository {
       list.add(UserModel.fromJson(item));
     }
     return list;
+  }
+
+  @override
+  Future<bool> deleteUser(int id) async {
+    var result = await _dio.delete(
+      'https://localhost:7092/api/User/Delete/$id',
+    );
+    return result.statusCode == 200;
+  }
+
+  @override
+  Future<bool> updateUser(UserModel object) async {
+    var result = await _dio.put(
+        'https://localhost:7092/api/User/Put/${object.id}',
+        data: object.toJson());
+    return result.statusCode == 200;
   }
 }

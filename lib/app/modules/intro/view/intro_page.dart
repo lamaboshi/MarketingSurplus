@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:marketing_surplus/app/routes/app_routes.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import '../controller/intro_controller.dart';
 
@@ -43,155 +44,181 @@ class IntroPage extends GetView<IntroController> {
       ),
     );
   }
-}
 
-PageViewModel interProductPage(context) {
-  return PageViewModel(
-    decoration:
-        const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
+  PageViewModel interProductPage(context) {
+    return PageViewModel(
+      decoration:
+          const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
 
-    ///image
-    titleWidget: Align(
-      alignment: Alignment.topRight,
-      child: Padding(
+      ///image
+      titleWidget: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: InkWell(
-          onTap: () {
-            Get.rootDelegate.toNamed(Paths.LogIn);
-          },
-          child: const Text(
-            'Skip',
-            style: TextStyle(fontSize: 18, color: Colors.purple),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ToggleSwitch(
+              minWidth: 70.0,
+              cornerRadius: 20.0,
+              activeBgColors: [
+                [Colors.purple.shade200],
+                [Colors.purple.shade200]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey.shade300,
+              inactiveFgColor: Colors.purple.shade200,
+              initialLabelIndex: 1,
+              totalSwitches: 2,
+              labels: controller.listTextTabToggle,
+              radiusStyle: true,
+              onToggle: (index) {
+                controller.toggle(index!);
+              },
+            ),
+            InkWell(
+              onTap: () {
+                Get.rootDelegate.toNamed(Paths.LogIn);
+              },
+              child: const Text(
+                'Skip',
+                style: TextStyle(fontSize: 18, color: Colors.purple),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      ///text
+      bodyWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 130),
+            child: Image.asset(
+              'assets/images/intro_1.jpg',
+            ),
+          ),
+          const Text(
+            'Marketing surplus products',
+            style: TextStyle(
+                color: Colors.purple,
+                fontSize: 26,
+                fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(
+            height: 35,
+          ),
+          Text(
+            'To protect surplus products from wastage',
+            softWrap: true,
+            style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
+          ),
+        ],
+      ),
+    );
+  }
+
+  PageViewModel interDeliveryPage(context) {
+    return PageViewModel(
+      decoration:
+          const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
+
+      ///image
+      titleWidget: Align(
+        alignment: Alignment.topRight,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: InkWell(
+            onTap: () {
+              Get.rootDelegate.toNamed(Paths.LogIn);
+            },
+            child: const Text(
+              'Skip',
+              style: TextStyle(fontSize: 18, color: Colors.purple),
+            ),
           ),
         ),
       ),
-    ),
 
-    ///text
-    bodyWidget: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 130),
-          child: Image.asset(
-            'assets/images/intro_1.jpg',
+      ///text
+      bodyWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 130),
+            child: Image.asset(
+              'assets/images/intro_2.jpg',
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        const Text(
-          'Marketing surplus products',
-          style: TextStyle(
-              color: Colors.purple, fontSize: 26, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(
-          height: 35,
-        ),
-        Text(
-          'To protect surplus products from wastage',
-          softWrap: true,
-          style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
-        ),
-      ],
-    ),
-  );
-}
+          const Text(
+            'Fast delivery',
+            style: TextStyle(
+                color: Colors.purple,
+                fontSize: 26,
+                fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(
+            height: 35,
+          ),
+          Text(
+            'Fast delivery to your home to save time and effort',
+            softWrap: true,
+            style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
+          ),
+        ],
+      ),
+    );
+  }
 
-PageViewModel interDeliveryPage(context) {
-  return PageViewModel(
-    decoration:
-        const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
+  PageViewModel interPaymentPage(context) {
+    return PageViewModel(
+      decoration:
+          const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
 
-    ///image
-    titleWidget: Align(
-      alignment: Alignment.topRight,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: InkWell(
-          onTap: () {
-            Get.rootDelegate.toNamed(Paths.LogIn);
-          },
-          child: const Text(
-            'Skip',
-            style: TextStyle(fontSize: 18, color: Colors.purple),
+      ///image
+      titleWidget: Align(
+        alignment: Alignment.topRight,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: InkWell(
+            onTap: () {
+              Get.rootDelegate.toNamed(Paths.LogIn);
+            },
+            child: const Text(
+              'Skip',
+              style: TextStyle(fontSize: 18, color: Colors.purple),
+            ),
           ),
         ),
       ),
-    ),
 
-    ///text
-    bodyWidget: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 130),
-          child: Image.asset(
-            'assets/images/intro_2.jpg',
-            fit: BoxFit.fill,
+      ///text
+      bodyWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 130),
+            child: Image.asset(
+              'assets/images/intro_3.png',
+            ),
           ),
-        ),
-        const Text(
-          'Fast delivery',
-          style: TextStyle(
-              color: Colors.purple, fontSize: 26, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(
-          height: 35,
-        ),
-        Text(
-          'Fast delivery to your home to save time and effort',
-          softWrap: true,
-          style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
-        ),
-      ],
-    ),
-  );
-}
-
-PageViewModel interPaymentPage(context) {
-  return PageViewModel(
-    decoration:
-        const PageDecoration(bodyFlex: 10, bodyPadding: EdgeInsets.zero),
-
-    ///image
-    titleWidget: Align(
-      alignment: Alignment.topRight,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: InkWell(
-          onTap: () {
-            Get.rootDelegate.toNamed(Paths.LogIn);
-          },
-          child: const Text(
-            'Skip',
-            style: TextStyle(fontSize: 18, color: Colors.purple),
+          const Text(
+            'Electronic payment',
+            style: TextStyle(
+                color: Colors.purple,
+                fontSize: 26,
+                fontWeight: FontWeight.w800),
           ),
-        ),
+          const SizedBox(
+            height: 35,
+          ),
+          Text(
+            'The payment process is secure and confidential',
+            softWrap: true,
+            style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
+          ),
+        ],
       ),
-    ),
-
-    ///text
-    bodyWidget: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 130),
-          child: Image.asset(
-            'assets/images/intro_3.png',
-          ),
-        ),
-        const Text(
-          'Electronic payment',
-          style: TextStyle(
-              color: Colors.purple, fontSize: 26, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(
-          height: 35,
-        ),
-        Text(
-          'The payment process is secure and confidential',
-          softWrap: true,
-          style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
-        ),
-      ],
-    ),
-  );
+    );
+  }
 }

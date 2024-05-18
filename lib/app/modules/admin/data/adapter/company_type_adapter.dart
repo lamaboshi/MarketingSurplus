@@ -4,4 +4,5 @@ abstract class ICompanyTypeRepository {
   Future<List<CompanyTypeModel>> getCompanyType();
   Future<bool> deleteCompanyType(int id);
   Future<bool> addCompanyType(CompanyTypeModel companyType);
+  Future<bool> updateCompanyType(CompanyTypeModel companyType);
 }
