@@ -9,8 +9,8 @@ class PasswordRepository implements IPasswordRepository {
 
   @override
   Future<RestPassword?> getEmail(String email) async {
-    var result = await _dio.get('https://localhost:7092/api/Auth/GetEmail',
-        queryParameters: {"email": email});
+    var result =
+        await _dio.get('/api/Auth/GetEmail', queryParameters: {"email": email});
     if (result.statusCode == 200) {
       return RestPassword.fromJson(result.data as Map<String, dynamic>);
     }
@@ -19,14 +19,14 @@ class PasswordRepository implements IPasswordRepository {
 
   @override
   Future<bool> resetPassComp(int idCompany, String newPassword) async {
-    var result = await _dio.put('https://localhost:7092/api/Company/Password',
+    var result = await _dio.put('/api/Company/Password',
         queryParameters: {"Id": idCompany, "password": newPassword});
     return result.statusCode == 200;
   }
 
   @override
   Future<bool> resetPassUser(int idUser, String newPassword) async {
-    var result = await _dio.put('https://localhost:7092/api/User/Password',
+    var result = await _dio.put('/api/User/Password',
         queryParameters: {"Id": idUser, "password": newPassword});
     return result.statusCode == 200;
   }

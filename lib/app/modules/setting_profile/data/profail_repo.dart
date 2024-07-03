@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/user_model.dart';
 
 import '../../../data/model/company_product_dto.dart';
 import '../../../data/model/company_type_model.dart';
 import '../../../data/model/subscription.dart';
 import 'adapter/profiel_adapter.dart';
-import 'model_data.dart';
 
 class ProfailRepository extends IProfailRepository {
   final _dio = Get.find<Dio>();
@@ -41,14 +41,12 @@ class ProfailRepository extends IProfailRepository {
   }
 
   @override
-  Future<List<ModelData>> getAllFollowCompany(String email) async {
-    var result = await _dio.get(
-        'https://localhost:7192/api/Company/GetFollowers',
-        queryParameters: {'email': email});
-    var list = <ModelData>[];
+  Future<List<UserModel>> GetAllCompanyUsers(int companyId) async {
+    var result = await _dio.get('/api/Main/GetAllCompanyUsers/$companyId');
+    var list = <UserModel>[];
     if (result.statusCode == 200) {
       for (var item in result.data) {
-        list.add(ModelData.fromJson(item));
+        list.add(UserModel.fromJson(item));
       }
     }
     print(
@@ -84,7 +82,7 @@ class ProfailRepository extends IProfailRepository {
   @override
   Future<bool> addSubscription(Subscription subscription) async {
     var result = await _dio.post(
-      'https://localhost:7092/api/Subscription/AddSubscription',
+      '/api/Subscription/AddSubscription',
       data: subscription.toJson(),
     );
     return result.statusCode == 200;
@@ -92,8 +90,7 @@ class ProfailRepository extends IProfailRepository {
 
   @override
   Future<List<Subscription>> getuserCompany(int userId) async {
-    var result = await _dio.get(
-        'https://localhost:7092/api/Subscription/GetSubscriptiones',
+    var result = await _dio.get('/api/Subscription/GetSubscriptiones',
         queryParameters: {'userId': userId});
     print(
         '-------------------------------- GetSubscriptiones ------------------------------');
@@ -110,15 +107,13 @@ class ProfailRepository extends IProfailRepository {
 
   @override
   Future<bool> deleteuserCompany(int id) async {
-    var result =
-        await _dio.delete('https://localhost:7092/api/Subscription/Delete/$id');
+    var result = await _dio.delete('/api/Subscription/Delete/$id');
     return result.statusCode == 200;
   }
 
   @override
   Future<List<Subscription>> getCompanySubcripation(int comanyId) async {
-    var result = await _dio.get(
-        'https://localhost:7092/api/Subscription/GetCompanySubscription',
+    var result = await _dio.get('/api/Subscription/GetCompanySubscription',
         queryParameters: {'companyId': comanyId});
     print(
         '-------------------------------- GetCompanySubscription ------------------------------');
@@ -134,8 +129,7 @@ class ProfailRepository extends IProfailRepository {
 
   @override
   Future<Subscription> getSubcripation(int userId, int comanyId) async {
-    var result = await _dio.get(
-        'https://localhost:7092/api/Subscription/GetCompanySubscription',
+    var result = await _dio.get('/api/Subscription/GetCompanySubscription',
         queryParameters: {'userId': userId, 'companyId': comanyId});
     print(
         '-------------------------------- GetCompanySubscription ------------------------------');

@@ -30,10 +30,10 @@ class Confirmpassword extends GetView<PasswordController> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    'Hello!',
-                    style: TextStyle(
+                    'hello-title'.tr,
+                    style: const TextStyle(
                         color: Colors.white70,
                         fontWeight: FontWeight.bold,
                         fontSize: 27),
@@ -72,14 +72,14 @@ class Confirmpassword extends GetView<PasswordController> {
                           controller.resrtpassword.value = value;
                         },
                         textInputType: TextInputType.emailAddress,
-                        label: 'Enter Your Password',
+                        label: 'entpass-title'.tr,
                       ),
                       TextFieldWidget(
                         onChanged: (value) {
                           controller.password.value = value;
                         },
                         textInputType: TextInputType.emailAddress,
-                        label: 'Enter Your Confirm Password',
+                        label: 'enterconf-title'.tr,
                       ),
                     ],
                   ),
@@ -99,7 +99,7 @@ class Confirmpassword extends GetView<PasswordController> {
                             height: 40,
                             child: Container(
                               child: Text(
-                                'Comfirmfromtheentervalue'.tr,
+                                'comf-title'.tr,
                                 style: const TextStyle(color: Colors.red),
                               ),
                             )).show();
@@ -111,10 +111,11 @@ class Confirmpassword extends GetView<PasswordController> {
                     child: SizedBox(
                       width: Get.width / 1.3,
                       height: 60,
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.white, fontSize: 21),
+                          'save-title'.tr,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 21),
                         ),
                       ),
                     )),

@@ -1,8 +1,10 @@
 import 'package:badges/badges.dart' as badg;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:marketing_surplus/shared/widgets/auth_bottom_sheet.dart';
+import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
+import 'package:marketing_surplus/app/routes/app_routes.dart';
 
 import '../../../../shared/widgets/single_item_product.dart';
 import '../controller/company_controller.dart';
@@ -33,7 +35,7 @@ class CompanyView extends GetView<CompanyController> {
               width: 10,
             ),
             Text(
-              'Clout',
+              'clout-title'.tr,
               style: TextStyle(
                   color: Colors.purple.shade200,
                   fontWeight: FontWeight.bold,
@@ -45,14 +47,14 @@ class CompanyView extends GetView<CompanyController> {
       body: Stack(
         children: [
           SizedBox(
-            height: Get.height / 3.2,
-            width: Get.width,
-            child: Image.asset(
-              'assets/images/post_2.jpg',
-              fit: BoxFit.fitWidth,
+              height: Get.height / 3.2,
               width: Get.width,
-            ),
-          ),
+              child: controller.dto.value.companyProduct!.company!.image ==
+                          null &&
+                      controller.dto.value.companyProduct!.company!.id != null
+                  ? Image.asset(
+                      'assets/images/company_${controller.dto.value.companyProduct!.company!.id!}.png')
+                  : Image.asset('assets/images/post_2.jpg')),
           Container(
             height: Get.height / 3.2,
             width: Get.width,
@@ -113,20 +115,75 @@ class CompanyView extends GetView<CompanyController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Items Company',
-                            style: TextStyle(fontSize: 20),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      controller.dto.value.companyProduct!
+                                              .company!.name ??
+                                          '',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 19,
+                                          color: Colors.purple.shade300),
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    SizedBox(
+                                      height: 60,
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                              child: Text(controller
+                                                      .dto
+                                                      .value
+                                                      .companyProduct!
+                                                      .company!
+                                                      .description ??
+                                                  ''))
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'itemcomp-title'.tr,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.purple.shade200),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Obx(() => Column(
-                              children: controller.products
-                                  .map((element) => SingleItem(element, () {
-                                        controller.addToBasket(element);
-                                      }, !controller.auth.isAuth()))
-                                  .toList(),
-                            )),
+                        Expanded(
+                          flex: 2,
+                          child: Obx(() => controller.isLoading.value
+                              ? CircularProgressIndicator()
+                              : controller.products.isEmpty
+                                  ? Text('nodat-title'.tr)
+                                  : SingleChildScrollView(
+                                      child: Column(
+                                        children: controller.products
+                                            .map((element) =>
+                                                SingleItem(element, false, () {
+                                                  controller
+                                                      .addToBasket(element);
+                                                }, () {}, () {},
+                                                    !controller.auth.isAuth()))
+                                            .toList(),
+                                      ),
+                                    )),
+                        ),
                       ],
                     ),
                   ),
@@ -149,7 +206,7 @@ class CompanyView extends GetView<CompanyController> {
                         child: Chip(
                             backgroundColor: Colors.white,
                             label: Text(
-                              'Subscription',
+                              'subscription-title'.tr,
                               style: TextStyle(
                                 color: Colors.purple.shade200,
                               ),
@@ -163,10 +220,11 @@ class CompanyView extends GetView<CompanyController> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-          tooltip: "Basket",
+          tooltip: 'basket-title'.tr,
           onPressed: () async {
-            await AuthBottomSheet().modalBasketBottomSheet(context);
-            controller.count.value = controller.getCount();
+            controller.count.value = await controller.getCount();
+            Get.find<HomeController>().pageIndex.value = 2;
+            Get.rootDelegate.offNamed(Paths.HOME);
           },
           child: badg.Badge(
             badgeContent: Obx(() => Text(controller.count.toString())),

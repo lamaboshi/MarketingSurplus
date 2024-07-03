@@ -8,8 +8,7 @@ class UsersDataRepository extends IUsersDataRepository {
   @override
   Future<bool> regierterUser(UserModel object) async {
     final map = object.toJson();
-    var data =
-        await _dio.post('https://localhost:7092/api/User/AddUser', data: map);
+    var data = await _dio.post('/api/User/AddUser', data: map);
     if (data.statusCode == 200) {
       return true;
     } else {
@@ -20,7 +19,7 @@ class UsersDataRepository extends IUsersDataRepository {
 
   @override
   Future<List<UserModel>> getUsers() async {
-    var result = await _dio.get('https://localhost:7092/api/User/GetUser');
+    var result = await _dio.get('/api/User/GetUser');
     print(result);
     var list = <UserModel>[];
     for (var item in result.data) {
@@ -32,16 +31,15 @@ class UsersDataRepository extends IUsersDataRepository {
   @override
   Future<bool> deleteUser(int id) async {
     var result = await _dio.delete(
-      'https://localhost:7092/api/User/Delete/$id',
+      '/api/User/Delete/$id',
     );
     return result.statusCode == 200;
   }
 
   @override
   Future<bool> updateUser(UserModel object) async {
-    var result = await _dio.put(
-        'https://localhost:7092/api/User/Put/${object.id}',
-        data: object.toJson());
+    var result =
+        await _dio.put('/api/User/Put/${object.id}', data: object.toJson());
     return result.statusCode == 200;
   }
 }

@@ -3,31 +3,40 @@ import 'dart:typed_data';
 class Product {
   int? id;
   String? name;
-  String? description;
-  double? price;
+  String? descripation;
+  double? newPrice;
   double? oldPrice;
   DateTime? expiration;
-  bool? isExpired;
+  DateTime? dateTime;
+  bool? isExpiration;
   Uint8List? image;
   Product(
       {this.id,
       this.name,
-      this.description,
-      this.price,
+      this.descripation,
+      this.newPrice,
       this.expiration,
-      this.isExpired,
+      this.dateTime,
+      this.isExpiration,
       this.oldPrice,
       this.image});
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    description = json['description'];
-    price = json['price'];
-    oldPrice = json['oldPrice'];
+    descripation = json['descripation'];
+    newPrice = json['newPrice'] == null
+        ? null
+        : double.tryParse(json['newPrice'].toString());
+    oldPrice = json['oldPrice'] == null
+        ? null
+        : double.tryParse(json['oldPrice'].toString());
     expiration = json['expiration'] == null
         ? null
         : DateTime.tryParse(json['expiration'].toString());
-    isExpired = json['isExpired'];
+    dateTime = json['dateTime'] == null
+        ? null
+        : DateTime.tryParse(json['dateTime'].toString());
+    isExpiration = json['isExpiration'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
@@ -35,13 +44,14 @@ class Product {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    json['id'] = id;
+    json['id'] = id ?? 0;
     json['name'] = name;
-    json['description'] = description;
-    json['price'] = price;
+    json['descripation'] = descripation;
+    json['newPrice'] = newPrice;
     json['oldPrice'] = oldPrice;
+    json['dateTime'] = dateTime?.toIso8601String();
     json['expiration'] = expiration?.toIso8601String();
-    json['isExpired'] = isExpired;
+    json['isExpiration'] = isExpiration;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
     return json;
   }

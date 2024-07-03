@@ -13,13 +13,13 @@ class SignUpCharity extends GetView<SignUpController> {
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(children: [
         TextFieldWidget(
-          icon: Icons.person_2_outlined,
+          icon: Icons.email,
           value: controller.charity.value.email,
           onChanged: (value) {
             controller.charity.value.email = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Email',
+          label: 'entem-title'.tr,
         ),
         TextFieldWidget(
           icon: Icons.person_2_outlined,
@@ -28,45 +28,77 @@ class SignUpCharity extends GetView<SignUpController> {
             controller.charity.value.name = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Name',
+          label: 'entername-title'.tr,
+        ),
+        Obx(
+          () => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              keyboardType: TextInputType.text,
+              controller: controller.userPasswordController,
+              obscureText: !controller.passwordVisible.value,
+              onChanged: (value) {
+                controller.charity.value.password = value;
+              },
+              decoration: InputDecoration(
+                icon: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.password,
+                    color: Colors.purple.shade100,
+                  ), // icon is 48px widget.
+                ),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                labelText: 'pass-title'.tr,
+                hintText: 'entpass-title'.tr,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.passwordVisible.value
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  onPressed: () {
+                    controller.passwordVisible.value =
+                        !controller.passwordVisible.value;
+                  },
+                ),
+              ),
+            ),
+          ),
         ),
         TextFieldWidget(
-          icon: Icons.person_2_outlined,
-          value: controller.charity.value.password,
-          onChanged: (value) {
-            controller.charity.value.password = value;
-          },
-          textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Password',
-        ),
-        TextFieldWidget(
-          icon: Icons.person_2_outlined,
+          icon: Icons.location_on,
           value: controller.charity.value.address,
           onChanged: (value) {
             controller.charity.value.address = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Address',
+          label: 'enteradd-title'.tr,
         ),
         Column(
           children: [
             TextFieldWidget(
-              icon: Icons.person_2_outlined,
+              icon: Icons.verified,
               value: controller.charity.value.associationLicense,
               onChanged: (value) {
                 controller.charity.value.associationLicense = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Association License',
+              label: 'asslic-title'.tr,
             ),
             TextFieldWidget(
-              icon: Icons.person_2_outlined,
+              icon: Icons.people_outline_rounded,
               value: controller.charity.value.targetGroup,
               onChanged: (value) {
                 controller.charity.value.targetGroup = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Target Group ',
+              label: 'target-title'.tr,
             ),
           ],
         )

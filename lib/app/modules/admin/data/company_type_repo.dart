@@ -9,8 +9,7 @@ class CompanyTypeRepository extends ICompanyTypeRepository {
 
   @override
   Future<bool> addCompanyType(CompanyTypeModel companyType) async {
-    var result = await _dio.post(
-        'https://localhost:7092/api/CompanyType/AddCompanyType',
+    var result = await _dio.post('/api/CompanyType/AddCompanyType',
         data: companyType.toJson());
     return result.statusCode == 200;
   }
@@ -18,27 +17,44 @@ class CompanyTypeRepository extends ICompanyTypeRepository {
   @override
   Future<bool> deleteCompanyType(int id) async {
     var result = await _dio.delete(
-      'https://localhost:7092/api/CompanyType/Delete/$id',
+      '/api/CompanyType/Delete/$id',
     );
     return result.statusCode == 200;
   }
 
   @override
   Future<List<CompanyTypeModel>> getCompanyType() async {
-    var result =
-        await _dio.get('https://localhost:7092/api/CompanyType/GetCompanyType');
-    print(result);
     var list = <CompanyTypeModel>[];
-    for (var item in result.data) {
-      list.add(CompanyTypeModel.fromJson(item));
+
+    try {
+      var response = await _dio.get('/api/CompanyType/GetCompanyType');
+
+      if (response.statusCode == 200) {
+        for (var item in response.data) {
+          list.add(CompanyTypeModel.fromJson(item));
+        }
+        return list;
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        // Server responded with a status code other than 2xx
+        print('Error response status: ${e.response?.statusCode}');
+        print('Error response data: ${e.response?.data}');
+      } else {
+        // Error while setting up the request or during the request
+        print('Error message: ${e.message}');
+        print('Error type: ${e.type}');
+      }
+    } catch (e) {
+      // Other types of errors
+      print('Unexpected error: $e');
     }
-    return list;
+    return [];
   }
 
   @override
   Future<bool> updateCompanyType(CompanyTypeModel companyType) async {
-    var result = await _dio.put(
-        'https://localhost:7092/api/CompanyType/Put/${companyType.id}',
+    var result = await _dio.put('/api/CompanyType/Put/${companyType.id}',
         data: companyType.toJson());
     return result.statusCode == 200;
   }

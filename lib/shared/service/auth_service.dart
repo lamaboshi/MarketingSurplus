@@ -20,11 +20,14 @@ class AuthService {
   final key = 'basket-Item';
   bool isAuth() => stroge.containsKey('type');
 
-  String personType() => jsonDecode(stroge.getData('type')!).toString();
+  String? personType() => stroge.getData('type') != null
+      ? jsonDecode(stroge.getData('type')!).toString()
+      : null;
   String companyType() => stroge.containsKey('CompanyType')
       ? jsonDecode(stroge.getData('CompanyType')!).toString()
       : '';
   Auth getTypeEnum() {
+    if (personType() == null) return Auth.none;
     switch (personType()) {
       case 'user':
         return Auth.user;
@@ -52,8 +55,7 @@ class AuthService {
   }
 
   Future<CompanyTypeModel?> logInType(String type, String password) async {
-    var result = await _dio.get(
-        'https://localhost:7092/api/CompanyType/Existing',
+    var result = await _dio.get('/api/CompanyType/Existing',
         queryParameters: {"Type": type, "password": password});
     print(result.data);
     if (result.statusCode == 200) {
@@ -65,7 +67,7 @@ class AuthService {
   }
 
   Future<Object?> logIn(String email, String password) async {
-    var result = await _dio.get('https://localhost:7092/api/Auth/GetAuth',
+    var result = await _dio.get('/api/Auth/GetAuth',
         queryParameters: {"email": email, "password": password});
     print(result.data);
     if (result.statusCode == 200) {
@@ -93,31 +95,47 @@ class AuthService {
     return null;
   }
 
-  List<CompanyProduct> getDataBasket() {
+  Future<List<CompanyProduct>> getDataBasket() async {
     if (!stroge.containsKey(key)) return [];
-    return (json.decode(stroge.getData(key)!) as List<dynamic>)
+    final data = (json.decode(stroge.getData(key)!) as List<dynamic>)
         .map<CompanyProduct>((item) => CompanyProduct.fromJson(item))
         .toList();
+    return data;
   }
 
-  Future<void> deleteFromBasket(CompanyProduct product) async {
+  Future<List<CompanyProduct>> deleteFromBasket(CompanyProduct product) async {
     //Get All Data
-    final list = getDataBasket();
+    final list = await getDataBasket();
+
     //remove To Data
-    list.removeWhere((q) => q.productId == product.productId);
+    list.removeWhere((q) => q.product!.id == product.product!.id);
+
     //Clear Old Data
     if (stroge.containsKey(key)) {
       await stroge.deleteDataByKey(key);
     }
     //Save New Data
     final dataToSave = json.encode(list.map((data) => data.toJson()).toList());
+
     print(dataToSave);
     stroge.saveData(key, dataToSave);
+    return list;
   }
 
   Future<void> addToBasket(CompanyProduct product) async {
     //Get All Data
-    final list = getDataBasket();
+    final list = await getDataBasket();
+    if (list.any((element) => element.product!.id == product.product!.id)) {
+      final item = list
+          .where((element) => element.product!.id == product.product!.id)
+          .first;
+      item.amountApp = item.amountApp! + 1;
+      if (item.amountApp! > item.amount!) return;
+      await deleteFromBasket(item);
+      await addToBasket(item);
+      return;
+    }
+
     //Add To Data
     list.add(product);
     //Clear Old Data
@@ -126,7 +144,9 @@ class AuthService {
     }
     //Save New Data
     final dataToSave = json.encode(list.map((data) => data.toJson()).toList());
+
     print(dataToSave);
+
     stroge.saveData(key, dataToSave);
   }
 }

@@ -30,10 +30,10 @@ class PasswordPageView extends GetView<PasswordController> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    'Hello!',
-                    style: TextStyle(
+                    'hello-title'.tr,
+                    style: const TextStyle(
                         color: Colors.white70,
                         fontWeight: FontWeight.bold,
                         fontSize: 27),
@@ -67,14 +67,13 @@ class PasswordPageView extends GetView<PasswordController> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      const Text(
-                          'Please enter your email so that we can obtain your information to complete the password change procedure'),
+                      Text('pleas-title'.tr),
                       TextFieldWidget(
                         onChanged: (value) {
                           controller.email.value = value;
                         },
                         textInputType: TextInputType.emailAddress,
-                        label: 'Enter Your Email',
+                        label: 'entem-title'.tr,
                       ),
                     ],
                   ),
@@ -92,10 +91,11 @@ class PasswordPageView extends GetView<PasswordController> {
                     child: SizedBox(
                       width: Get.width / 1.3,
                       height: 60,
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Done',
-                          style: TextStyle(color: Colors.white, fontSize: 21),
+                          'done-title'.tr,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 21),
                         ),
                       ),
                     )),

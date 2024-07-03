@@ -23,12 +23,13 @@ class CompanyController extends GetxController {
   final companyName = ''.obs;
   final rate = 0.0.obs;
   final count = 0.obs;
+  final isLoading = false.obs;
   @override
   void onInit() {
     dto.value = getSelectedCompany();
     getAllProduct(dto.value.companyProduct!.company!.id!);
 
-    count.value = getCount();
+    getCount();
     super.onInit();
   }
 
@@ -42,15 +43,22 @@ class CompanyController extends GetxController {
 
   Future<void> addToBasket(CompanyProduct product) async {
     await auth.addToBasket(product);
-    count.value = getCount();
+    count.value = await getCount();
   }
 
   Future<void> getAllProduct(int companyId) async {
+    isLoading.value = true;
     final data = await companyRepo.getAllCompanyProduct(companyId);
     products.assignAll(data);
+    isLoading.value = false;
   }
 
-  int getCount() => auth.getDataBasket().length;
+  Future<int> getCount() async {
+    final re = (await auth.getDataBasket()).length;
+    count.value = re;
+    return re;
+  }
+
   Future<void> addRate(Rate rate, int subId) async {
     await rateRepo.regierterRate(rate, subId);
     dto.value.rateNumber = rate.rateNumber;

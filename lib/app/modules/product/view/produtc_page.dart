@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/product.dart';
 import 'package:marketing_surplus/app/modules/product/controller/product_controller.dart';
+import 'package:overlayment/overlayment.dart';
 
 class ProductView extends GetView<ProductController> {
-  const ProductView({super.key});
-
+  ProductView({this.product, this.onTap});
+  final Product? product;
+  final VoidCallback? onTap;
   Widget headerBuild(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(15.0),
@@ -30,7 +33,7 @@ class ProductView extends GetView<ProductController> {
                     color: Colors.purple.shade200,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Overlayment.dismissLast();
                   })),
           const Expanded(child: Text("")),
           //===================shoping cart
@@ -146,24 +149,23 @@ class ProductView extends GetView<ProductController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text(
-                        "سيتامول",
+                      Text(
+                        product!.name ?? '',
                         style: TextStyle(fontSize: 30.0),
                       ),
-                      Row(
-                        children: <Widget>[
-                          Icon(Icons.favorite, color: Colors.purple.shade200),
-                          const Text("5", style: TextStyle(fontSize: 16.0)),
-                          const Expanded(child: Text("")),
-                          const Icon(Icons.star, color: Colors.orange),
-                          const Text("5 review",
-                              style: TextStyle(fontSize: 16.0)),
-                        ],
-                      ),
                       const Padding(padding: EdgeInsets.only(bottom: 15.0)),
-                      const Text(
-                        "تاخذ حبة السيتامول للتخفيف من اعراض الصدا والحمى وارتفاع درجة الحرارة وسمكن الالام للعظام ",
-                        style: TextStyle(fontSize: 18.0, color: Colors.grey),
+                      SizedBox(
+                        height: 60,
+                        child: Row(
+                          children: [
+                            Flexible(
+                                child: Text(
+                              product!.descripation ?? '',
+                              style:
+                                  TextStyle(fontSize: 18.0, color: Colors.grey),
+                            ))
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -180,62 +182,69 @@ class ProductView extends GetView<ProductController> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsets.only(left: 50, right: 30),
-          height: 75.0,
-          decoration: BoxDecoration(
-              //  color: Colors.red[300],
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Colors.purple,
-                    Colors.purple.shade200,
-                    Colors.purple.shade300,
-                    Colors.purple,
-                  ]),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.shade100,
-                    spreadRadius: 7,
-                    blurRadius: 4,
-                    offset: const Offset(0, 3))
-              ],
-              borderRadius: BorderRadius.circular(40)),
-          child: Row(
-            children: <Widget>[
-              const Text(
-                "1500",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              const Expanded(child: Text("")),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.purple.shade100,
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade100,
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: const Offset(0, 1))
-                      ],
-                      borderRadius: BorderRadius.circular(40)),
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: const Text("إضاغة إلى السلة",
-                      style: TextStyle(color: Colors.white, fontSize: 20))),
-              Container(
-                child: const Icon(
-                  Icons.shopping_basket,
-                  color: Colors.white,
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          onTap!();
+          Overlayment.dismissLast();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.only(left: 50, right: 30),
+            height: 75.0,
+            decoration: BoxDecoration(
+                //  color: Colors.red[300],
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.purple.shade100,
+                      Colors.purple.shade200,
+                      Colors.purple.shade300,
+                      Colors.purple.shade400,
+                    ]),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.shade100,
+                      spreadRadius: 7,
+                      blurRadius: 4,
+                      offset: const Offset(0, 3))
+                ],
+                borderRadius: BorderRadius.circular(40)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      product!.newPrice == null
+                          ? ''
+                          : ' ${product!.newPrice!}\$',
+                      style: TextStyle(
+                        color: Colors.purple,
+                        fontSize: 17,
+                      ),
+                    ),
+                    Text(
+                      product!.oldPrice == null
+                          ? ''
+                          : ' ${product!.oldPrice!}\$',
+                      style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 17,
+                          decoration: TextDecoration.lineThrough),
+                    ),
+                  ],
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text("إضاغة إلى السلة",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                )
+              ],
+            ),
           ),
         ),
       ),

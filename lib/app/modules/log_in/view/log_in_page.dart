@@ -31,10 +31,10 @@ class LogInView extends GetView<LogInController> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    'Hello!',
-                    style: TextStyle(
+                    'hello-title'.tr,
+                    style: const TextStyle(
                         color: Colors.white70,
                         fontWeight: FontWeight.bold,
                         fontSize: 27),
@@ -71,14 +71,41 @@ class LogInView extends GetView<LogInController> {
                           controller.email.value = value;
                         },
                         textInputType: TextInputType.emailAddress,
-                        label: 'Enter Your Email',
+                        label: 'entem-title'.tr,
                       ),
-                      TextFieldWidget(
-                        onChanged: (value) {
-                          controller.password.value = value;
-                        },
-                        textInputType: TextInputType.emailAddress,
-                        label: 'Enter Your Password',
+                      Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: controller.userPasswordController,
+                            obscureText: !controller.passwordVisible.value,
+                            onChanged: (value) {
+                              controller.password.value = value;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'pass-title'.tr,
+                              hintText: 'entpass-title'.tr,
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.passwordVisible.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  controller.passwordVisible.value =
+                                      !controller.passwordVisible.value;
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -96,10 +123,11 @@ class LogInView extends GetView<LogInController> {
                     child: SizedBox(
                       width: Get.width / 1.3,
                       height: 60,
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Log In',
-                          style: TextStyle(color: Colors.white, fontSize: 21),
+                          'login-title'.tr,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 21),
                         ),
                       ),
                     )),
@@ -110,12 +138,12 @@ class LogInView extends GetView<LogInController> {
                     onPressed: () {
                       Get.rootDelegate.toNamed(Paths.SignUpUserPage);
                     },
-                    child: const Text('Don\'t have an account ?!')),
+                    child: Text('dontha-title'.tr)),
                 TextButton(
                     onPressed: () {
                       Get.rootDelegate.toNamed(Paths.Password);
                     },
-                    child: const Text('Forget Your password ?!'))
+                    child: Text('forget-title'.tr))
               ],
             ),
           ),

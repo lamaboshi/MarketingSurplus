@@ -12,6 +12,7 @@ class Company {
   String? description;
   String? licenseNumber;
   int? companyTypeId;
+  bool? isAccept;
   Company({
     this.id,
     this.name,
@@ -22,6 +23,7 @@ class Company {
     this.telePhone,
     this.image,
     this.companyTypeId,
+    this.isAccept,
     this.description,
   });
 
@@ -34,6 +36,7 @@ class Company {
     password = json['password'];
     telePhone = json['telePhone'];
     description = json['description'];
+          isAccept = json['isAccept'];
     companyTypeId = json['companyTypeId'];
     licenseNumber = json['licenseNumber'];
     image = json['image'] == null

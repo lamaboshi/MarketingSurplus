@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marketing_surplus/app/modules/admin/data/charity_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/user_repo.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
 import '../../../../shared/service/util.dart';
@@ -17,7 +19,8 @@ class SignUpController extends GetxController {
   final authType = Auth.user.obs;
   final companyTypes = <CompanyTypeModel>[].obs;
   final typeRepo = CompanyTypeRepository();
-
+  final passwordVisible = false.obs;
+  final userPasswordController = TextEditingController();
   @override
   void onInit() {
     super.onInit();
@@ -82,12 +85,13 @@ class SignUpController extends GetxController {
   final userRpo = UsersDataRepository();
   final charityRepo = CharityRepository();
   final auth = Get.find<AuthService>();
-
+  final newType = CompanyTypeModel().obs;
   Future<void> signUpCompany() async {
     //   company.value.image = Utility.dataFromBase64String(stringPickImage.value);
     var data = await companyRpo.regierterComp(company.value);
     if (data) {
       await auth.logIn(company.value.email!, company.value.password!);
+
       Get.rootDelegate.toNamed(Paths.HOME);
     }
   }
@@ -131,6 +135,19 @@ class SignUpController extends GetxController {
         return charity;
       case Auth.none:
       // TODO: Handle this case.
+    }
+  }
+
+  Future<void> addCompanyTypeModelelement(
+      CompanyTypeModel companyTypeModel) async {
+    var res = await typeRepo.addCompanyType(companyTypeModel);
+    if (res) {
+      Overlayment.dismissLast();
+      companyTypes.clear();
+      getAllCompanyType();
+      var item =
+          companyTypes.where((p0) => p0.type == companyTypeModel.type).first;
+      company.value.companyTypeId = item.id;
     }
   }
 

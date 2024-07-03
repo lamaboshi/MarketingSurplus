@@ -109,10 +109,10 @@ class ProfileDetails extends GetView<SettingProfileController> {
                 },
                 label: SizedBox(
                     width: Get.width / 3,
-                    child: const Center(
+                    child: Center(
                         child: Text(
-                      'Save',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      'save-title'.tr,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
                     )))),
       ),
     );
@@ -142,7 +142,7 @@ class UserProfileDetails extends GetView<SettingProfileController> {
               controller.user.value.email = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Email',
+            label: 'entem-title'.tr,
             isReadOnly: controller.isNotEdit.value,
           ),
           TextFieldWidget(
@@ -151,7 +151,7 @@ class UserProfileDetails extends GetView<SettingProfileController> {
               controller.user.value.name = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Name',
+            label: 'entername-title'.tr,
             isReadOnly: controller.isNotEdit.value,
           ),
           TextFieldWidget(
@@ -160,7 +160,7 @@ class UserProfileDetails extends GetView<SettingProfileController> {
               controller.user.value.password = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Password',
+            label: 'entpass-title'.tr,
             isReadOnly: controller.isNotEdit.value,
           ),
           TextFieldWidget(
@@ -169,7 +169,7 @@ class UserProfileDetails extends GetView<SettingProfileController> {
               controller.user.value.phone = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Phone',
+            label: 'enterphon-title'.tr,
             isReadOnly: controller.isNotEdit.value,
           ),
         ],

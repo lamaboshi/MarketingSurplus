@@ -30,7 +30,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
                 controller.company.value.email = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Enter Your Email',
+              label: 'entem-title'.tr,
               isReadOnly: controller.isNotEdit.value,
             ),
             TextFieldWidget(
@@ -39,7 +39,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
                 controller.company.value.name = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Enter Your Name',
+              label: 'entername-title'.tr,
               isReadOnly: controller.isNotEdit.value,
             ),
             TextFieldWidget(
@@ -48,7 +48,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
                 controller.company.value.password = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Enter Your Password',
+              label: 'entpass-title'.tr,
               isReadOnly: controller.isNotEdit.value,
             ),
             Padding(
@@ -56,8 +56,8 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
               child: Obx(
                 () => DropdownButton<CompanyTypeModel>(
                   isExpanded: true,
-                  hint: const Text(
-                      'Please choose a Type'), // Not necessary for Option 1
+                  hint:
+                      Text('pleasechos-title'.tr), // Not necessary for Option 1
                   value: controller.companyTypes
                       .where((p0) =>
                           p0.id == controller.company.value.companyTypeId)
@@ -83,7 +83,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
                 controller.company.value.licenseNumber = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'License Number',
+              label: 'licnum-title'.tr,
               isReadOnly: controller.isNotEdit.value,
             ),
             TextFieldWidget(
@@ -92,7 +92,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
                 controller.company.value.address = value;
               },
               textInputType: TextInputType.emailAddress,
-              label: 'Enter Your Address',
+              label: 'enteradd-title'.tr,
               isReadOnly: controller.isNotEdit.value,
             ),
             TextFieldWidget(
@@ -102,7 +102,7 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
               },
               textInputType: TextInputType.emailAddress,
               isReadOnly: controller.isNotEdit.value,
-              label: 'Tele Phone ',
+              label: 'tele-title'.tr,
             ),
           ],
         ),

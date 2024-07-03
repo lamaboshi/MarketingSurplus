@@ -2,13 +2,14 @@ class CompanyTypeModel {
   int? id;
   String? type;
   String? description;
-
-  CompanyTypeModel({this.id, this.type, this.description});
+        bool? isAccept ;
+  CompanyTypeModel({this.id, this.type, this.isAccept,this.description});
 
   CompanyTypeModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['typeName'];
     description = json['description'];
+        isAccept = json['isAccept'];
   }
 
   Map<String, dynamic> toJson() {

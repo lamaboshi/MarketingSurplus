@@ -11,6 +11,7 @@ class UserModel {
   String? userName;
   String? address;
   Uint8List? image;
+    bool? isAccept;
   Uint8List? qRCode;
   UserModel({
     this.id,
@@ -22,6 +23,7 @@ class UserModel {
     this.password,
     this.userName,
     this.image,
+    this.isAccept
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class UserModel {
     age = json['age'];
     password = json['password'];
     userName = json['userName'];
+    isAccept = json['isAccept'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));

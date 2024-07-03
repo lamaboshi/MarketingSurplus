@@ -137,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  fluid_action_card:
+    dependency: "direct main"
+    description:
+      name: fluid_action_card
+      sha256: "3d20e411cd0f1ff4f0581a46212ae5cf9fdc9b4f46cf72494b20e68aa57c64bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+5"
   flutter:
     dependency: "direct main"
     description: flutter

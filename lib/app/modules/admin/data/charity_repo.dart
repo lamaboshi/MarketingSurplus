@@ -9,8 +9,8 @@ class CharityRepository extends ICharityRepository {
 
   @override
   Future<bool> regierterCharity(Charity object) async {
-    var data = await _dio.post('https://localhost:7092/api/Charity/AddCharity',
-        data: object.toJson());
+    var data =
+        await _dio.post('/api/Charity/AddCharity', data: object.toJson());
     if (data.statusCode == 200) {
       return true;
     } else {
@@ -22,15 +22,14 @@ class CharityRepository extends ICharityRepository {
   @override
   Future<bool> deleteCharity(int id) async {
     var result = await _dio.delete(
-      'https://localhost:7092/api/Charity/Delete/$id',
+      '/api/Charity/Delete/$id',
     );
     return result.statusCode == 200;
   }
 
   @override
   Future<List<Charity>> getCharities() async {
-    var result =
-        await _dio.get('https://localhost:7092/api/Charity/GetCharities');
+    var result = await _dio.get('/api/Charity/GetCharities');
     print(result);
     var list = <Charity>[];
     for (var item in result.data) {
@@ -41,9 +40,8 @@ class CharityRepository extends ICharityRepository {
 
   @override
   Future<bool> updateCharity(Charity object) async {
-    var result = await _dio.put(
-        'https://localhost:7092/api/Charity/Put/${object.id}',
-        data: object.toJson());
+    var result =
+        await _dio.put('/api/Charity/Put/${object.id}', data: object.toJson());
     return result.statusCode == 200;
   }
 }

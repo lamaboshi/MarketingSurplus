@@ -12,7 +12,7 @@ class OrderModel {
     this.name,
     this.amount,
     this.price,
-    this.isDelivery,
+    this.isDelivery = false,
     this.payMethodId,
     this.userId,
     this.descripation,
@@ -22,7 +22,9 @@ class OrderModel {
     id = json['id'];
     name = json['name'];
     amount = json['amount'];
-    price = json['price'];
+    price = json['price'] == null
+        ? null
+        : double.tryParse(json['price'].toString());
     isDelivery = json['isDelivery'];
     payMethodId = json['payMethodId'];
     userId = json['userId'];
@@ -31,13 +33,13 @@ class OrderModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    json['id'] = id;
+    json['id'] = id ?? 0;
     json['name'] = name;
     json['amount'] = amount;
     json['price'] = price;
     json['isDelivery'] = isDelivery;
     json['payMethodId'] = payMethodId;
-    json['telePhone'] = userId;
+    json['userId'] = userId;
     json['descripation'] = descripation;
     return json;
   }

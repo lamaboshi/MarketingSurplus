@@ -14,13 +14,13 @@ class SignUpUser extends GetView<SignUpController> {
       child: Column(
         children: [
           TextFieldWidget(
-            icon: Icons.person_2_outlined,
+            icon: Icons.email,
             value: controller.user.value.email,
             onChanged: (value) {
               controller.user.value.email = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Email',
+            label: 'entem-title'.tr,
           ),
           TextFieldWidget(
             icon: Icons.person_2_outlined,
@@ -29,23 +29,57 @@ class SignUpUser extends GetView<SignUpController> {
               controller.user.value.name = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Name',
+            label: 'entername-title'.tr,
+          ),
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                controller: controller.userPasswordController,
+                obscureText: !controller.passwordVisible.value,
+                onChanged: (value) {
+                  controller.user.value.password = value;
+                },
+                decoration: InputDecoration(
+                  icon: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.password,
+                      color: Colors.purple.shade100,
+                    ), // icon is 48px widget.
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                  labelText: 'pass-title'.tr,
+                  hintText: 'entpass-title'.tr,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.passwordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      controller.passwordVisible.value =
+                          !controller.passwordVisible.value;
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
           TextFieldWidget(
-            value: controller.user.value.password,
-            onChanged: (value) {
-              controller.user.value.password = value;
-            },
-            textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Password',
-          ),
-          TextFieldWidget(
+            icon: Icons.phone,
             value: controller.user.value.phone,
             onChanged: (value) {
               controller.user.value.phone = value;
             },
             textInputType: TextInputType.emailAddress,
-            label: 'Enter Your Phone',
+            label: 'tele-title'.tr,
           ),
         ],
       ),

@@ -51,13 +51,13 @@ class UserWidget extends GetView<AdminController> {
                   fontWeight: FontWeight.bold, color: Colors.purple))))
       .toList()
     ..addAll([
-      const DataColumn(
-          label: Text('Edit',
-              style: TextStyle(
+      DataColumn(
+          label: Text('edit-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
-      const DataColumn(
-          label: Text('Delete',
-              style: TextStyle(
+      DataColumn(
+          label: Text('delete-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
   List<DataRow> getRows() => controller.users

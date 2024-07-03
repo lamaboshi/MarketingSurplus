@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/setting_profile/controller/setting_profile_controller.dart';
+import 'package:marketing_surplus/app/modules/setting_profile/view/widget/pay_method_widget.dart';
 import 'package:overlayment/overlayment.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
+import '../../../../shared/service/auth_service.dart';
+import '../../../routes/app_routes.dart';
 import 'profile_details.dart';
+import 'widget/help_order.dart';
+import 'widget/join_page.dart';
+import 'widget/order_bills_widget.dart';
+import 'widget/work_way_page.dart';
 
 class SettingProfileView extends GetView<SettingProfileController> {
   const SettingProfileView({super.key});
@@ -12,6 +20,26 @@ class SettingProfileView extends GetView<SettingProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          ToggleSwitch(
+            minWidth: 70.0,
+            cornerRadius: 20.0,
+            activeBgColors: [
+              [Colors.purple.shade200],
+              [Colors.purple.shade200]
+            ],
+            activeFgColor: Colors.white,
+            inactiveBgColor: Colors.grey.shade300,
+            inactiveFgColor: Colors.purple.shade200,
+            initialLabelIndex: 1,
+            totalSwitches: 2,
+            labels: controller.listTextTabToggle,
+            radiusStyle: true,
+            onToggle: (index) {
+              controller.toggle(index!);
+            },
+          ),
+        ],
         title: Row(
           children: [
             Container(
@@ -40,42 +68,24 @@ class SettingProfileView extends GetView<SettingProfileController> {
       ),
       body: ListView(
         children: <Widget>[
-          // UserAccountsDrawerHeader(
-          //   accountName: const Text(
-          //     "ghazal",
-          //     style: TextStyle(fontSize: 20.0, color: Colors.black),
-          //   ),
-          //   accountEmail: const Text(
-          //     'ghazal@gmail.com',
-          //     style: TextStyle(fontSize: 20.0, color: Colors.grey),
-          //   ),
-          //   currentAccountPicture: GestureDetector(
-          //     child: const CircleAvatar(
-          //       backgroundColor: Colors.purple,
-          //       child: Icon(
-          //         Icons.person,
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //   ),
-          //   decoration: BoxDecoration(color: Colors.grey[100]),
-          // ),
           SectionWidget(
-            title: 'SETTING',
-            widget: const [
-              'Account details',
-              'Payment cards',
-              'vouchers',
-              'Notification',
-              'Delete My Account'
+            title: 'seting-title'.tr,
+            widget: [
+              'accdea-title'.tr,
+              'paycar-title'.tr,
+              'vou-title'.tr,
+              'del-title'.tr
             ],
             onTabs: [
               () {
                 Get.to(const ProfileDetails());
               },
-              () {},
-              () {},
-              () {},
+              () {
+                Overlayment.show(OverPanel(child: const PayMethodView()));
+              },
+              () {
+                Overlayment.show(OverPanel(child: const OrderBillsWidget()));
+              },
               () async {
                 Overlayment.show(OverDialog(
                     child: Padding(
@@ -83,7 +93,7 @@ class SettingProfileView extends GetView<SettingProfileController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Delete Acount !!'),
+                      Text('delacc-title'.tr),
                       const SizedBox(
                         height: 10,
                       ),
@@ -101,27 +111,52 @@ class SettingProfileView extends GetView<SettingProfileController> {
               Icons.account_circle_outlined,
               Icons.payment,
               Icons.vertical_distribute_sharp,
-              Icons.notifications,
               Icons.person_off_outlined
             ],
           ),
           SectionWidget(
-            title: 'COMMUNITY',
-            widget: const [
-              'Recommend a store',
-              'sign up your store',
-            ],
-            onTabs: [() {}, () {}],
-            icons: const [Icons.comment_outlined, Icons.store],
+            title: 'com-title'.tr,
+            widget: controller.auth.getTypeEnum() == Auth.comapny
+                ? ['All users Subscraption', 'signUp As User']
+                : [
+                    'rec-title'.tr,
+                    'sing-title'.tr,
+                  ],
+            onTabs: controller.auth.getTypeEnum() == Auth.comapny
+                ? [
+                    () {},
+                    () {
+                      Get.rootDelegate.offAndToNamed(Paths.SignUpUserPage);
+                    }
+                  ]
+                : [
+                    () {},
+                    () {
+                      Get.rootDelegate.offAndToNamed(Paths.SignUpUserPage);
+                    }
+                  ],
+            icons: controller.auth.getTypeEnum() == Auth.comapny
+                ? [Icons.people, Icons.person_2]
+                : const [Icons.comment_outlined, Icons.store],
           ),
           SectionWidget(
-            title: 'SUPPORT',
-            widget: const [
-              'Help with an order',
-              'How clean out work',
-              'join to Clean out',
+            title: 'sup-title'.tr,
+            widget: [
+              'help-title'.tr,
+              'howcl-title'.tr,
+              'joinup-title'.tr,
             ],
-            onTabs: [() {}, () {}, () {}],
+            onTabs: [
+              () {
+                Get.to(HelpOrder());
+              },
+              () {
+                Get.to(WorkWayPage());
+              },
+              () {
+                Get.to(JoinPage());
+              }
+            ],
             icons: const [
               Icons.shopify_outlined,
               Icons.help_outline_rounded,

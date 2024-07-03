@@ -32,7 +32,7 @@ class PayMethodWidget extends GetView<AdminController> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Add Pay method',
+                                  'addpay-title'.tr,
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.purple.shade200),
@@ -45,7 +45,7 @@ class PayMethodWidget extends GetView<AdminController> {
                                     controller.pay.value.name = value;
                                   },
                                   textInputType: TextInputType.text,
-                                  label: 'Name Pay method',
+                                  label: 'namepay-title'.tr,
                                 ),
                               ),
                               ElevatedButton(
@@ -55,13 +55,13 @@ class PayMethodWidget extends GetView<AdminController> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.purple.shade200,
                                       shape: const StadiumBorder()),
-                                  child: const SizedBox(
+                                  child: SizedBox(
                                     width: 150,
                                     height: 30,
                                     child: Center(
                                       child: Text(
-                                        'Save',
-                                        style: TextStyle(
+                                        'save-title'.tr,
+                                        style: const TextStyle(
                                             color: Colors.white, fontSize: 19),
                                       ),
                                     ),
@@ -108,13 +108,13 @@ class PayMethodWidget extends GetView<AdminController> {
                   fontWeight: FontWeight.bold, color: Colors.purple))))
       .toList()
     ..addAll([
-      const DataColumn(
-          label: Text('Edit',
-              style: TextStyle(
+      DataColumn(
+          label: Text('edit-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
-      const DataColumn(
-          label: Text('Delete',
-              style: TextStyle(
+      DataColumn(
+          label: Text('delete-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
   List<DataRow> getRows() => controller.method
@@ -137,7 +137,7 @@ class PayMethodWidget extends GetView<AdminController> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'Update Pay method',
+                              'updatepay-title'.tr,
                               style: TextStyle(
                                   fontSize: 18, color: Colors.purple.shade200),
                             ),
@@ -150,7 +150,7 @@ class PayMethodWidget extends GetView<AdminController> {
                                 controller.pay.value.name = value;
                               },
                               textInputType: TextInputType.text,
-                              label: 'Name Pay method',
+                              label: 'namepay-title'.tr,
                             ),
                           ),
                           ElevatedButton(
@@ -160,13 +160,13 @@ class PayMethodWidget extends GetView<AdminController> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple.shade200,
                                   shape: const StadiumBorder()),
-                              child: const SizedBox(
+                              child: SizedBox(
                                 width: 150,
                                 height: 30,
                                 child: Center(
                                   child: Text(
-                                    'Save',
-                                    style: TextStyle(
+                                    'save-title'.tr,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 19),
                                   ),
                                 ),

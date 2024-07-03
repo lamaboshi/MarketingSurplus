@@ -34,10 +34,10 @@ class SignUpView extends GetView<SignUpController> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    'Hello!',
-                    style: TextStyle(
+                    'hello-title'.tr,
+                    style: const TextStyle(
                         color: Colors.white70,
                         fontWeight: FontWeight.bold,
                         fontSize: 27),
@@ -77,13 +77,15 @@ class SignUpView extends GetView<SignUpController> {
                       () => DropdownButton<Auth>(
                         focusNode: FocusNode(canRequestFocus: false),
                         isExpanded: true,
-                        hint: const Text('Please choose a Type SignUp'),
+                        hint: Text('plsi-title'.tr),
                         value: controller.authType.value,
                         onChanged: (newValue) {
                           FocusScope.of(context).requestFocus(FocusNode());
                           controller.authType.value = newValue!;
                         },
-                        items: Auth.values.map((e) {
+                        items: Auth.values
+                            .where((element) => element != Auth.none)
+                            .map((e) {
                           return DropdownMenuItem(
                             value: e,
                             child: Text(e.name),
@@ -113,10 +115,11 @@ class SignUpView extends GetView<SignUpController> {
                       child: SizedBox(
                         width: Get.width / 1.3,
                         height: 60,
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            'Register',
-                            style: TextStyle(color: Colors.white, fontSize: 21),
+                            'reg-title'.tr,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 21),
                           ),
                         ),
                       )),
@@ -127,7 +130,7 @@ class SignUpView extends GetView<SignUpController> {
                       onPressed: () {
                         Get.rootDelegate.toNamed(Paths.LogIn);
                       },
-                      child: const Text('Already have an account ?!'))
+                      child: Text('alr-title'.tr))
                 ],
               ),
             ),

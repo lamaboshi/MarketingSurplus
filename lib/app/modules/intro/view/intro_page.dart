@@ -18,7 +18,7 @@ class IntroPage extends GetView<IntroController> {
           interDeliveryPage(context),
           interPaymentPage(context)
         ],
-        done: Text("Done".tr,
+        done: Text("done-title".tr,
             style: const TextStyle(
                 color: Colors.purple, fontWeight: FontWeight.w600)),
         showNextButton: true,
@@ -27,10 +27,10 @@ class IntroPage extends GetView<IntroController> {
         onDone: () {
           Get.rootDelegate.toNamed(Paths.SignUpUserPage);
         },
-        back: Text("Back".tr,
+        back: Text("back-title".tr,
             style: const TextStyle(
                 color: Colors.purple, fontWeight: FontWeight.w600)),
-        next: Text("Next".tr,
+        next: Text("next-title".tr,
             style: const TextStyle(
                 color: Colors.purple, fontWeight: FontWeight.w600)),
         globalBackgroundColor: Colors.white,
@@ -74,14 +74,30 @@ class IntroPage extends GetView<IntroController> {
                 controller.toggle(index!);
               },
             ),
-            InkWell(
-              onTap: () {
-                Get.rootDelegate.toNamed(Paths.LogIn);
-              },
-              child: const Text(
-                'Skip',
-                style: TextStyle(fontSize: 18, color: Colors.purple),
-              ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.rootDelegate.toNamed(Paths.LogIn);
+                  },
+                  child: Text(
+                    'skip-title'.tr,
+                    style: const TextStyle(fontSize: 18, color: Colors.purple),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    Get.rootDelegate.toNamed(Paths.HOME);
+                  },
+                  child: Text(
+                    'viwer-title'.tr,
+                    style: const TextStyle(fontSize: 18, color: Colors.purple),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -97,9 +113,9 @@ class IntroPage extends GetView<IntroController> {
               'assets/images/intro_1.jpg',
             ),
           ),
-          const Text(
-            'Marketing surplus products',
-            style: TextStyle(
+          Text(
+            'market-title'.tr,
+            style: const TextStyle(
                 color: Colors.purple,
                 fontSize: 26,
                 fontWeight: FontWeight.w800),
@@ -108,7 +124,7 @@ class IntroPage extends GetView<IntroController> {
             height: 35,
           ),
           Text(
-            'To protect surplus products from wastage',
+            'topro-title'.tr,
             softWrap: true,
             style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
           ),
@@ -127,14 +143,30 @@ class IntroPage extends GetView<IntroController> {
         alignment: Alignment.topRight,
         child: Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: InkWell(
-            onTap: () {
-              Get.rootDelegate.toNamed(Paths.LogIn);
-            },
-            child: const Text(
-              'Skip',
-              style: TextStyle(fontSize: 18, color: Colors.purple),
-            ),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.rootDelegate.toNamed(Paths.LogIn);
+                },
+                child: Text(
+                  'skip-title'.tr,
+                  style: const TextStyle(fontSize: 18, color: Colors.purple),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Get.rootDelegate.toNamed(Paths.HOME);
+                },
+                child: Text(
+                  'viwer-title'.tr,
+                  style: const TextStyle(fontSize: 18, color: Colors.purple),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -150,9 +182,9 @@ class IntroPage extends GetView<IntroController> {
               fit: BoxFit.fill,
             ),
           ),
-          const Text(
-            'Fast delivery',
-            style: TextStyle(
+          Text(
+            'fast-title'.tr,
+            style: const TextStyle(
                 color: Colors.purple,
                 fontSize: 26,
                 fontWeight: FontWeight.w800),
@@ -161,7 +193,7 @@ class IntroPage extends GetView<IntroController> {
             height: 35,
           ),
           Text(
-            'Fast delivery to your home to save time and effort',
+            'fastde-title'.tr,
             softWrap: true,
             style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
           ),
@@ -180,14 +212,30 @@ class IntroPage extends GetView<IntroController> {
         alignment: Alignment.topRight,
         child: Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: InkWell(
-            onTap: () {
-              Get.rootDelegate.toNamed(Paths.LogIn);
-            },
-            child: const Text(
-              'Skip',
-              style: TextStyle(fontSize: 18, color: Colors.purple),
-            ),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.rootDelegate.toNamed(Paths.LogIn);
+                },
+                child: Text(
+                  'skip-title'.tr,
+                  style: const TextStyle(fontSize: 18, color: Colors.purple),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Get.rootDelegate.toNamed(Paths.HOME);
+                },
+                child: Text(
+                  'viwer-title'.tr,
+                  style: const TextStyle(fontSize: 18, color: Colors.purple),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -202,9 +250,9 @@ class IntroPage extends GetView<IntroController> {
               'assets/images/intro_3.png',
             ),
           ),
-          const Text(
-            'Electronic payment',
-            style: TextStyle(
+          Text(
+            'elcpay-title'.tr,
+            style: const TextStyle(
                 color: Colors.purple,
                 fontSize: 26,
                 fontWeight: FontWeight.w800),
@@ -213,7 +261,7 @@ class IntroPage extends GetView<IntroController> {
             height: 35,
           ),
           Text(
-            'The payment process is secure and confidential',
+            'thepay-title'.tr,
             softWrap: true,
             style: TextStyle(fontSize: 17, color: Colors.purple.shade300),
           ),

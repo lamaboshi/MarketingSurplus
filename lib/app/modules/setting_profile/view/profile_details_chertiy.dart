@@ -26,7 +26,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.email = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Email',
+          label: 'entem-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
         TextFieldWidget(
@@ -35,7 +35,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.name = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Name',
+          label: 'entername-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
         TextFieldWidget(
@@ -44,7 +44,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.password = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Password',
+          label: 'entpass-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
         TextFieldWidget(
@@ -53,7 +53,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.address = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Enter Your Address',
+          label: 'enteradd-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
         TextFieldWidget(
@@ -62,7 +62,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.associationLicense = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Association License',
+          label: 'asslic-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
         TextFieldWidget(
@@ -71,7 +71,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             controller.charity.value.targetGroup = value;
           },
           textInputType: TextInputType.emailAddress,
-          label: 'Target Group ',
+          label: 'target-title'.tr,
           isReadOnly: controller.isNotEdit.value,
         ),
       ]),

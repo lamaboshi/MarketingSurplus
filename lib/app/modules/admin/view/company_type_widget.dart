@@ -32,7 +32,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Add Company Type',
+                                  'add-title'.tr,
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.purple.shade200),
@@ -47,7 +47,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                                         controller.type.value.type = value;
                                       },
                                       textInputType: TextInputType.text,
-                                      label: 'Type Name',
+                                      label: 'type-title'.tr,
                                     ),
                                     TextFieldWidget(
                                       onChanged: (value) {
@@ -55,7 +55,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                                             value;
                                       },
                                       textInputType: TextInputType.text,
-                                      label: 'Type Discraption',
+                                      label: 'typedis-title'.tr,
                                     ),
                                   ],
                                 ),
@@ -68,13 +68,13 @@ class CompanyTypeWidget extends GetView<AdminController> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.purple.shade200,
                                       shape: const StadiumBorder()),
-                                  child: const SizedBox(
+                                  child: SizedBox(
                                     width: 150,
                                     height: 30,
                                     child: Center(
                                       child: Text(
-                                        'Save',
-                                        style: TextStyle(
+                                        'save-title'.tr,
+                                        style: const TextStyle(
                                             color: Colors.white, fontSize: 19),
                                       ),
                                     ),
@@ -121,13 +121,13 @@ class CompanyTypeWidget extends GetView<AdminController> {
                   fontWeight: FontWeight.bold, color: Colors.purple))))
       .toList()
     ..addAll([
-      const DataColumn(
-          label: Text('Edit',
-              style: TextStyle(
+      DataColumn(
+          label: Text('edit-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
-      const DataColumn(
-          label: Text('Delete',
-              style: TextStyle(
+      DataColumn(
+          label: Text('delete-title'.tr,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
   List<DataRow> getRows() => controller.companyTypes
@@ -152,7 +152,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'Add Company Type',
+                              'add-title'.tr,
                               style: TextStyle(
                                   fontSize: 18, color: Colors.purple.shade200),
                             ),
@@ -167,7 +167,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                                     controller.type.value.type = value;
                                   },
                                   textInputType: TextInputType.text,
-                                  label: 'Type Name',
+                                  label: 'type-title'.tr,
                                 ),
                                 TextFieldWidget(
                                   value: controller.type.value.description,
@@ -175,7 +175,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                                     controller.type.value.description = value;
                                   },
                                   textInputType: TextInputType.text,
-                                  label: 'Type Discraption',
+                                  label: 'typedis-title'.tr,
                                 ),
                               ],
                             ),
@@ -187,13 +187,13 @@ class CompanyTypeWidget extends GetView<AdminController> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple.shade200,
                                   shape: const StadiumBorder()),
-                              child: const SizedBox(
+                              child: SizedBox(
                                 width: 150,
                                 height: 30,
                                 child: Center(
                                   child: Text(
-                                    'Save',
-                                    style: TextStyle(
+                                    'save-title'.tr,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 19),
                                   ),
                                 ),

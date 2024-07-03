@@ -41,7 +41,7 @@ class AdminView extends GetView<AdminController> {
                                       height: 30,
                                       child: Center(
                                         child: Text(
-                                          'Settings',
+                                          'setting-title'.tr,
                                           style: TextStyle(
                                               color: Colors.purple.shade200,
                                               fontSize: 19),
@@ -61,7 +61,7 @@ class AdminView extends GetView<AdminController> {
                                       height: 30,
                                       child: Center(
                                         child: Text(
-                                          'Notification',
+                                          'notification-title'.tr,
                                           style: TextStyle(
                                               color: Colors.purple.shade200,
                                               fontSize: 19),
@@ -70,36 +70,36 @@ class AdminView extends GetView<AdminController> {
                                     )),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 50,
                                   ),
                                   Text(
-                                    'Clean Out',
-                                    style: TextStyle(
+                                    'clean-title'.tr,
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 23,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 50,
                                   ),
                                   Text(
-                                    'LEST\' FIGHT FOOD WASTE TOGETHER',
-                                    style: TextStyle(
+                                    'lest-title'.tr,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 23),
                                   ),
                                   Text(
-                                    'Food waste is a big problem, and we can be a solution.',
-                                    style: TextStyle(
+                                    'food-title'.tr,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 21),
                                   ),
                                   Text(
-                                    ' Clean Out is the app that lets you rescue unsold food at your favorite spots from an untimely fate.',
-                                    style: TextStyle(
+                                    'cleanout-title'.tr,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                     ),
                                   )

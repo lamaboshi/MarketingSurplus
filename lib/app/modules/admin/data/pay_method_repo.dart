@@ -7,8 +7,7 @@ class PayMethodRepositry extends IPayMethodRepositry {
   final _dio = Get.find<Dio>();
   @override
   Future<bool> addMethod(PayMethod payMethod) async {
-    var result = await _dio.post(
-        'https://localhost:7092/api/PayMethod/AddPayMethod',
+    var result = await _dio.post('/api/PayMethod/AddPayMethod',
         data: payMethod.toJson());
     return result.statusCode == 200;
   }
@@ -16,15 +15,14 @@ class PayMethodRepositry extends IPayMethodRepositry {
   @override
   Future<bool> deleteMethod(int payMethodId) async {
     var result = await _dio.delete(
-      'https://localhost:7092/api/PayMethod/Delete/$payMethodId',
+      '/api/PayMethod/Delete/$payMethodId',
     );
     return result.statusCode == 200;
   }
 
   @override
   Future<List<PayMethod>> getAllMethod() async {
-    var result =
-        await _dio.get('https://localhost:7092/api/PayMethod/GetPayMethods');
+    var result = await _dio.get('/api/PayMethod/GetPayMethods');
     print(result);
     var list = <PayMethod>[];
     for (var item in result.data) {
@@ -35,8 +33,7 @@ class PayMethodRepositry extends IPayMethodRepositry {
 
   @override
   Future<bool> updateMethod(PayMethod payMethod) async {
-    var result = await _dio.put(
-        'https://localhost:7092/api/PayMethod/Put/${payMethod.id}',
+    var result = await _dio.put('/api/PayMethod/Put/${payMethod.id}',
         data: payMethod.toJson());
     return result.statusCode == 200;
   }

@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_type_model.dart';
+import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/admin/data/charity_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/company_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/user_repo.dart';
@@ -9,8 +12,12 @@ import 'package:overlayment/overlayment.dart';
 import '../../../../shared/service/auth_service.dart';
 import '../../../data/model/charity.dart';
 import '../../../data/model/company.dart';
+import '../../../data/model/pay_method.dart';
 import '../../../data/model/user_model.dart';
 import '../../admin/data/company_type_repo.dart';
+import '../../admin/data/order_repo.dart';
+import '../../admin/data/pay_method_repo.dart';
+import '../data/profail_repo.dart';
 
 class SettingProfileController extends GetxController {
   final kind = true.obs;
@@ -22,15 +29,53 @@ class SettingProfileController extends GetxController {
   final companyRepo = CompanyRepository();
   final userRepo = UsersDataRepository();
   final charityRepo = CharityRepository();
+  final profRepo = ProfailRepository();
   final auth = Get.find<AuthService>();
   final company = Company().obs;
   final user = UserModel().obs;
   final charity = Charity().obs;
+  final pays = <PayMethod>[].obs;
+  final orderProducts = <OrderProduct>[].obs;
+  final companyUsers = <UserModel>[].obs;
+  final listTextTabToggle = ["عربي", "English"];
+  RxInt tabTextIndexSelected = 0.obs;
+
+  void toggle(int index) {
+    tabTextIndexSelected.value = index;
+    if (index == 0) {
+      Get.updateLocale(Locale('ar', 'AR'));
+    } else {
+      Get.updateLocale(Locale('en', 'EN'));
+    }
+  }
+
   @override
   void onInit() {
     getDataperson();
     getAllCompanyType();
+    getPayMethod();
+    getLastOrder();
+    getAllUserSubs();
     super.onInit();
+  }
+
+  Future<void> getPayMethod() async {
+    final result = await PayMethodRepositry().getAllMethod();
+    pays.assignAll(result);
+  }
+
+  Future<void> getAllUserSubs() async {
+    if (auth.getTypeEnum() == Auth.comapny) {
+      final id = (auth.getDataFromStorage() as Company).id!;
+      var result = await profRepo.GetAllCompanyUsers(id);
+      companyUsers.assignAll(result);
+    }
+  }
+
+  Future<void> getLastOrder() async {
+    final result = await OrderDataRepository().getOrderDetails();
+    var data = result.where((p0) => p0.bills!.last.orderStatusId == 4);
+    orderProducts.addAll(data);
   }
 
   Future<void> getAllCompanyType() async {

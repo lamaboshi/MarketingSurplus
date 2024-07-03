@@ -12,6 +12,7 @@ class Charity {
   String? associationLicense;
   String? targetGroup;
   String? goals;
+           bool? isAccept ;
 
   Charity({
     this.id,
@@ -24,6 +25,7 @@ class Charity {
     this.address,
     this.associationLicense,
     this.targetGroup,
+    this.isAccept,
     this.goals,
   });
   Charity.fromJson(Map<String, dynamic> json) {
@@ -36,6 +38,7 @@ class Charity {
     targetGroup = json['targetGroup'];
     password = json['password'];
     goals = json['goals'];
+        isAccept = json['isAccept'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));

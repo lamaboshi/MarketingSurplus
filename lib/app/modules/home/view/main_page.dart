@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
 import 'package:marketing_surplus/app/data/model/company_type_model.dart';
+import 'package:marketing_surplus/app/modules/company/controller/company_controller.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 
 import '../../../../shared/widgets/auth_bottom_sheet.dart';
@@ -40,16 +40,20 @@ class MainView extends GetView<HomeController> {
             flex: 10,
             child: Obx(
               () => SizedBox(
-                child: controller.listPosts.isEmpty
-                    ? const Text('No Company To Show')
-                    : SingleChildScrollView(
-                        child: Column(
-                            children: controller.listPosts
-                                .map((element) => SingleCompany(
-                                      product: element,
-                                    ))
-                                .toList()),
-                      ),
+                child: controller.isloading.value
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : controller.companies.isEmpty
+                        ? Text('nocomp-title'.tr)
+                        : SingleChildScrollView(
+                            child: Column(
+                                children: controller.companies
+                                    .map((element) => SingleCompany(
+                                          product: element,
+                                        ))
+                                    .toList()),
+                          ),
               ),
             ),
           )
@@ -70,6 +74,9 @@ class SingleCompany extends GetView<HomeController> {
           await AuthBottomSheet().modalBottomSheet(context);
         } else {
           await controller.saveSelectedCompany(product);
+          if (Get.isRegistered<CompanyController>()) {
+            Get.find<CompanyController>().onInit();
+          }
           await Get.rootDelegate.toNamed(Paths.COMPANY_PAGE);
         }
       },
@@ -90,8 +97,10 @@ class SingleCompany extends GetView<HomeController> {
                         color: Colors.purpleAccent.shade100,
                         image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: companyPro!.company!.image == null
-                                ? const AssetImage('assets/images/post_2.jpg')
+                            image: companyPro!.company!.image == null &&
+                                    companyPro.company!.id != null
+                                ? AssetImage(
+                                    'assets/images/company_${companyPro.company!.id!}.png')
                                 : const AssetImage(
                                     'assets/images/post_2.jpg'))),
                   ),
@@ -123,7 +132,7 @@ class SingleCompany extends GetView<HomeController> {
                               child: Chip(
                                   backgroundColor: Colors.white,
                                   label: Text(
-                                    'Subscription',
+                                    'subscription-title'.tr,
                                     style: TextStyle(
                                       color: Colors.purple.shade200,
                                     ),
@@ -148,24 +157,38 @@ class SingleCompany extends GetView<HomeController> {
                         fontSize: 18,
                       ),
                     ),
-                    RatingBar.builder(
-                      initialRating: product.rateNumber == null
-                          ? 0.0
-                          : product.rateNumber! < 6
-                              ? double.parse(product.rateNumber.toString())
-                              : 5.0,
-                      itemSize: 22,
-                      minRating: 0,
-                      direction: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
-                    ),
+                    Row(
+                      children: Iterable<int>.generate(5)
+                          .toList()
+                          .map((e) => Icon(
+                                Icons.star,
+                                color: product.rateNumber == null
+                                    ? Colors.grey
+                                    : product.rateNumber! < 6
+                                        ? e + 1 <= product.rateNumber!
+                                            ? Colors.amber
+                                            : Colors.grey
+                                        : Colors.amber,
+                              ))
+                          .toList(),
+                    )
+
+                    // RatingBar.builder(
+                    //   initialRating: product.rateNumber == null
+                    //       ? 0.0
+                    //       : product.rateNumber! < 6
+                    //           ? double.parse(product.rateNumber.toString())
+                    //           : 5.0,
+                    //   itemSize: 22,
+                    //   minRating: 0,
+                    //   direction: Axis.horizontal,
+                    //   itemCount: 5,
+                    //   itemBuilder: (context, _) => const Icon(
+                    //     Icons.star,
+                    //     color: Colors.amber,
+                    //   ), onRatingUpdate: (double value) {  },
+
+                    // ),
                   ],
                 ),
               ),

@@ -26,9 +26,9 @@ class CompanyProductDto {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['companyProduct'] = companyProduct!.toJson();
-    json['rateNumber'] = rateNumber.toString();
-    json['companyType'] = type!.toJson();
-    json['subscription'] = subscription!.toJson();
+    json['rateNumber'] = rateNumber?.toString();
+    json['companyType'] = type?.toJson();
+    json['subscription'] = subscription?.toJson();
     return json;
   }
 }

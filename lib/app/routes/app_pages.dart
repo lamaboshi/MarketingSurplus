@@ -31,6 +31,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
+    GetPage(
+        name: Paths.Intro,
+        page: () => const IntroPage(),
+        binding: IntroBinding()),
     GetPage(name: Paths.HOME, page: () => const HomeView(), bindings: [
       HomeBinding(),
       BillsBinding(),
@@ -70,11 +74,6 @@ class AppPages {
         binding: SignUpBinding()),
 
     GetPage(
-        name: Paths.Intro,
-        page: () => const IntroPage(),
-        binding: IntroBinding()),
-
-    GetPage(
       name: Paths.LogIn,
       page: () => const LogInView(),
       binding: LogInBinding(),
@@ -86,7 +85,7 @@ class AppPages {
     ),
     GetPage(
       name: Paths.PRODUCT_PAGE,
-      page: () => const ProductView(),
+      page: () => ProductView(),
       binding: ProductBinding(),
     ),
     GetPage(
