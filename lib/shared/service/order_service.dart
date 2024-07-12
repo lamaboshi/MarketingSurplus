@@ -2,10 +2,15 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/charity.dart';
+import 'package:marketing_surplus/app/data/model/donation.dart';
 import 'package:marketing_surplus/app/data/model/order_model.dart';
 
 import '../../api/storge/storge_service.dart';
+import '../../app/data/model/company.dart';
 import '../../app/data/model/order_Product.dart';
+import '../../app/data/model/order_type.dart';
+import '../../app/data/model/product_donation.dart';
 import '../../app/data/model/user_model.dart';
 import 'auth_service.dart';
 
@@ -49,6 +54,7 @@ class OrderService {
 //ToAddAll Products
       for (var element in orderProduct) {
         element.orderId = orderId;
+        print(element.toJson());
         await _dio.post('/api/Main/SaveOrderProduct', data: element.toJson());
         print('****************** add Product');
       }
@@ -68,9 +74,101 @@ class OrderService {
     return false;
   }
 
+  Future<bool> saveDonation(
+      Donation donation, List<ProductDonation> product) async {
+    if (auth.getTypeEnum() == Auth.charity) {
+      final charityId = (auth.getDataFromStorage() as Charity).id!;
+      donation.charityId = charityId;
+    }
+    print(donation.toJson());
+
+    var data =
+        await _dio.post('/api/Donation/SaveDonation', data: donation.toJson());
+    if (data.statusCode == 200) {
+      print('****************** add donation');
+      final donationId = int.parse(data.data.toString());
+//ToAddAll Products
+      for (var element in product) {
+        element.donationId = donationId;
+        print(element.toJson());
+        await _dio.post('/api/Donation/SaveProductDonation',
+            data: element.toJson());
+        print('****************** add donation Product');
+      }
+      const key = 'basket-Item';
+      stroge.deleteDataByKey(key);
+      return true;
+    } else {
+      print(data.statusMessage);
+    }
+    return false;
+  }
+
+  Future<List<ProductDonation>> getAllDonation() async {
+    var id = (auth.getDataFromStorage() as Charity).id;
+
+    var data = await _dio.get('/api/Donation/GetAllOrder/$id');
+    print(data);
+    var list = <ProductDonation>[];
+    for (var item in data.data) {
+      list.add(ProductDonation.fromJson(item));
+    }
+    return list;
+  }
+
+  Future<List<Company>> getAllCompanyForCharity() async {
+    var id = (auth.getDataFromStorage() as Charity).id;
+    var data = await _dio.get('/api/Donation/GetAllCompanyForThis/$id');
+
+    var list = <Company>[];
+    for (var item in data.data) {
+      list.add(Company.fromJson(item));
+    }
+    return list;
+  }
+
+  Future<List<Donation>> getAllDonationForCompany(int idCompany) async {
+    var data =
+        await _dio.get('/api/Donation/GetAllDonationForCompany/$idCompany');
+
+    var list = <Donation>[];
+    for (var item in data.data) {
+      list.add(Donation.fromJson(item));
+    }
+    return list;
+  }
+
   Future<OrderModel> getOrder(int id) async {
     var result = await _dio.get('/api/Order/Get/$id');
     print(result);
     return OrderModel.fromJson(result.data as Map<String, dynamic>);
+  }
+
+  Future<Donation> getDonation(int id) async {
+    var result = await _dio.get('/api/Donation/GetDonation/$id');
+    print(result);
+    return Donation.fromJson(result.data as Map<String, dynamic>);
+  }
+
+  Future<List<OrderType>> getOrderType() async {
+    var data = await _dio.get('/api/OrderType/GetOrderTypes');
+
+    var list = <OrderType>[];
+    for (var item in data.data) {
+      list.add(OrderType.fromJson(item));
+    }
+    return list;
+  }
+
+  Future<List<OrderProduct>> getOrderDetailsForCompany() async {
+    var id = (auth.getDataFromStorage() as Company).id;
+
+    var data = await _dio.get('/api/Main/GetOrderDetailsForCompany/$id');
+    print(data);
+    var list = <OrderProduct>[];
+    for (var item in data.data) {
+      list.add(OrderProduct.fromJson(item));
+    }
+    return list;
   }
 }

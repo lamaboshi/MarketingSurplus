@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/rate.dart';
 
+import '../../../data/model/evalution.dart';
 import 'adapter/rate_adapter.dart';
 
 class RateRepository extends IRateRepository {
@@ -16,18 +17,24 @@ class RateRepository extends IRateRepository {
   }
 
   @override
-  Future<List<Rate>> getRates() async {
-    var result = await _dio.get('/api/Rate/GetRates');
-    print(result);
-    var list = <Rate>[];
-    for (var item in result.data) {
-      list.add(Rate.fromJson(item));
+  Future<List<Evalution>> getRates(int id) async {
+    try {
+      var result = await _dio.get('/api/Rate/GetRates/$id');
+      print(result);
+      var list = <Evalution>[];
+      for (var item in result.data) {
+        list.add(Evalution.fromJson(item));
+      }
+      return list;
+    } catch (e) {
+      return [];
     }
-    return list;
   }
 
   @override
   Future<bool> regierterRate(Rate object, int subId) async {
+    print(object.toJson());
+    print(subId);
     var result = await _dio.post('/api/Rate/AddRate?subId=$subId',
         data: object.toJson());
     return result.statusCode == 200;

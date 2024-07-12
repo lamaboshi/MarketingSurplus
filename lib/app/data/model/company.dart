@@ -11,6 +11,7 @@ class Company {
   Uint8List? image;
   String? description;
   String? licenseNumber;
+  String? onlineImage;
   int? companyTypeId;
   bool? isAccept;
   Company({
@@ -32,11 +33,12 @@ class Company {
     name = json['name'];
     phone = json['phone'];
     email = json['email'];
+    onlineImage = json['onlineImage'];
     address = json['address'];
     password = json['password'];
     telePhone = json['telePhone'];
     description = json['description'];
-          isAccept = json['isAccept'];
+    isAccept = json['isAccept'];
     companyTypeId = json['companyTypeId'];
     licenseNumber = json['licenseNumber'];
     image = json['image'] == null
@@ -52,8 +54,10 @@ class Company {
     json['email'] = email;
     json['address'] = address;
     json['password'] = password;
+
     json['telePhone'] = telePhone;
     json['description'] = description;
+    json['onlineImage'] = onlineImage;
     json['companyTypeId'] = companyTypeId;
     json['licenseNumber'] = licenseNumber;
 

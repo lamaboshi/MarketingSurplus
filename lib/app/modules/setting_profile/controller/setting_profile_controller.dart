@@ -10,9 +10,12 @@ import 'package:marketing_surplus/app/routes/app_routes.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/order_service.dart';
 import '../../../data/model/charity.dart';
 import '../../../data/model/company.dart';
+import '../../../data/model/order_type.dart';
 import '../../../data/model/pay_method.dart';
+import '../../../data/model/product_donation.dart';
 import '../../../data/model/user_model.dart';
 import '../../admin/data/company_type_repo.dart';
 import '../../admin/data/order_repo.dart';
@@ -25,6 +28,8 @@ class SettingProfileController extends GetxController {
   final isNotEdit = true.obs;
   final authType = Auth.user.obs;
   final companyTypes = <CompanyTypeModel>[].obs;
+  final orderTypes = <OrderType>[].obs;
+  final newOrderType = OrderType().obs;
   final typeRepo = CompanyTypeRepository();
   final companyRepo = CompanyRepository();
   final userRepo = UsersDataRepository();
@@ -37,9 +42,10 @@ class SettingProfileController extends GetxController {
   final pays = <PayMethod>[].obs;
   final orderProducts = <OrderProduct>[].obs;
   final companyUsers = <UserModel>[].obs;
+  final lastOrderCharity = <ProductDonation>[].obs;
   final listTextTabToggle = ["عربي", "English"];
   RxInt tabTextIndexSelected = 0.obs;
-
+  final isLoading = false.obs;
   void toggle(int index) {
     tabTextIndexSelected.value = index;
     if (index == 0) {
@@ -54,7 +60,8 @@ class SettingProfileController extends GetxController {
     getDataperson();
     getAllCompanyType();
     getPayMethod();
-    getLastOrder();
+    getData();
+    getOrderType();
     getAllUserSubs();
     super.onInit();
   }
@@ -62,6 +69,37 @@ class SettingProfileController extends GetxController {
   Future<void> getPayMethod() async {
     final result = await PayMethodRepositry().getAllMethod();
     pays.assignAll(result);
+  }
+
+  Future<void> getData() async {
+    if (auth.getTypeEnum() == Auth.user) {
+      await getLastOrder();
+    } else if (auth.getTypeEnum() == Auth.charity) {
+      await getLastOrderCharity();
+    } else {
+      getOrderDetailsForCompany();
+    }
+  }
+
+  Future<void> getOrderType() async {
+    final result = await OrderService().getOrderType();
+    orderTypes.assignAll(result);
+  }
+
+  Future<void> getLastOrderCharity() async {
+    final result = await OrderService().getAllDonation();
+    lastOrderCharity.assignAll(result);
+  }
+
+  Future<void> getOrderDetailsForCompany() async {
+    isLoading.value = true;
+    final data = await OrderService().getOrderDetailsForCompany();
+    print(
+        '--------------------------------getOrderDetailsForCompany with ${data.length}------------------');
+
+    orderProducts.assignAll(data);
+
+    isLoading.value = false;
   }
 
   Future<void> getAllUserSubs() async {
@@ -142,6 +180,7 @@ class SettingProfileController extends GetxController {
       case Auth.none:
         break;
     }
+    isNotEdit.value = true;
     loading.value = false;
   }
 

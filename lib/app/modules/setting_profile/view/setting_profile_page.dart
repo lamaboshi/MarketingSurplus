@@ -8,9 +8,11 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../shared/service/auth_service.dart';
 import '../../../routes/app_routes.dart';
 import 'profile_details.dart';
+import 'widget/company_users_page.dart';
 import 'widget/help_order.dart';
 import 'widget/join_page.dart';
 import 'widget/order_bills_widget.dart';
+import 'widget/order_type_page.dart';
 import 'widget/work_way_page.dart';
 
 class SettingProfileView extends GetView<SettingProfileController> {
@@ -70,18 +72,29 @@ class SettingProfileView extends GetView<SettingProfileController> {
         children: <Widget>[
           SectionWidget(
             title: 'seting-title'.tr,
-            widget: [
-              'accdea-title'.tr,
-              'paycar-title'.tr,
-              'vou-title'.tr,
-              'del-title'.tr
-            ],
+            widget: controller.auth.getTypeEnum() != Auth.charity
+                ? [
+                    'accdea-title'.tr,
+                    'paycar-title'.tr,
+                    'vou-title'.tr,
+                    'del-title'.tr
+                  ]
+                : [
+                    'accdea-title'.tr,
+                    'order-type'.tr,
+                    'vou-title'.tr,
+                    'del-title'.tr
+                  ],
             onTabs: [
               () {
                 Get.to(const ProfileDetails());
               },
               () {
-                Overlayment.show(OverPanel(child: const PayMethodView()));
+                if (controller.auth.getTypeEnum() == Auth.charity) {
+                  Overlayment.show(OverPanel(child: const OrderTypeView()));
+                } else {
+                  Overlayment.show(OverPanel(child: const PayMethodView()));
+                }
               },
               () {
                 Overlayment.show(OverPanel(child: const OrderBillsWidget()));
@@ -117,14 +130,16 @@ class SettingProfileView extends GetView<SettingProfileController> {
           SectionWidget(
             title: 'com-title'.tr,
             widget: controller.auth.getTypeEnum() == Auth.comapny
-                ? ['All users Subscraption', 'signUp As User']
+                ? ['user-sub'.tr, 'sign-user'.tr]
                 : [
                     'rec-title'.tr,
                     'sing-title'.tr,
                   ],
             onTabs: controller.auth.getTypeEnum() == Auth.comapny
                 ? [
-                    () {},
+                    () {
+                      Overlayment.show(OverPanel(child: CompanyUsersPage()));
+                    },
                     () {
                       Get.rootDelegate.offAndToNamed(Paths.SignUpUserPage);
                     }

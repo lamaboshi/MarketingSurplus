@@ -9,6 +9,7 @@ class UsersDataRepository extends IUsersDataRepository {
   Future<bool> regierterUser(UserModel object) async {
     final map = object.toJson();
     var data = await _dio.post('/api/User/AddUser', data: map);
+    print('-------------------AddUser ${data.statusCode}-----------------');
     if (data.statusCode == 200) {
       return true;
     } else {

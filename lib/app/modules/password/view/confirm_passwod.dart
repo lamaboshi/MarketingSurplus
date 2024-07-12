@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlayment/overlayment.dart';
 
-import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/passowd_controller.dart';
 
 class Confirmpassword extends GetView<PasswordController> {
@@ -67,19 +66,73 @@ class Confirmpassword extends GetView<PasswordController> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      TextFieldWidget(
-                        onChanged: (value) {
-                          controller.resrtpassword.value = value;
-                        },
-                        textInputType: TextInputType.emailAddress,
-                        label: 'entpass-title'.tr,
+                      Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: controller.userPasswordController,
+                            obscureText: !controller.passwordVisible.value,
+                            onChanged: (value) {
+                              controller.resrtpassword.value = value;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'pass-title'.tr,
+                              hintText: 'entpass-title'.tr,
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.passwordVisible.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  controller.passwordVisible.value =
+                                      !controller.passwordVisible.value;
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      TextFieldWidget(
-                        onChanged: (value) {
-                          controller.password.value = value;
-                        },
-                        textInputType: TextInputType.emailAddress,
-                        label: 'enterconf-title'.tr,
+                      Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: controller.userPasswordController1,
+                            obscureText: !controller.passwordVisible1.value,
+                            onChanged: (value) {
+                              controller.password.value = value;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'enterconf-title'.tr,
+                              hintText: 'entpass-title'.tr,
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.passwordVisible1.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                onPressed: () {
+                                  controller.passwordVisible1.value =
+                                      !controller.passwordVisible1.value;
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

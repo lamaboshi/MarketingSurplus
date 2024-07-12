@@ -21,6 +21,8 @@ class SignUpController extends GetxController {
   final typeRepo = CompanyTypeRepository();
   final passwordVisible = false.obs;
   final userPasswordController = TextEditingController();
+  final selectedType = CompanyTypeModel().obs;
+  final isloading = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -81,36 +83,42 @@ class SignUpController extends GetxController {
     phone: '0215789147 exmp',
     targetGroup: 'Rich Pepole exmp',
   ).obs;
+  final userForm = GlobalKey<FormState>();
+  final influencerForm = GlobalKey<FormState>();
+  final companyForm = GlobalKey<FormState>();
   final companyRpo = CompanyRepository();
   final userRpo = UsersDataRepository();
   final charityRepo = CharityRepository();
   final auth = Get.find<AuthService>();
   final newType = CompanyTypeModel().obs;
   Future<void> signUpCompany() async {
-    //   company.value.image = Utility.dataFromBase64String(stringPickImage.value);
+    company.value.image = Utility.dataFromBase64String(stringPickImage.value);
     var data = await companyRpo.regierterComp(company.value);
     if (data) {
-      await auth.logIn(company.value.email!, company.value.password!);
-
-      Get.rootDelegate.toNamed(Paths.HOME);
+      auth.stroge.saveData('regierterComp', 'New One');
+      stringPickImage.value = '';
+      Overlayment.dismissLast();
+      Get.rootDelegate.toNamed(Paths.LogIn);
     }
   }
 
   Future<void> signUpUser() async {
-    // user.value.image = Utility.dataFromBase64String(stringPickImage.value);
+    user.value.image = Utility.dataFromBase64String(stringPickImage.value);
     var data = await userRpo.regierterUser(user.value);
     if (data) {
-      await auth.logIn(user.value.email!, user.value.password!);
-      Get.rootDelegate.toNamed(Paths.HOME);
+      stringPickImage.value = '';
+      Overlayment.dismissLast();
+      Get.rootDelegate.toNamed(Paths.LogIn);
     }
   }
 
   Future<void> signUpCharity() async {
-    // user.value.image = Utility.dataFromBase64String(stringPickImage.value);
+    charity.value.image = Utility.dataFromBase64String(stringPickImage.value);
     var data = await charityRepo.regierterCharity(charity.value);
     if (data) {
-      await auth.logIn(charity.value.email!, charity.value.password!);
-      Get.rootDelegate.toNamed(Paths.HOME);
+      stringPickImage.value = '';
+      Overlayment.dismissLast();
+      Get.rootDelegate.toNamed(Paths.LogIn);
     }
   }
 
@@ -121,8 +129,12 @@ class SignUpController extends GetxController {
     //   CompanyTypeModel(type: 'Clothes', id: 3),
     //   CompanyTypeModel(type: 'Food', id: 4)
     // ]);
+    isloading.value = true;
+
     var data = await typeRepo.getCompanyType();
     companyTypes.assignAll(data);
+    selectedType.value = companyTypes.first;
+    isloading.value = false;
   }
 
   dynamic getObject() {
@@ -144,10 +156,12 @@ class SignUpController extends GetxController {
     if (res) {
       Overlayment.dismissLast();
       companyTypes.clear();
-      getAllCompanyType();
-      var item =
-          companyTypes.where((p0) => p0.type == companyTypeModel.type).first;
+      await getAllCompanyType();
+      var item = companyTypes
+          .where((p0) => p0.type!.contains(companyTypeModel.type!))
+          .first;
       company.value.companyTypeId = item.id;
+      selectedType.value = item;
     }
   }
 

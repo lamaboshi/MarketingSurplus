@@ -31,4 +31,5 @@ abstract class Paths {
   static const PERMISSIONS_PAGE = '/permissions-page';
   static const FAVORITES = '/favorites';
   static const ADMIN = '/admin';
+  static const Charity = '/charity';
 }

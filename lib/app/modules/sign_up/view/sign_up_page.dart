@@ -81,6 +81,7 @@ class SignUpView extends GetView<SignUpController> {
                         value: controller.authType.value,
                         onChanged: (newValue) {
                           FocusScope.of(context).requestFocus(FocusNode());
+                          controller.stringPickImage.value = '';
                           controller.authType.value = newValue!;
                         },
                         items: Auth.values
@@ -88,7 +89,7 @@ class SignUpView extends GetView<SignUpController> {
                             .map((e) {
                           return DropdownMenuItem(
                             value: e,
-                            child: Text(e.name),
+                            child: Text('${e.name}-type'.tr),
                           );
                         }).toList(),
                       ),
@@ -99,30 +100,6 @@ class SignUpView extends GetView<SignUpController> {
                       : controller.authType.value == Auth.charity
                           ? const SignUpCharity()
                           : const SignUpUser()),
-                  ElevatedButton(
-                      onPressed: () async {
-                        controller.authType.value == Auth.comapny
-                            ? await controller.signUpCompany()
-                            : controller.authType.value == Auth.user
-                                ? await controller.signUpUser()
-                                : controller.authType.value == Auth.charity
-                                    ? controller.signUpCharity()
-                                    : () {};
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple.shade100,
-                          shape: const StadiumBorder()),
-                      child: SizedBox(
-                        width: Get.width / 1.3,
-                        height: 60,
-                        child: Center(
-                          child: Text(
-                            'reg-title'.tr,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 21),
-                          ),
-                        ),
-                      )),
                   const SizedBox(
                     height: 15,
                   ),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
+import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
+
 import '../../../data/model/company_product.dart';
 import '../../../data/model/company_product_dto.dart';
 import '../../../data/model/company_type_model.dart';
@@ -14,16 +18,20 @@ import '../../home/data/post_repo.dart';
 
 class MenuController extends GetxController {
   final toggleValue = 0.obs;
+  final isLoading = false.obs;
   final listPosts = <CompanyProductDto>[].obs;
   final auth = Get.find<AuthService>();
   final mainRepo = PostRepository();
   final products = <CompanyProduct>[].obs;
+  final productsOrderCompany = <OrderProduct>[].obs;
+  final lastProductsOrderCompany = <OrderProduct>[].obs;
   final companies = <CompanyProductDto>[].obs;
   final companyTypes = <CompanyTypeModel>[].obs;
   final companyRepo = CompanyRepository();
   final companySearch = CompanyProductDto().obs;
   final companyTypeSearch = CompanyTypeModel().obs;
   final homeController = Get.find<HomeController>();
+
   final isEmptyData = true.obs;
   final count = 0.obs;
   final newProduct = Product(
@@ -91,10 +99,28 @@ class MenuController extends GetxController {
     products.assignAll(homeController.products);
     companies.assignAll(homeController.companies);
     companyTypes.assignAll(homeController.companyTypes);
+    if (auth.getTypeEnum() == Auth.comapny) {
+      await getOrderDetailsForCompany();
+    }
   }
 
-  void filter() {
-    listPosts.assignAll(homeController.listPosts);
+  Future<void> getOrderDetailsForCompany() async {
+    isLoading.value = true;
+    final data = await OrderService().getOrderDetailsForCompany();
+    print(
+        '--------------------------------getOrderDetailsForCompany with ${data.length}------------------');
+    final item = data
+        .where((element) => element.bills!.last.orderStatusId != 4)
+        .toList();
+    productsOrderCompany.assignAll(item);
+    final last = data
+        .where((element) => element.bills!.last.orderStatusId == 4)
+        .toList();
+    lastProductsOrderCompany.assignAll(last);
+    isLoading.value = false;
+  }
+
+  Future<void> filter() async {
     if (companySearch.value.companyProduct != null) {
       var data = listPosts
           .where((p0) =>

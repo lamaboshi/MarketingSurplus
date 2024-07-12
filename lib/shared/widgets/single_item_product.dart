@@ -5,6 +5,7 @@ import 'package:marketing_surplus/shared/widgets/auth_bottom_sheet.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../app/modules/product/view/produtc_page.dart';
+import '../service/util.dart';
 
 class SingleItem extends GetView {
   final CompanyProduct product;
@@ -26,7 +27,7 @@ class SingleItem extends GetView {
           onTap: () {
             Overlayment.show(OverDialog(
                 child: ProductView(
-              product: product.product!,
+              product: product,
               onTap: onTap,
             )));
           },
@@ -57,12 +58,13 @@ class SingleItem extends GetView {
                                           style: TextStyle(
                                               color: Colors.purple.shade200),
                                         )),
-                                Image.asset(
-                                  'assets/images/product_1.jpg',
-                                  fit: BoxFit.fill,
-                                  width: 120,
-                                  height: 120,
-                                ),
+                                SizedBox(
+                                  height: Get.height / 6,
+                                  width: Get.width / 4,
+                                  child: Utility.getImage(
+                                      base64StringPh: product.product!.image,
+                                      link: product.product!.onlineImage),
+                                )
                               ],
                             )),
                         Padding(
@@ -80,7 +82,7 @@ class SingleItem extends GetView {
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   SizedBox(
-                                    width: Get.width / 3.5,
+                                    width: Get.width / 3.6,
                                     height: 40,
                                     child: Row(
                                       children: [
@@ -88,7 +90,7 @@ class SingleItem extends GetView {
                                           child: Text(
                                             product.product!.descripation ==
                                                     null
-                                                ? 'No Description'
+                                                ? 'no-description'
                                                 : product
                                                     .product!.descripation!,
                                             style: const TextStyle(
@@ -136,7 +138,7 @@ class SingleItem extends GetView {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -197,9 +199,10 @@ class SingleItem extends GetView {
                                   },
                                   child: Chip(
                                       backgroundColor: Colors.purple.shade200,
-                                      label: const Text(
-                                        'Buy',
-                                        style: TextStyle(color: Colors.white),
+                                      label: Text(
+                                        'buy'.tr,
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       )),
                                 )
                         ],
@@ -213,11 +216,11 @@ class SingleItem extends GetView {
                       alignment: Alignment.centerRight,
                       child: Container(
                         color: Colors.orange,
-                        child: const Padding(
-                          padding: EdgeInsets.all(5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
                           child: Text(
-                            'Expired',
-                            style: TextStyle(color: Colors.white),
+                            'Expired'.tr,
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ),

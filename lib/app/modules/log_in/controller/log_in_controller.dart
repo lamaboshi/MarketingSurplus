@@ -27,12 +27,14 @@ class LogInController extends GetxController {
     if (!stroge.containsKey('type')) {
       return;
     }
+
     if (Get.isRegistered<HomeController>()) {
       Get.find<HomeController>().onInit();
     }
     if (Get.isRegistered<MenuController>()) {
       Get.find<MenuController>().onInit();
     }
-    Get.rootDelegate.offNamed(Paths.HOME);
+    Get.rootDelegate.history.clear();
+    Get.rootDelegate.offAndToNamed(Paths.HOME);
   }
 }

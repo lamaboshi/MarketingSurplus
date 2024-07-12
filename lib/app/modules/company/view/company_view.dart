@@ -5,8 +5,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 import 'package:marketing_surplus/app/routes/app_routes.dart';
+import 'package:overlayment/overlayment.dart';
 
+import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/single_item_product.dart';
+import '../../../../shared/widgets/textfield_widget.dart';
+import '../../../data/model/rate.dart';
 import '../controller/company_controller.dart';
 
 class CompanyView extends GetView<CompanyController> {
@@ -47,14 +52,14 @@ class CompanyView extends GetView<CompanyController> {
       body: Stack(
         children: [
           SizedBox(
-              height: Get.height / 3.2,
-              width: Get.width,
-              child: controller.dto.value.companyProduct!.company!.image ==
-                          null &&
-                      controller.dto.value.companyProduct!.company!.id != null
-                  ? Image.asset(
-                      'assets/images/company_${controller.dto.value.companyProduct!.company!.id!}.png')
-                  : Image.asset('assets/images/post_2.jpg')),
+            height: Get.height / 3.2,
+            width: Get.width,
+            child: Utility.getImage(
+                base64StringPh:
+                    controller.dto.value.companyProduct!.company!.image,
+                link:
+                    controller.dto.value.companyProduct!.company!.onlineImage),
+          ),
           Container(
             height: Get.height / 3.2,
             width: Get.width,
@@ -86,6 +91,59 @@ class CompanyView extends GetView<CompanyController> {
                       ),
                       onRatingUpdate: (rating) {
                         print(rating);
+                        Overlayment.show(OverDialog(
+                            child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Rate to ${controller.companyName.value}',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                            RatingBar.builder(
+                              initialRating: controller.rate.value,
+                              itemSize: 22,
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              unratedColor: Colors.black,
+                              itemCount: 5,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                                controller.rate.value = rating;
+                              },
+                            ),
+                            TextFieldWidget(
+                              onChanged: (value) {
+                                controller.rateDes.value = value;
+                              },
+                              textInputType: TextInputType.emailAddress,
+                              label: 'Description'.tr,
+                            ),
+                            InkWell(
+                                onTap: () async {
+                                  await controller.addRate(
+                                      Rate(
+                                          rateNumber:
+                                              controller.rate.value.toInt(),
+                                          description:
+                                              controller.rateDes.value),
+                                      controller.dto.value.subscription!.id!);
+                                  Overlayment.dismissLast();
+                                },
+                                child: Chip(
+                                    backgroundColor: Colors.purple.shade200,
+                                    label: const Text(
+                                      'Save',
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
+                          ],
+                        )));
                       },
                     )
                   ],
@@ -168,7 +226,7 @@ class CompanyView extends GetView<CompanyController> {
                         Expanded(
                           flex: 2,
                           child: Obx(() => controller.isLoading.value
-                              ? CircularProgressIndicator()
+                              ? const Center(child: CircularProgressIndicator())
                               : controller.products.isEmpty
                                   ? Text('nodat-title'.tr)
                                   : SingleChildScrollView(
@@ -192,7 +250,8 @@ class CompanyView extends GetView<CompanyController> {
             ],
           ),
           Obx(
-            () => controller.dto.value.subscription == null
+            () => controller.dto.value.subscription == null &&
+                    controller.auth.getTypeEnum() == Auth.user
                 ? Align(
                     alignment: Alignment.topRight,
                     child: InkWell(

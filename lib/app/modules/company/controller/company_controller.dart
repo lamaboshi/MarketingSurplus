@@ -22,6 +22,7 @@ class CompanyController extends GetxController {
   final rateRepo = RateRepository();
   final companyName = ''.obs;
   final rate = 0.0.obs;
+  final rateDes = ''.obs;
   final count = 0.obs;
   final isLoading = false.obs;
   @override

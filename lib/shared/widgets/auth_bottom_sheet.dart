@@ -44,6 +44,7 @@ class AuthBottomSheet {
                                   backgroundColor: Colors.purple.shade200,
                                   isExtended: true,
                                   onPressed: () async {
+                                    Get.rootDelegate.history.clear();
                                     await Get.rootDelegate
                                         .offAndToNamed(Paths.LogIn);
                                   },

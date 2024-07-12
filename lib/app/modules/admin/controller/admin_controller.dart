@@ -110,7 +110,7 @@ class AdminController extends GetxController {
     getAllOrders();
     getAllMethod();
     getAllOrderType();
-    getRates();
+    // getRates();
   }
 
   Resource setResourceEnum(index) {
@@ -169,10 +169,10 @@ class AdminController extends GetxController {
     method.assignAll(data);
   }
 
-  Future<void> getRates() async {
-    var data = await rateRepo.getRates();
-    rates.assignAll(data);
-  }
+  // Future<void> getRates() async {
+  //   var data = await rateRepo.getRates(1);
+  //   rates.assignAll(data);
+  // }
 
   Future<void> getAllOrderType() async {
     var data = await orderTypeRepo.getAllOrderType();

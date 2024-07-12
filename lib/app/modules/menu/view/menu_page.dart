@@ -67,7 +67,9 @@ class MenView extends GetView<con.MenuController> {
                             child: Padding(
                               padding: const EdgeInsets.all(11),
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async {
+                                  await controller.homeController.getPosts();
+                                  await controller.getPosts();
                                   Overlayment.show(OverDialog(
                                       child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -211,8 +213,8 @@ class MenView extends GetView<con.MenuController> {
                                         Row(
                                           children: [
                                             TextButton(
-                                                onPressed: () {
-                                                  controller.filter();
+                                                onPressed: () async {
+                                                  await controller.filter();
                                                 },
                                                 child: Text('filt-title'.tr)),
                                             TextButton(
@@ -250,53 +252,6 @@ class MenView extends GetView<con.MenuController> {
                         ],
                       ),
                     ),
-
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Row(
-                    //         children: [
-                    //           const Text('Sort by:'),
-                    //           const SizedBox(
-                    //             width: 10,
-                    //           ),
-                    //           SizedBox(
-                    //             width: 110,
-                    //             child: DropdownButton<String>(
-                    //               iconEnabledColor: Colors.purple,
-                    //               items: <String>['Hello Here', 'B', 'C', 'D']
-                    //                   .map((String value) {
-                    //                 return DropdownMenuItem<String>(
-                    //                   value: value,
-                    //                   child: Text(
-                    //                     value,
-                    //                     style: const TextStyle(color: Colors.purple),
-                    //                   ),
-                    //                 );
-                    //               }).toList(),
-                    //               onChanged: (_) {},
-                    //             ),
-                    //           )
-                    //         ],
-                    //       ),
-                    //       Row(
-                    //         children: [
-                    //           const Text('Sold Out'),
-                    //           const SizedBox(
-                    //             width: 5,
-                    //           ),
-                    //           CupertinoSwitch(
-                    //             value: true,
-                    //             activeColor: Colors.purple.shade200,
-                    //             onChanged: (value) {},
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -356,248 +311,14 @@ class MenView extends GetView<con.MenuController> {
                     : Obx(
                         () => SingleChildScrollView(
                           child: Column(
-                            children:
-                                controller.auth.getTypeEnum() == Auth.comapny
-                                    ? controller.products
-                                        .map((element) => SingleItem(
-                                                element, true, () {}, () async {
-                                              controller.newProduct.value =
-                                                  element.product!;
-                                              await showModalBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (builder) =>
-                                                          SingleChildScrollView(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .stretch,
-                                                              children: [
-                                                                Container(
-                                                                  color: Colors
-                                                                      .purple
-                                                                      .shade200,
-                                                                  child:
-                                                                      const Padding(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Text(
-                                                                      'Edit Product',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize:
-                                                                              20),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                SingleChildScrollView(
-                                                                  child: Column(
-                                                                    children: [
-                                                                      TextFieldWidget(
-                                                                        label: controller.newProduct.value.name ??
-                                                                            'Name Product',
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          controller
-                                                                              .newProduct
-                                                                              .value
-                                                                              .name = value;
-                                                                        },
-                                                                        textInputType:
-                                                                            TextInputType.text,
-                                                                      ),
-                                                                      TextFieldWidget(
-                                                                        label: controller.newProduct.value.descripation ??
-                                                                            'Descripation Product',
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          controller
-                                                                              .newProduct
-                                                                              .value
-                                                                              .descripation = value;
-                                                                        },
-                                                                        textInputType:
-                                                                            TextInputType.text,
-                                                                      ),
-                                                                      TextFieldWidget(
-                                                                        label: controller.newProduct.value.oldPrice !=
-                                                                                null
-                                                                            ? controller.newProduct.value.oldPrice.toString()
-                                                                            : 'Old Price Product',
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          controller
-                                                                              .newProduct
-                                                                              .value
-                                                                              .oldPrice = double.tryParse(value);
-                                                                        },
-                                                                        textInputType:
-                                                                            TextInputType.text,
-                                                                      ),
-                                                                      TextFieldWidget(
-                                                                        label: controller.newProduct.value.newPrice !=
-                                                                                null
-                                                                            ? controller.newProduct.value.newPrice.toString()
-                                                                            : 'offer Price Product',
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          controller
-                                                                              .newProduct
-                                                                              .value
-                                                                              .newPrice = double.tryParse(value);
-                                                                        },
-                                                                        textInputType:
-                                                                            TextInputType.text,
-                                                                      ),
-                                                                      TextFieldWidget(
-                                                                        label:
-                                                                            'Amount  this  Product',
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          controller
-                                                                              .amount
-                                                                              .value = int.parse(value);
-                                                                        },
-                                                                        textInputType:
-                                                                            TextInputType.text,
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            5),
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            const Text(
-                                                                              'Create Date Product',
-                                                                              style: TextStyle(fontSize: 18),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 120,
-                                                                              child: CupertinoDatePicker(
-                                                                                mode: CupertinoDatePickerMode.date,
-                                                                                initialDateTime: controller.newProduct.value.dateTime ?? DateTime.now(),
-                                                                                onDateTimeChanged: (DateTime newDateTime) {
-                                                                                  controller.newProduct.value.dateTime = newDateTime;
-                                                                                },
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            5),
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            const Text(
-                                                                              'Expiration Date Product',
-                                                                              style: TextStyle(fontSize: 18),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 120,
-                                                                              child: CupertinoDatePicker(
-                                                                                mode: CupertinoDatePickerMode.date,
-                                                                                initialDateTime: controller.newProduct.value.expiration ?? DateTime.now(),
-                                                                                onDateTimeChanged: (newDateTime) {
-                                                                                  controller.newProduct.value.expiration = newDateTime;
-                                                                                },
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
-                                                                        child: FloatingActionButton.extended(
-                                                                            backgroundColor: Colors.purple.shade200,
-                                                                            isExtended: true,
-                                                                            onPressed: () async {
-                                                                              final rsult = await controller.addProduct();
-                                                                              if (rsult) {
-                                                                                Navigator.of(context).pop();
-                                                                              }
-                                                                            },
-                                                                            label: SizedBox(
-                                                                                width: Get.width / 3,
-                                                                                child: const Center(
-                                                                                    child: Text(
-                                                                                  'Add',
-                                                                                  style: TextStyle(fontSize: 18, color: Colors.white),
-                                                                                )))),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ));
-                                            }, () {
-                                              Overlayment.show(OverDialog(
-                                                  child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child:
-                                                          Text('Are you sure'),
-                                                    ),
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        TextButton(
-                                                            onPressed: () {},
-                                                            child: Text("yes")),
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              Overlayment
-                                                                  .dismissLast();
-                                                            },
-                                                            child: Text("no")),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              )));
-                                            }, !controller.auth.isAuth()))
-                                        .toList()
-                                    : controller.listPosts
-                                        .map((element) => SingleItem(
-                                                element.companyProduct!, false,
-                                                () {
-                                              controller.addToBasket(
-                                                  element.companyProduct!);
-                                            }, () {}, () {},
-                                                !controller.auth.isAuth(),
-                                                type: element.type!.type!))
-                                        .toList(),
+                            children: controller.listPosts
+                                .map((element) => SingleItem(
+                                        element.companyProduct!, false, () {
+                                      controller
+                                          .addToBasket(element.companyProduct!);
+                                    }, () {}, () {}, !controller.auth.isAuth(),
+                                        type: element.type!.type!))
+                                .toList(),
                           ),
                         ),
                       )),
@@ -770,23 +491,20 @@ class MenView extends GetView<con.MenuController> {
                 size: 35,
               ),
             )
-          : controller.auth.getTypeEnum() == Auth.user
-              ? FloatingActionButton(
-                  tooltip: "bas-title".tr,
-                  onPressed: () async {
-                    controller.count.value = await controller.getCount();
-                    Get.find<HomeController>().pageIndex.value = 2;
-                  },
-                  child: badg.Badge(
-                    badgeContent: Obx(() => Text(controller.count.toString())),
-                    badgeStyle:
-                        badg.BadgeStyle(badgeColor: Colors.purple.shade200),
-                    child: const Icon(
-                      Icons.shopping_cart,
-                      size: 25,
-                    ),
-                  ))
-              : null,
+          : FloatingActionButton(
+              tooltip: "bas-title".tr,
+              onPressed: () async {
+                controller.count.value = await controller.getCount();
+                Get.find<HomeController>().pageIndex.value = 2;
+              },
+              child: badg.Badge(
+                badgeContent: Obx(() => Text(controller.count.toString())),
+                badgeStyle: badg.BadgeStyle(badgeColor: Colors.purple.shade200),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  size: 25,
+                ),
+              )),
     );
   }
 }

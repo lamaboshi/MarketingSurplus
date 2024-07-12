@@ -48,14 +48,14 @@ class HomeView extends GetView<HomeController> {
                             items: controller.select.map((e) {
                               return DropdownMenuItem(
                                 value: e,
-                                child: Text(e),
+                                child: Text(e.tr),
                               );
                             }).toList(),
                           ),
                         ),
                       ),
                     )
-                  : const SizedBox.shrink(),
+                  : SizedBox.shrink(),
             ),
             controller.pageIndex.value == 3
                 ? Padding(
@@ -93,28 +93,26 @@ class HomeView extends GetView<HomeController> {
                 width: 10,
               ),
               Text(
-                'cl-title'.tr,
+                'Clout',
                 style: TextStyle(
                     color: Colors.purple.shade200,
                     fontWeight: FontWeight.bold,
                     fontSize: 21),
               ),
-              Text(
-                'out-title'.tr,
-                style: const TextStyle(
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21),
-              )
             ],
           ),
         ),
-        body: Obx(
-          () => controller.auth.getTypeEnum() == Auth.user
-              ? controller.pageList[controller.pageIndex.value]
-              : controller.auth.getTypeEnum() == Auth.comapny
-                  ? controller.pageListCompany[controller.pageIndex.value]
-                  : controller.pageList[controller.pageIndex.value],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            controller.onInit();
+          },
+          child: Obx(
+            () => controller.auth.getTypeEnum() == Auth.user
+                ? controller.pageList[controller.pageIndex.value]
+                : controller.auth.getTypeEnum() == Auth.comapny
+                    ? controller.pageListCompany[controller.pageIndex.value]
+                    : controller.pageList[controller.pageIndex.value],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.pageIndex.value,

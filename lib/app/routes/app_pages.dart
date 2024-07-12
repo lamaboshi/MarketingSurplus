@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/admin/binding/admin_binding.dart';
 import 'package:marketing_surplus/app/modules/admin/view/admin_page.dart';
 import 'package:marketing_surplus/app/modules/bills/binding/bills_binding.dart';
+import 'package:marketing_surplus/app/modules/charity/binding/charity_binding.dart';
 import 'package:marketing_surplus/app/modules/company/binding/company_binding.dart';
 import 'package:marketing_surplus/app/modules/company/view/company_view.dart';
 import 'package:marketing_surplus/app/modules/product/binding/product_binding.dart';
@@ -32,6 +33,11 @@ class AppPages {
 
   static final routes = [
     GetPage(
+      name: Paths.FirstSplash,
+      page: () => const FiestSplashView(),
+      binding: FirstSplashBinding(),
+    ),
+    GetPage(
         name: Paths.Intro,
         page: () => const IntroPage(),
         binding: IntroBinding()),
@@ -39,13 +45,9 @@ class AppPages {
       HomeBinding(),
       BillsBinding(),
       ProfileBinding(),
-      MenuBinding()
+      MenuBinding(),
+      CharityBinding()
     ]),
-    GetPage(
-      name: Paths.FirstSplash,
-      page: () => const FiestSplashView(),
-      binding: FirstSplashBinding(),
-    ),
 
     GetPage(
       name: Paths.Profile,
@@ -57,7 +59,6 @@ class AppPages {
       page: () => const AdminView(),
       binding: AdminBinding(),
     ),
-
     GetPage(
         name: Paths.Password,
         page: () => const PasswordPageView(),

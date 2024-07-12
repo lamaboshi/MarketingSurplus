@@ -17,6 +17,10 @@ class PasswordController extends GetxController {
   final restModel = RestPassword().obs;
   final authService = Get.find<AuthService>();
   final stroge = Get.find<StorageService>();
+  final passwordVisible = false.obs;
+  final userPasswordController = TextEditingController();
+  final passwordVisible1 = false.obs;
+  final userPasswordController1 = TextEditingController();
   Future<void> getEmail() async {
     var data = await repo.getEmail(email.value);
     if (data != null) {
@@ -59,6 +63,7 @@ class PasswordController extends GetxController {
               ),
               duration: const Duration(seconds: 2))
           .show();
+      Get.rootDelegate.history.clear();
       Get.rootDelegate.offNamed(Paths.HOME);
     }
   }

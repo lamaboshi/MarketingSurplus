@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../shared/service/auth_service.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
+import '../../../routes/app_routes.dart';
 import '../controller/setting_profile_controller.dart';
 import 'profile_detail_company.dart';
 import 'profile_details_chertiy.dart';
@@ -33,29 +34,49 @@ class ProfileDetails extends GetView<SettingProfileController> {
                     child: SizedBox(
                       height: 120,
                       width: Get.width,
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      controller.isNotEdit.value = false;
+                                    },
+                                    icon: const Icon(
+                                        color: Colors.white, Icons.edit),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      var data = controller.auth.stroge
+                                          .getData('one-Time');
+                                      controller.auth.stroge.deleteAllKeys();
+                                      if (data != null) {
+                                        controller.auth.stroge
+                                            .saveData('one-Time', data);
+                                      }
+
+                                      Get.rootDelegate.history.clear();
+                                      Get.rootDelegate.toNamed(Paths.LogIn);
+                                    },
+                                    icon: const Icon(
+                                        color: Colors.white, Icons.logout),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
                                 onPressed: () {
-                                  controller.isNotEdit.value = false;
+                                  Get.back();
                                 },
-                                icon:
-                                    const Icon(color: Colors.white, Icons.edit),
-                              ),
-                              IconButton(
-                                onPressed: () {},
                                 icon: const Icon(
-                                    color: Colors.white, Icons.logout),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ))
+                          ]),
                     )),
                 Positioned(
                   bottom: 0,
@@ -81,19 +102,21 @@ class ProfileDetails extends GetView<SettingProfileController> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(
-                    () => controller.authType.value == Auth.user
-                        ? const UserProfileDetails()
-                        : controller.authType.value == Auth.comapny
-                            ? const ProfileDetailsCompany()
-                            : controller.authType.value == Auth.charity
-                                ? const ProfileDetailsChertiy()
-                                : const SizedBox(),
-                  )
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => controller.authType.value == Auth.user
+                          ? const UserProfileDetails()
+                          : controller.authType.value == Auth.comapny
+                              ? const ProfileDetailsCompany()
+                              : controller.authType.value == Auth.charity
+                                  ? const ProfileDetailsChertiy()
+                                  : const SizedBox(),
+                    )
+                  ],
+                ),
               ),
             )
           ],
@@ -125,54 +148,56 @@ class UserProfileDetails extends GetView<SettingProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        children: [
-          Text(
-            controller.user.value.name == null
-                ? ''
-                : controller.user.value.name!,
-            style: TextStyle(
-                color: Colors.purple.shade300,
-                fontWeight: FontWeight.bold,
-                fontSize: 21),
-          ),
-          TextFieldWidget(
-            value: controller.user.value.email,
-            onChanged: (value) {
-              controller.user.value.email = value;
-            },
-            textInputType: TextInputType.emailAddress,
-            label: 'entem-title'.tr,
-            isReadOnly: controller.isNotEdit.value,
-          ),
-          TextFieldWidget(
-            value: controller.user.value.name,
-            onChanged: (value) {
-              controller.user.value.name = value;
-            },
-            textInputType: TextInputType.emailAddress,
-            label: 'entername-title'.tr,
-            isReadOnly: controller.isNotEdit.value,
-          ),
-          TextFieldWidget(
-            value: controller.user.value.password,
-            onChanged: (value) {
-              controller.user.value.password = value;
-            },
-            textInputType: TextInputType.emailAddress,
-            label: 'entpass-title'.tr,
-            isReadOnly: controller.isNotEdit.value,
-          ),
-          TextFieldWidget(
-            value: controller.user.value.phone,
-            onChanged: (value) {
-              controller.user.value.phone = value;
-            },
-            textInputType: TextInputType.emailAddress,
-            label: 'enterphon-title'.tr,
-            isReadOnly: controller.isNotEdit.value,
-          ),
-        ],
+      () => SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              controller.user.value.name == null
+                  ? ''
+                  : controller.user.value.name!,
+              style: TextStyle(
+                  color: Colors.purple.shade300,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21),
+            ),
+            TextFieldWidget(
+              value: controller.user.value.email,
+              onChanged: (value) {
+                controller.user.value.email = value;
+              },
+              textInputType: TextInputType.emailAddress,
+              label: 'entem-title'.tr,
+              isReadOnly: controller.isNotEdit.value,
+            ),
+            TextFieldWidget(
+              value: controller.user.value.name,
+              onChanged: (value) {
+                controller.user.value.name = value;
+              },
+              textInputType: TextInputType.emailAddress,
+              label: 'entername-title'.tr,
+              isReadOnly: controller.isNotEdit.value,
+            ),
+            TextFieldWidget(
+              value: controller.user.value.password,
+              onChanged: (value) {
+                controller.user.value.password = value;
+              },
+              textInputType: TextInputType.emailAddress,
+              label: 'entpass-title'.tr,
+              isReadOnly: controller.isNotEdit.value,
+            ),
+            TextFieldWidget(
+              value: controller.user.value.phone,
+              onChanged: (value) {
+                controller.user.value.phone = value;
+              },
+              textInputType: TextInputType.emailAddress,
+              label: 'enterphon-title'.tr,
+              isReadOnly: controller.isNotEdit.value,
+            ),
+          ],
+        ),
       ),
     );
   }

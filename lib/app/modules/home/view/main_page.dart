@@ -5,6 +5,8 @@ import 'package:marketing_surplus/app/data/model/company_type_model.dart';
 import 'package:marketing_surplus/app/modules/company/controller/company_controller.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 
+import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/auth_bottom_sheet.dart';
 import '../../../routes/app_routes.dart';
 
@@ -47,12 +49,14 @@ class MainView extends GetView<HomeController> {
                     : controller.companies.isEmpty
                         ? Text('nocomp-title'.tr)
                         : SingleChildScrollView(
-                            child: Column(
-                                children: controller.companies
-                                    .map((element) => SingleCompany(
-                                          product: element,
-                                        ))
-                                    .toList()),
+                            child: Obx(
+                              () => Column(
+                                  children: controller.companies
+                                      .map((element) => SingleCompany(
+                                            product: element,
+                                          ))
+                                      .toList()),
+                            ),
                           ),
               ),
             ),
@@ -93,16 +97,12 @@ class SingleCompany extends GetView<HomeController> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 5.5,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.purpleAccent.shade100,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: companyPro!.company!.image == null &&
-                                    companyPro.company!.id != null
-                                ? AssetImage(
-                                    'assets/images/company_${companyPro.company!.id!}.png')
-                                : const AssetImage(
-                                    'assets/images/post_2.jpg'))),
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.purpleAccent.shade100,
+                    ),
+                    child: Utility.getImage(
+                        base64StringPh: companyPro!.company!.image,
+                        link: companyPro.company!.onlineImage),
                   ),
                   product.subscription == null && controller.isAll.value
                       ? Container(
@@ -114,7 +114,9 @@ class SingleCompany extends GetView<HomeController> {
                           ),
                         )
                       : const SizedBox.shrink(),
-                  product.subscription == null && controller.isAll.value
+                  product.subscription == null &&
+                          controller.isAll.value &&
+                          controller.auth.getTypeEnum() == Auth.user
                       ? Align(
                           alignment: Alignment.topRight,
                           child: InkWell(
@@ -213,12 +215,12 @@ class SingleCatrgory extends GetView<HomeController> {
         if (!controller.auth.isAuth()) {
           await AuthBottomSheet().modalBottomSheet(context);
         } else {
-          if (controller.selecetType.value == type) {
+          if (controller.selectType.value == type) {
             await controller.getPosts();
             await controller.getAllCompanyType();
-            controller.selecetType.value = CompanyTypeModel();
+            controller.selectType.value = CompanyTypeModel();
           } else {
-            controller.selecetType.value = type;
+            controller.selectType.value = type;
             await controller.filterByType();
           }
         }
@@ -228,16 +230,16 @@ class SingleCatrgory extends GetView<HomeController> {
           child: Obx(
             () => Chip(
                 side: BorderSide(
-                    color: controller.selecetType.value.id == type.id
+                    color: controller.selectType.value.id == type.id
                         ? Colors.white
                         : Colors.purple.shade200),
-                backgroundColor: controller.selecetType.value.id == type.id
+                backgroundColor: controller.selectType.value.id == type.id
                     ? Colors.purple.shade200
                     : Colors.white,
                 label: Text(
                   type.type == null ? '' : type.type!,
                   style: TextStyle(
-                    color: controller.selecetType.value.id == type.id
+                    color: controller.selectType.value.id == type.id
                         ? Colors.white
                         : Colors.purple.shade200,
                   ),

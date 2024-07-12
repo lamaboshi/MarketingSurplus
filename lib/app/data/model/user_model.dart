@@ -11,20 +11,19 @@ class UserModel {
   String? userName;
   String? address;
   Uint8List? image;
-    bool? isAccept;
+  bool? isAccept;
   Uint8List? qRCode;
-  UserModel({
-    this.id,
-    this.name,
-    this.phone,
-    this.email,
-    this.paypal,
-    this.age,
-    this.password,
-    this.userName,
-    this.image,
-    this.isAccept
-  });
+  UserModel(
+      {this.id,
+      this.name,
+      this.phone,
+      this.email,
+      this.paypal,
+      this.age,
+      this.password,
+      this.userName,
+      this.image,
+      this.isAccept});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,7 +56,7 @@ class UserModel {
     json['password'] = password;
     json['userName'] = userName;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
-    json['qrCode'] = image == null ? null : Uint8List.fromList(qRCode!);
+    json['qrCode'] = qRCode == null ? null : Uint8List.fromList(qRCode!);
 
     return json;
   }

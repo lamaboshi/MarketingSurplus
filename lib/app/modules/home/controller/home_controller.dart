@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:marketing_surplus/app/data/model/company.dart';
 import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
 import 'package:marketing_surplus/app/data/model/product.dart';
@@ -9,18 +11,22 @@ import 'package:marketing_surplus/app/data/model/subscription.dart';
 import 'package:marketing_surplus/app/data/model/user_model.dart';
 import 'package:marketing_surplus/app/modules/home/data/post_repo.dart';
 import 'package:marketing_surplus/app/modules/home/view/main_company_page.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../api/storge/storge_service.dart';
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/util.dart';
 import '../../../data/model/company_product.dart';
 import '../../../data/model/company_type_model.dart';
+import '../../../data/model/evalution.dart';
 import '../../../data/model/order_model.dart';
-import '../../../data/model/rate.dart';
 import '../../admin/data/company_repo.dart';
 import '../../admin/data/company_type_repo.dart';
 import '../../admin/data/order_repo.dart';
 import '../../admin/data/rate_repo.dart';
 import '../../bills/view/bills_page.dart';
+import '../../charity/view/charity_view.dart';
+import '../../menu/view/menu_company_page.dart';
 import '../../menu/view/menu_page.dart';
 import '../../profile/view/profile_page.dart';
 import '../../setting_profile/data/profail_repo.dart';
@@ -35,15 +41,15 @@ class HomeController extends GetxController {
   final mainRepo = PostRepository();
   final profileRepo = ProfailRepository();
   final typeRepo = CompanyTypeRepository();
-  final selecetType = CompanyTypeModel().obs;
-  final rates = <Rate>[].obs;
+  final selectType = CompanyTypeModel().obs;
+  final rates = <Evalution>[].obs;
   final orders = <OrderModel>[].obs;
   final orderRepo = OrderDataRepository();
   final rateRepo = RateRepository();
   final isAll = true.obs;
   final isAccept = false.obs;
   final isloading = false.obs;
-
+  final stringPickImage = ''.obs;
   final products = <CompanyProduct>[].obs;
   final newProduct = Product(
           name: 'test',
@@ -55,10 +61,11 @@ class HomeController extends GetxController {
       .obs;
   final amount = 0.obs;
   final companyRepo = CompanyRepository();
-  final select = ['Suggested Company', 'Subscription Company'];
+  final select = ['drop-all', 'drop-sub'];
 
   @override
   void onInit() {
+    selectType.value = CompanyTypeModel();
     getData();
 
     getPosts();
@@ -66,25 +73,40 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  Future<void> getData() async {
-    if (auth.getTypeEnum() == Auth.comapny) {
-      final object = (auth.getDataFromStorage() as Company);
-      if (object.isAccept!) {
-        await getAllOrders();
-        await getRates();
-        await getAllProduct(object.id!);
-        isAccept.value = true;
-      }
+  void isNew() {
+    var isNewData = auth.stroge.containsKey('regierterComp');
+    if (isNewData) {
+      Overlayment.showMessage(
+          icon: Icon(
+            Icons.album_sharp,
+            color: Colors.purple.shade400,
+          ),
+          'Hello Welcome To -Clout- You should Add your own PayMethods From Settings and Your Product to reach orders from Customer ,there help page to help you  -Welcome Again-');
+      auth.stroge.deleteDataByKey('regierterComp');
     }
   }
 
+  Future<void> getData() async {
+    if (auth.getTypeEnum() == Auth.comapny) {
+      final object = (auth.getDataFromStorage() as Company);
+
+      await getAllOrders();
+      await getRates();
+      await getAllProduct(object.id!);
+      isAccept.value = true;
+    }
+  }
+
+//TODO MM reomve
   Future<void> getAllOrders() async {
     var data = await orderRepo.getOrders();
+
     orders.assignAll(data);
   }
 
   Future<void> getRates() async {
-    var data = await rateRepo.getRates();
+    final id = (auth.getDataFromStorage() as Company).id!;
+    var data = await rateRepo.getRates(id);
     rates.assignAll(data);
   }
 
@@ -107,10 +129,12 @@ class HomeController extends GetxController {
   Future<void> getPosts({bool isAllData = false}) async {
     isloading.value = true;
     listPosts.clear();
-
-    if (!auth.isAuth()) {
+    companies.clear();
+    if (!auth.isAuth() || auth.getTypeEnum() == Auth.charity) {
       final data = await mainRepo.getAllPosts(0);
+      data.shuffle();
       sortList(data, isAllData: isAllData);
+      isloading.value = false;
       return;
     }
 
@@ -121,21 +145,23 @@ class HomeController extends GetxController {
         getData();
         getAllCompanyType();
         final data = await mainRepo.getAllPosts(userId);
+        data.shuffle();
         sortList(data, isAllData: isAllData);
       } else {
         companies.clear();
         final data = await mainRepo.getSubscriptionPosts(userId);
-
+        data.shuffle();
         listPosts.assignAll(data);
         for (var e in data) {
           if (!companies.any((element) =>
               element.companyProduct!.company!.id ==
               e.companyProduct!.company!.id)) {
-            companies.add(e);
+            companies.assign(e);
           }
         }
       }
     }
+
     isloading.value = false;
   }
 
@@ -158,19 +184,30 @@ class HomeController extends GetxController {
   }
 
   Future<void> filterByType() async {
-    if (selecetType.value.id == null) return;
+    if (selectType.value.id == null) return;
     if (auth.getTypeEnum() == Auth.user) {
       final userId = (auth.getDataFromStorage() as UserModel).id!;
 
       final list = await mainRepo.getAllPosts(userId);
       var data =
-          list.where((p0) => p0.type!.id == selecetType.value.id).toList();
+          list.where((p0) => p0.type!.id == selectType.value.id).toList();
       listPosts.clear();
+      companies.clear();
+      sortList(data);
+    } else {
+      final list = await mainRepo.getAllPosts(0);
+      var data =
+          list.where((p0) => p0.type!.id == selectType.value.id).toList();
+
+      listPosts.clear();
+      companies.clear();
       sortList(data);
     }
   }
 
   void sortList(List<CompanyProductDto> data, {bool isAllData = false}) {
+    listPosts.clear();
+    companies.clear();
     var items = isAllData ? data : data.take(20);
     listPosts.assignAll(items);
     for (var e in data) {
@@ -182,11 +219,22 @@ class HomeController extends GetxController {
     }
   }
 
+  Future pickImageFun() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      stringPickImage.value = Utility.base64String(await image.readAsBytes());
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
   Future<bool> addProduct() async {
     newProduct.value.isExpiration =
         newProduct.value.expiration!.isBefore(DateTime.now());
     final save = SaveProduct(product: newProduct.value, amount: amount.value);
     final result = await companyRepo.addProduct(save);
+    onInit();
     return result;
   }
 
@@ -198,8 +246,8 @@ class HomeController extends GetxController {
   ];
   final pageListCompany = [
     const MainCompanyPage(),
-    MenView(),
-    const BillsView(),
+    const MenuCompanyPage(),
+    const CharityView(),
     const ProfileView()
   ];
 }

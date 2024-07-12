@@ -4,8 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../shared/service/util.dart';
+import '../../../../shared/widgets/empty_screen.dart';
+import '../../../../shared/widgets/section_widget.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/home_controller.dart';
+import 'main_compnay_product.dart';
 
 class MainCompanyPage extends GetView<HomeController> {
   const MainCompanyPage({super.key});
@@ -14,122 +18,64 @@ class MainCompanyPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _SectionWidget(
-                title: 'lastord-title'.tr,
-                icon: Icons.shopping_bag_rounded,
+      body: Column(
+        children: [
+          SectionWidget(
+              flex: 3,
+              title: 'itemcomp-title'.tr,
+              icon: Icons.shopping_bag_rounded,
+              child: SingleChildScrollView(
+                child: MainCompanyProduct(),
+              )),
+          SectionWidget(
+              flex: 1,
+              title: 'ratecus-title'.tr,
+              icon: Icons.data_exploration_sharp,
+              child: SingleChildScrollView(
                 child: Obx(
-                  () => Wrap(
-                    children: controller.orders
-                        .map(
-                          (element) => Card(
-                            color: Color((math.Random().nextDouble() * 0xFFFFFF)
-                                    .toInt())
-                                .withOpacity(0.5),
-                            child: ListTile(
-                              title: Text(
-                                element.name ?? '',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              subtitle: Row(
-                                children: [
-                                  Text(
-                                    'amount-title'.tr,
-                                    style: const TextStyle(color: Colors.white),
+                  () => controller.rates.isEmpty
+                      ? EmptyData()
+                      : Wrap(
+                          children: controller.rates
+                              .map(
+                                (element) => Card(
+                                  color: Color((math.Random().nextDouble() *
+                                              0xFFFFFF)
+                                          .toInt())
+                                      .withOpacity(0.5),
+                                  child: ListTile(
+                                    title: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.star,
+                                          color: Colors.white,
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          element.rate!.rateNumber.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          element.rate!.description ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    element.amount.toString(),
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'price-title'.tr,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  Text(
-                                    element.price.toString(),
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                )),
-            _SectionWidget(
-                title: 'ratecus-title'.tr,
-                icon: Icons.data_exploration_sharp,
-                child: Obx(
-                  () => Wrap(
-                    children: controller.rates
-                        .map(
-                          (element) => Card(
-                            color: Color((math.Random().nextDouble() * 0xFFFFFF)
-                                    .toInt())
-                                .withOpacity(0.5),
-                            child: ListTile(
-                              title: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    element.rateNumber.toString(),
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                )),
-            _SectionWidget(
-              title: 'mostpop-title'.tr,
-              icon: Icons.star_purple500_outlined,
-              child: Obx(
-                () => Wrap(
-                  children: controller.products
-                      .map(
-                        (element) => Card(
-                          color: Color((math.Random().nextDouble() * 0xFFFFFF)
-                                  .toInt())
-                              .withOpacity(0.5),
-                          child: ListTile(
-                            title: Text(
-                              element.product!.name ?? "",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Row(
-                              children: [
-                                Text(
-                                  'price-title'.tr,
-                                  style: const TextStyle(color: Colors.white),
                                 ),
-                                Text(
-                                  element.product!.newPrice.toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
+                              )
+                              .toList(),
                         ),
-                      )
-                      .toList(),
                 ),
-              ),
-            )
-          ],
-        ),
+              )),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -142,14 +88,49 @@ class MainCompanyPage extends GetView<HomeController> {
                       children: [
                         Container(
                           color: Colors.purple.shade200,
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              'addpro-title',
+                              'addpro-title'.tr,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Obx(() => controller
+                                    .stringPickImage.value.isNotEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(33),
+                                      child: Utility.imageFromBase64String(
+                                          controller.stringPickImage.value,
+                                          75,
+                                          150),
+                                    ),
+                                  )
+                                : Icon(
+                                    Icons.production_quantity_limits,
+                                    size: 50,
+                                  )),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Center(
+                              child: InkWell(
+                                  onTap: () async {
+                                    await controller.pickImageFun();
+                                  },
+                                  child: Text('Addanimage'.tr)),
+                            ),
+                          ],
                         ),
                         SingleChildScrollView(
                           child: Column(
@@ -283,46 +264,6 @@ class MainCompanyPage extends GetView<HomeController> {
           size: 35,
         ),
       ),
-    );
-  }
-}
-
-class _SectionWidget extends GetView<HomeController> {
-  const _SectionWidget({this.title, this.icon, this.child});
-  final String? title;
-  final Widget? child;
-  final IconData? icon;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                  icon,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                title ?? "",
-                style: TextStyle(color: Colors.purple.shade300, fontSize: 21),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: child!,
-        )
-      ],
     );
   }
 }

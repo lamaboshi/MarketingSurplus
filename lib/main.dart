@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
       contentType: 'application/json; charset=UTF-8',
     )));
     Overlayment.navigationKey = Get.key;
-    var storge = Get.put(StorageService());
-    storge.init();
+    var storage = Get.put(StorageService());
+    storage.init();
     Get.put(AuthService());
     return GetMaterialApp.router(
         title: "Markting suplus",

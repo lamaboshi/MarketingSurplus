@@ -14,6 +14,7 @@ class TextFieldWidget extends StatefulWidget {
   final bool? isNumberFormat;
   final IconData? icon;
   final bool isReadOnly;
+  final String? Function(String?)? validator;
   const TextFieldWidget(
       {this.value,
       this.label,
@@ -25,6 +26,7 @@ class TextFieldWidget extends StatefulWidget {
       this.controller,
       this.minLines,
       this.icon,
+      this.validator,
       this.isNumberFormat = false,
       this.isReadOnly = false,
       Key? key})
@@ -52,6 +54,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         width: widget.width,
         child: TextFormField(
           key: Key(widget.label!),
+          validator: widget.validator,
           focusNode: FocusNode(),
           readOnly: widget.isReadOnly,
           controller: _controller,

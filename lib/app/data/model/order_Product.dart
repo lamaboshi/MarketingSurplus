@@ -6,7 +6,7 @@ import 'company_product.dart';
 class OrderProduct {
   int? id;
   int? amount;
-  double? totalPrice;
+  int? totalPrice;
   int? companyProductId;
   int? orderId;
   CompanyProduct? companyProduct;
@@ -26,7 +26,7 @@ class OrderProduct {
         json['amount'] == null ? null : int.tryParse(json['amount'].toString());
     totalPrice = json['totalPrice'] == null
         ? null
-        : double.tryParse(json['totalPrice'].toString());
+        : int.tryParse(json['totalPrice'].toString());
     companyProductId = json['companyProductId'];
     companyProduct = json['companyProduct'] == null
         ? null

@@ -7,6 +7,7 @@ class Product {
   double? newPrice;
   double? oldPrice;
   DateTime? expiration;
+  String? onlineImage;
   DateTime? dateTime;
   bool? isExpiration;
   Uint8List? image;
@@ -23,6 +24,7 @@ class Product {
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    onlineImage = json['onlineImage'];
     descripation = json['descripation'];
     newPrice = json['newPrice'] == null
         ? null
@@ -52,6 +54,7 @@ class Product {
     json['dateTime'] = dateTime?.toIso8601String();
     json['expiration'] = expiration?.toIso8601String();
     json['isExpiration'] = isExpiration;
+    json['onlineImage'] = onlineImage;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
     return json;
   }

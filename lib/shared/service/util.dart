@@ -26,4 +26,23 @@ class Utility {
   static String base64String(Uint8List data) {
     return base64Encode(data);
   }
+
+  static Widget getImage({Uint8List? base64StringPh, String? link}) {
+    if (base64StringPh != null) {
+      var image = base64String(base64StringPh);
+      return imageFromBase64String(image, null, null);
+    } else if (link != null) {
+      return Image.network(
+        link.trimLeft(),
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset(
+        'assets/images/logo.png',
+        fit: BoxFit.cover,
+        width: 40,
+        height: 40,
+      );
+    }
+  }
 }
