@@ -64,7 +64,9 @@ class ProductView extends GetView<ProductController> {
         children: <Widget>[
           Utility.getImage(
               base64StringPh: product!.product!.image,
-              link: product!.product!.onlineImage),
+              link: product!.product!.onlineImage,
+              hight: Get.height / 2,
+              width: Get.width),
           const Padding(padding: EdgeInsets.only(top: 30.0)),
         ],
       ),

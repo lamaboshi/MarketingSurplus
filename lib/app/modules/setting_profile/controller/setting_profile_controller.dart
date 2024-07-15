@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:marketing_surplus/app/data/model/company_type_model.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/admin/data/charity_repo.dart';
@@ -11,6 +12,7 @@ import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
 import '../../../../shared/service/order_service.dart';
+import '../../../../shared/service/util.dart';
 import '../../../data/model/charity.dart';
 import '../../../data/model/company.dart';
 import '../../../data/model/order_type.dart';
@@ -43,6 +45,7 @@ class SettingProfileController extends GetxController {
   final orderProducts = <OrderProduct>[].obs;
   final companyUsers = <UserModel>[].obs;
   final lastOrderCharity = <ProductDonation>[].obs;
+  final stringPickImage = ''.obs;
   final listTextTabToggle = ["عربي", "English"];
   RxInt tabTextIndexSelected = 0.obs;
   final isLoading = false.obs;
@@ -69,6 +72,16 @@ class SettingProfileController extends GetxController {
   Future<void> getPayMethod() async {
     final result = await PayMethodRepositry().getAllMethod();
     pays.assignAll(result);
+  }
+
+  Future pickImageFun() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      stringPickImage.value = Utility.base64String(await image.readAsBytes());
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 
   Future<void> getData() async {
@@ -163,16 +176,31 @@ class SettingProfileController extends GetxController {
 
     switch (authType.value) {
       case Auth.user:
+        if (stringPickImage.value.isNotEmpty) {
+          user.value.image =
+              Utility.dataFromBase64String(stringPickImage.value);
+        }
+
         await userRepo.updateUser(user.value);
         auth.stroge.deleteAllKeys();
         auth.logIn(user.value.email!, user.value.password!);
         break;
       case Auth.comapny:
+        if (stringPickImage.value.isNotEmpty) {
+          company.value.image =
+              Utility.dataFromBase64String(stringPickImage.value);
+        }
+
         await companyRepo.updateCompany(company.value);
         auth.stroge.deleteAllKeys();
         auth.logIn(company.value.email!, company.value.password!);
         break;
       case Auth.charity:
+        if (stringPickImage.value.isNotEmpty) {
+          charity.value.image =
+              Utility.dataFromBase64String(stringPickImage.value);
+        }
+
         await charityRepo.updateCharity(charity.value);
         auth.stroge.deleteAllKeys();
         auth.logIn(charity.value.email!, charity.value.password!);

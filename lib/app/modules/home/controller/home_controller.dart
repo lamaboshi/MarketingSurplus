@@ -15,6 +15,7 @@ import 'package:overlayment/overlayment.dart';
 
 import '../../../../api/storge/storge_service.dart';
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/order_service.dart';
 import '../../../../shared/service/util.dart';
 import '../../../data/model/company_product.dart';
 import '../../../data/model/company_type_model.dart';
@@ -230,6 +231,8 @@ class HomeController extends GetxController {
   }
 
   Future<bool> addProduct() async {
+    newProduct.value.image =
+        Utility.dataFromBase64String(stringPickImage.value);
     newProduct.value.isExpiration =
         newProduct.value.expiration!.isBefore(DateTime.now());
     final save = SaveProduct(product: newProduct.value, amount: amount.value);
@@ -238,6 +241,31 @@ class HomeController extends GetxController {
     return result;
   }
 
+  String? forceValue(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'requird';
+    }
+    return null;
+  }
+
+  Future<bool> updateProduct() async {
+    var result = await OrderService().updateProduct(newProduct.value);
+    if (result) {
+      Overlayment.dismissLast();
+      onInit();
+    }
+    return result;
+  }
+
+  Future<void> deleteProduct(int id) async {
+    var result = await OrderService().deleteProduct(id);
+    if (result) {
+      Overlayment.dismissLast();
+      onInit();
+    }
+  }
+
+  final keyForm = GlobalKey<FormState>();
   final pageList = [
     const MainView(),
     MenView(),

@@ -62,8 +62,9 @@ class SingleItem extends GetView {
                                   height: Get.height / 6,
                                   width: Get.width / 4,
                                   child: Utility.getImage(
-                                      base64StringPh: product.product!.image,
-                                      link: product.product!.onlineImage),
+                                    base64StringPh: product.product!.image,
+                                    link: product.product!.onlineImage,
+                                  ),
                                 )
                               ],
                             )),
@@ -75,11 +76,23 @@ class SingleItem extends GetView {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    product.product!.name == null
-                                        ? ''
-                                        : product.product!.name!,
-                                    style: const TextStyle(fontSize: 18),
+                                  SizedBox(
+                                    width: Get.width / 3.6,
+                                    height: 25,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            product.product!.name == null
+                                                ? ''
+                                                : product.product!.name!,
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     width: Get.width / 3.6,

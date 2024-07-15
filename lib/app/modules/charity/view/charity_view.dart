@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/donation.dart';
 import 'package:marketing_surplus/app/modules/charity/controller/charity_controller.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/empty_screen.dart';
@@ -17,31 +18,51 @@ class CharityView extends GetView<CharityController> {
         : Column(
             children: [
               SectionWidget(
-                flex: 1,
-                icon: Icons.add_home_work_rounded,
-                title: 'last-order-charity'.tr,
-                child: controller.lastOrderCharity.isEmpty
-                    ? EmptyData()
-                    : Column(
-                        children: controller.lastOrderCharity
-                            .map((element) => Container())
-                            .toList(),
-                      ),
-              ),
+                  flex: 1,
+                  icon: Icons.local_fire_department_rounded,
+                  title: 'Features'.tr,
+                  child: Row(children: [
+                    Expanded(
+                      child: getMinCard(
+                          Icons.add_home_work_rounded, 'last-order-charity'.tr,
+                          onTab: () {
+                        Overlayment.show(OverDialog(
+                            child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            controller.lastOrderCharity.isEmpty
+                                ? EmptyData()
+                                : Column(
+                                    children: controller.lastOrderCharity
+                                        .map((element) => Container())
+                                        .toList(),
+                                  ),
+                          ],
+                        )));
+                      }),
+                    ),
+                    Expanded(
+                      child: getMinCard(
+                          Icons.home_work_rounded, 'all-donation-company'.tr,
+                          onTab: () {
+                        Overlayment.show(OverDialog(
+                            child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            controller.allDonationCompany.isEmpty
+                                ? EmptyData()
+                                : Column(
+                                    children: controller.allDonationCompany
+                                        .map((element) => Container())
+                                        .toList(),
+                                  ),
+                          ],
+                        )));
+                      }),
+                    ),
+                  ])),
               SectionWidget(
-                flex: 1,
-                icon: Icons.home_work_rounded,
-                title: 'all-donation-company'.tr,
-                child: controller.allDonationCompany.isEmpty
-                    ? EmptyData()
-                    : Column(
-                        children: controller.allDonationCompany
-                            .map((element) => Container())
-                            .toList(),
-                      ),
-              ),
-              SectionWidget(
-                flex: 1,
+                flex: 3,
                 icon: Icons.home_filled,
                 title: 'allCharity'.tr,
                 child: controller.allCharity.isEmpty
@@ -59,6 +80,47 @@ class CharityView extends GetView<CharityController> {
             ],
           ));
   }
+}
+
+Widget getMinCard(IconData icon, String value, {Function? onTab}) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: InkWell(
+      onTap: () {
+        onTab!();
+      },
+      child: Card(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                color: Colors.purple.shade200,
+                size: 60,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      value,
+                      style: TextStyle(color: Colors.purple.shade200),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class SingleDonation extends GetView<CharityController> {
@@ -159,7 +221,8 @@ class SingleCharity extends GetView {
                       color: Colors.purpleAccent.shade100,
                     ),
                     child: Utility.getImage(
-                        base64StringPh: charity!.image, link: null),
+                        base64StringPh: charity!.image,
+                        link: charity!.onlineImage),
                   ),
                 ],
               ),

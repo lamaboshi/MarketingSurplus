@@ -21,7 +21,7 @@ class EmptyBasketController extends GetxController {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       currentColor.value = currentColor.value == Colors.white
           ? Colors.purple.shade200
           : Colors.white;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/setting_profile_controller.dart';
@@ -17,89 +18,64 @@ class ProfileDetails extends GetView<SettingProfileController> {
       () => Scaffold(
         body: Column(
           children: [
-            Stack(
-              children: [
-                const SizedBox(
-                  height: 160,
-                ),
-                Card(
-                    elevation: 5,
-                    margin: EdgeInsets.zero,
-                    color: Colors.purple.shade100,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(60),
-                      bottomRight: Radius.circular(60),
-                    )),
-                    child: SizedBox(
-                      height: 120,
-                      width: Get.width,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      controller.isNotEdit.value = false;
-                                    },
-                                    icon: const Icon(
-                                        color: Colors.white, Icons.edit),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      var data = controller.auth.stroge
-                                          .getData('one-Time');
-                                      controller.auth.stroge.deleteAllKeys();
-                                      if (data != null) {
-                                        controller.auth.stroge
-                                            .saveData('one-Time', data);
-                                      }
+            Card(
+                elevation: 5,
+                margin: EdgeInsets.zero,
+                color: Colors.purple.shade100,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(60),
+                  bottomRight: Radius.circular(60),
+                )),
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    height: 120,
+                    width: Get.width,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    controller.isNotEdit.value = false;
+                                  },
+                                  icon: const Icon(
+                                      color: Colors.white, Icons.edit),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    var data = controller.auth.stroge
+                                        .getData('one-Time');
+                                    controller.auth.stroge.deleteAllKeys();
+                                    if (data != null) {
+                                      controller.auth.stroge
+                                          .saveData('one-Time', data);
+                                    }
 
-                                      Get.rootDelegate.history.clear();
-                                      Get.rootDelegate.toNamed(Paths.LogIn);
-                                    },
-                                    icon: const Icon(
-                                        color: Colors.white, Icons.logout),
-                                  ),
-                                ],
-                              ),
+                                    Get.rootDelegate.history.clear();
+                                    Get.rootDelegate.toNamed(Paths.LogIn);
+                                  },
+                                  icon: const Icon(
+                                      color: Colors.white, Icons.logout),
+                                ),
+                              ],
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                ))
-                          ]),
-                    )),
-                Positioned(
-                  bottom: 0,
-                  right: Get.width / 2.5,
-                  child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        side:
-                            BorderSide(color: Colors.purple.shade100, width: 4),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(80))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.person_2,
-                        color: Colors.purple.shade100,
-                        size: 80,
-                      ),
-                    ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white,
+                              ))
+                        ]),
                   ),
-                )
-              ],
-            ),
+                )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
@@ -151,6 +127,36 @@ class UserProfileDetails extends GetView<SettingProfileController> {
       () => SingleChildScrollView(
         child: Column(
           children: [
+            Positioned(
+              bottom: 0,
+              right: Get.width / 2.5,
+              child: Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.purple.shade100, width: 4),
+                    borderRadius: const BorderRadius.all(Radius.circular(80))),
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: controller.stringPickImage.value.isNotEmpty
+                        ? Utility.imageFromBase64String(
+                            controller.stringPickImage.value, null, null)
+                        : Utility.getImage(
+                            base64StringPh: controller.user.value.image,
+                            link: null),
+                  ),
+                ),
+              ),
+            ),
+            controller.isNotEdit.value
+                ? SizedBox.shrink()
+                : InkWell(
+                    onTap: () {
+                      controller.pickImageFun();
+                    },
+                    child: Text('AddYourPhoto'.tr)),
             Text(
               controller.user.value.name == null
                   ? ''

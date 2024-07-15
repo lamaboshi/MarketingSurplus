@@ -27,10 +27,11 @@ class Utility {
     return base64Encode(data);
   }
 
-  static Widget getImage({Uint8List? base64StringPh, String? link}) {
+  static Widget getImage(
+      {Uint8List? base64StringPh, String? link, double? width, double? hight}) {
     if (base64StringPh != null) {
       var image = base64String(base64StringPh);
-      return imageFromBase64String(image, null, null);
+      return imageFromBase64String(image, width, hight);
     } else if (link != null) {
       return Image.network(
         link.trimLeft(),

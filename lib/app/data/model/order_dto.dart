@@ -1,4 +1,5 @@
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
+import 'package:marketing_surplus/app/data/model/order_model.dart';
 
 import 'company_product.dart';
 
@@ -23,4 +24,10 @@ class OrderDto {
 
     return json;
   }
+}
+
+class OrderDtoToShow {
+  OrderModel? order;
+  List<OrderProduct>? ordersProduct;
+  OrderDtoToShow({this.order, this.ordersProduct});
 }

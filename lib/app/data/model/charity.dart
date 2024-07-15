@@ -11,8 +11,9 @@ class Charity {
   String? address;
   String? associationLicense;
   String? targetGroup;
+  String? onlineImage;
   String? goals;
-           bool? isAccept ;
+  bool? isAccept;
 
   Charity({
     this.id,
@@ -24,6 +25,7 @@ class Charity {
     this.qrCode,
     this.address,
     this.associationLicense,
+    this.onlineImage,
     this.targetGroup,
     this.isAccept,
     this.goals,
@@ -36,9 +38,10 @@ class Charity {
     associationLicense = json['associationLicense'];
     address = json['address'];
     targetGroup = json['targetGroup'];
+    onlineImage = json['onlineImage'];
     password = json['password'];
     goals = json['goals'];
-        isAccept = json['isAccept'];
+    isAccept = json['isAccept'];
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
@@ -56,6 +59,7 @@ class Charity {
     json['goals'] = goals;
     json['address'] = address;
     json['targetGroup'] = targetGroup;
+    json['onlineImage'] = onlineImage;
     json['password'] = password;
     json['associationLicense'] = associationLicense;
     json['image'] = image == null ? null : Uint8List.fromList(image!);

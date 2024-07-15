@@ -15,7 +15,7 @@ class CompanyProduct {
   CompanyProduct.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     rateNumber = json['rateNumber'] == null
-        ? 0
+        ? null
         : int.parse(json['rateNumber'].toString());
 
     amount = json['amount'] == null ? 0 : int.parse(json['amount'].toString());
@@ -34,7 +34,7 @@ class CompanyProduct {
 
     json['productId'] = productId;
     json['product'] = product!.toJson();
-    json['rateNumber'] = rateNumber.toString();
+    json['rateNumber'] = rateNumber?.toString();
     json['amount'] = amount.toString();
     json['amountApp'] = amountApp.toString();
     return json;

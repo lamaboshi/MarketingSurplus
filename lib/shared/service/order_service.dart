@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/donation.dart';
 import 'package:marketing_surplus/app/data/model/order_model.dart';
+import 'package:marketing_surplus/app/data/model/product.dart';
 
 import '../../api/storge/storge_service.dart';
 import '../../app/data/model/company.dart';
@@ -170,5 +171,25 @@ class OrderService {
       list.add(OrderProduct.fromJson(item));
     }
     return list;
+  }
+
+  Future<bool> updateStatusOrder(int orderId, int status) async {
+    var result =
+        await _dio.post('/api/Main/UpdateStutasOrder/$orderId', data: status);
+    print('----------------Done Update Status--------------------------');
+    return result.statusCode == 200;
+  }
+
+  Future<bool> deleteProduct(int id) async {
+    var result = await _dio.delete(
+      '/api/Main/Delete/$id',
+    );
+    return result.statusCode == 200;
+  }
+
+  Future<bool> updateProduct(Product product) async {
+    var result =
+        await _dio.put('/api/Main/Put/${product.id}', data: product.toJson());
+    return result.statusCode == 200;
   }
 }

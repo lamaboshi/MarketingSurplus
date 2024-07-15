@@ -43,6 +43,7 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                     ElevatedButton(
                         onPressed: () {
+                          Get.rootDelegate.history.clear();
                           Get.rootDelegate.toNamed(Paths.SignUpUserPage);
                         },
                         style: ElevatedButton.styleFrom(

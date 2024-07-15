@@ -45,26 +45,35 @@ class OrderDetailsPage extends GetView<BillsController> {
             ),
             getRow('ordername-title', orderProduct!.order!.name ?? ''),
             getRow('orderdes-title', orderProduct!.order!.descripation ?? ''),
-            getRow('namepro-title',
-                orderProduct!.companyProduct!.product!.name ?? ''),
-            getRow('despro-title',
-                orderProduct!.companyProduct!.product!.descripation ?? ''),
-            getRow('expda-title',
-                orderProduct!.companyProduct!.product!.expiration.toString()),
-            getRow('creatda-title',
-                orderProduct!.companyProduct!.product!.dateTime.toString()),
-            getRow('new-price',
-                orderProduct!.companyProduct!.product!.newPrice.toString()),
-            getRow('oldpri-title',
-                orderProduct!.companyProduct!.product!.oldPrice.toString()),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('namepro-title',
+                  orderProduct!.companyProduct!.product!.name ?? ''),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('despro-title',
+                  orderProduct!.companyProduct!.product!.descripation ?? ''),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('expda-title',
+                  orderProduct!.companyProduct!.product!.expiration.toString()),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('creatda-title',
+                  orderProduct!.companyProduct!.product!.dateTime.toString()),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('new-price',
+                  orderProduct!.companyProduct!.product!.newPrice.toString()),
+            if (orderProduct!.companyProduct!.product != null)
+              getRow('oldpri-title',
+                  orderProduct!.companyProduct!.product!.oldPrice.toString()),
             getRow('amoutth-title',
                 orderProduct!.companyProduct!.amount.toString()),
-            getRow(
-                'cmp-name', orderProduct!.companyProduct!.company!.name ?? ''),
-            getRow('cmp-email',
-                orderProduct!.companyProduct!.company!.email ?? ''),
-            getRow('cmp-phone',
-                orderProduct!.companyProduct!.company!.phone ?? ''),
+            if (orderProduct!.companyProduct!.company != null)
+              getRow('cmp-name',
+                  orderProduct!.companyProduct!.company!.name ?? ''),
+            if (orderProduct!.companyProduct!.company != null)
+              getRow('cmp-email',
+                  orderProduct!.companyProduct!.company!.email ?? ''),
+            if (orderProduct!.companyProduct!.company != null)
+              getRow('cmp-phone',
+                  orderProduct!.companyProduct!.company!.phone ?? ''),
             Row(
               children: [
                 Expanded(

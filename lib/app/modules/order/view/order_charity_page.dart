@@ -28,13 +28,16 @@ class OrderCharityPage extends GetView<OrderController> {
             const SizedBox(
               height: 20,
             ),
-            TextFieldWidget(
-              onChanged: (String value) {
-                controller.donation.value.pricePay = double.tryParse(value);
-              },
-              textInputType: TextInputType.number,
-              label: 'num-pay'.tr,
-            ),
+            Obx(() => controller.selectedType.value.id == 2
+                ? TextFieldWidget(
+                    onChanged: (String value) {
+                      controller.donation.value.pricePay =
+                          double.tryParse(value);
+                    },
+                    textInputType: TextInputType.number,
+                    label: 'num-pay'.tr,
+                  )
+                : SizedBox.shrink()),
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(

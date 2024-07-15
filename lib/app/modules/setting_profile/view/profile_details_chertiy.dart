@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/setting_profile/controller/setting_profile_controller.dart';
 
+import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
 
 class ProfileDetailsChertiy extends GetView<SettingProfileController> {
@@ -12,6 +13,36 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
     return Obx(
       () => SingleChildScrollView(
         child: Column(children: [
+          Positioned(
+            bottom: 0,
+            right: Get.width / 2.5,
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.purple.shade100, width: 4),
+                  borderRadius: const BorderRadius.all(Radius.circular(80))),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: controller.stringPickImage.value.isNotEmpty
+                      ? Utility.imageFromBase64String(
+                          controller.stringPickImage.value, null, null)
+                      : Utility.getImage(
+                          base64StringPh: controller.charity.value.image,
+                          link: controller.charity.value.onlineImage),
+                ),
+              ),
+            ),
+          ),
+          controller.isNotEdit.value
+              ? SizedBox.shrink()
+              : InkWell(
+                  onTap: () {
+                    controller.pickImageFun();
+                  },
+                  child: Text('AddYourPhoto'.tr)),
           Text(
             controller.charity.value.name == null
                 ? ''

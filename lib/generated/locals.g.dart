@@ -218,7 +218,13 @@ class AppTranslation extends Translations {
           "sign-user": "SignUp As User",
           "con-charity": "Confirme Order Charity",
           "mun-pay": "Add Number you will pay",
-          "cho-type": "choice pay order Type"
+          "cho-type": "choice pay order Type",
+          "AddYourPhoto": "Add Your Photo",
+          "AreyousurewanttoSaveYourData": "Are you sure want to Save Your Data",
+          "Addanimage": "Add an image",
+          "all-status": "Order Status",
+          "new-price": "New Price",
+          "two-order": "You Cannot Make Order from many Company"
         },
         "ar_AR": {
           "title": "تطبيق رائع",
@@ -378,8 +384,8 @@ class AppTranslation extends Translations {
           "sing-title": "قم بالتسجيل في متجرك",
           "sup-title": "يدعم",
           "help-title": "مساعدة في الطلب",
-          "howcl-title": "كيفية Clout العمل",
-          "joinup-title": "انضم إلى Clout  ",
+          "howcl-title": "Clout كيفية عمل",
+          "joinup-title": "Clout   انضم الى",
           "addtyp-title": "أضف النوع الخاص بك",
           "enteryourtyp-title": "أدخل النوع الخاص بك",
           "enterdes-title": "أدخل وصف النوع الخاص بك",
@@ -416,8 +422,8 @@ class AppTranslation extends Translations {
           "preparation": "تحضير",
           "done": "انتهى",
           "Features": "ميزات",
-          "old-price": "السعر القديم",
-          "tot-price": "المجموع",
+          "old-price": "مجموع السعر القديم",
+          "tot-price": "مجموع السعر الجديد",
           "result": "الناتج",
           "all-save": "المجموع الكلي",
           "order-details": "تفاصيل الطلب",
@@ -430,7 +436,13 @@ class AppTranslation extends Translations {
           "sign-user": "تسجل الدخول كمستخدم",
           "con-charity": "تاكيد طلب الجمعية",
           "mun-pay": "ادخل رقم الدفع",
-          "cho-type": "ادخل طريقة الشراء"
+          "cho-type": "ادخل طريقة الشراء",
+          "AddYourPhoto": "ادخل صورتك",
+          "AreyousurewanttoSaveYourData": " هل انت متاكد من بياناتك ؟",
+          "Addanimage": " اضافة صورة جديدة",
+          "all-status": "حالات الطلب",
+          "new-price": "السعر الجديد",
+          "two-order": "لا يمكنك الطلب من اكثر من شركة"
         }
       };
 }

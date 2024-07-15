@@ -28,231 +28,247 @@ class MenView extends GetView<con.MenuController> {
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: SizedBox(
-                              height: 45,
-                              child: TextField(
-                                readOnly: !controller.auth.isAuth(),
-                                controller: _controller,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide:
-                                        const BorderSide(color: Colors.purple),
-                                  ),
-                                  hintText: "search-title".tr,
-                                  prefixIcon: const Icon(Icons.search),
-                                  prefixIconColor: Colors.black,
-                                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: SizedBox(
+                          height: 45,
+                          child: TextFormField(
+                            readOnly: !controller.auth.isAuth(),
+                            controller: _controller,
+                            onChanged: (value) {
+                              controller.filterString.value = value;
+                              controller.filterStringMethod();
+                            },
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide:
+                                    const BorderSide(color: Colors.purple),
                               ),
+                              hintText: "search-title".tr,
+                              prefixIcon: const Icon(Icons.search),
+                              prefixIconColor: Colors.black,
                             ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                              child: Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side:
-                                    BorderSide(color: Colors.purple.shade200)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(11),
-                              child: InkWell(
-                                onTap: () async {
-                                  await controller.homeController.getPosts();
-                                  await controller.getPosts();
-                                  Overlayment.show(OverDialog(
-                                      child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'sort-title'.tr,
-                                            style: TextStyle(
-                                                fontSize: 19,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.purple.shade200),
-                                          ),
-                                        ),
-                                        Card(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                child: Text('typ-title'.tr),
-                                              ),
-                                              Obx(() => SizedBox(
-                                                    width: Get.width - 100,
-                                                    height: 100,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Wrap(
-                                                          children:
-                                                              controller
-                                                                  .companyTypes
-                                                                  .map(
-                                                                    (element) =>
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                      child: TextButton(
-                                                                          style: TextButton.styleFrom(
-                                                                            backgroundColor: controller.companyTypeSearch.value != element
-                                                                                ? Colors.white
-                                                                                : Colors.purple.shade200,
-                                                                          ),
-                                                                          onPressed: () {
-                                                                            if (controller.companyTypeSearch.value ==
-                                                                                element) {
-                                                                              controller.companies.assignAll(controller.homeController.companies);
-                                                                              controller.companyTypeSearch.value = CompanyTypeModel();
-                                                                            } else {
-                                                                              controller.companies.assignAll(controller.homeController.companies);
-                                                                              controller.companyTypeSearch.value = element;
-                                                                              var data = controller.companies.toList();
-                                                                              controller.companies.clear();
-
-                                                                              controller.companies.assignAll(data.where((e) => e.type!.id == element.id).toList());
-                                                                            }
-                                                                          },
-                                                                          child: Text(
-                                                                            element.type ??
-                                                                                '',
-                                                                            style:
-                                                                                TextStyle(color: controller.companyTypeSearch.value == element ? Colors.white : Colors.purple.shade200),
-                                                                          )),
-                                                                    ),
-                                                                  )
-                                                                  .toList(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                        Card(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                child: Text('comp-title'.tr),
-                                              ),
-                                              Obx(() => SizedBox(
-                                                    width: Get.width - 110,
-                                                    height: 300,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Wrap(
-                                                          children:
-                                                              controller
-                                                                  .companies
-                                                                  .map(
-                                                                    (element) =>
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                      child: TextButton(
-                                                                          style: TextButton.styleFrom(
-                                                                            backgroundColor: controller.companySearch.value != element
-                                                                                ? Colors.white
-                                                                                : Colors.purple.shade200,
-                                                                          ),
-                                                                          onPressed: () {
-                                                                            if (controller.companySearch.value ==
-                                                                                element) {
-                                                                              controller.companySearch.value = CompanyProductDto();
-                                                                            } else {
-                                                                              controller.companySearch.value = element;
-                                                                            }
-                                                                          },
-                                                                          child: Text(
-                                                                            element.companyProduct!.company!.name ??
-                                                                                '',
-                                                                            style:
-                                                                                TextStyle(color: controller.companySearch.value == element ? Colors.white : Colors.purple.shade200),
-                                                                          )),
-                                                                    ),
-                                                                  )
-                                                                  .toList(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            TextButton(
-                                                onPressed: () async {
-                                                  await controller.filter();
-                                                },
-                                                child: Text('filt-title'.tr)),
-                                            TextButton(
-                                                onPressed: () {
-                                                  controller.companyTypeSearch
-                                                          .value =
-                                                      CompanyTypeModel();
-                                                  controller
-                                                          .companySearch.value =
-                                                      CompanyProductDto();
-                                                  controller.companies
-                                                      .assignAll(controller
-                                                          .homeController
-                                                          .companies);
-                                                  controller.listPosts
-                                                      .assignAll(controller
-                                                          .homeController
-                                                          .listPosts);
-                                                  Overlayment.dismissLast();
-                                                },
-                                                child: Text('clear-title'.tr)),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  )));
-                                },
-                                child: Icon(
-                                  Icons.segment_rounded,
-                                  color: Colors.purple.shade200,
-                                ),
-                              ),
-                            ),
-                          ))
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                          child: Card(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: Colors.purple.shade200)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(11),
+                          child: InkWell(
+                            onTap: () async {
+                              await controller.homeController.getPosts();
+                              await controller.getPosts();
+                              Overlayment.show(OverDialog(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'sort-title'.tr,
+                                        style: TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.purple.shade200),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Text('typ-title'.tr),
+                                          ),
+                                          Obx(() => SizedBox(
+                                                width: Get.width - 100,
+                                                height: 100,
+                                                child: SingleChildScrollView(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Wrap(
+                                                      children:
+                                                          controller
+                                                              .companyTypes
+                                                              .map(
+                                                                (element) =>
+                                                                    Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child: TextButton(
+                                                                      style: TextButton.styleFrom(
+                                                                        backgroundColor: controller.companyTypeSearch.value !=
+                                                                                element
+                                                                            ? Colors.white
+                                                                            : Colors.purple.shade200,
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        if (controller.companyTypeSearch.value ==
+                                                                            element) {
+                                                                          controller
+                                                                              .companies
+                                                                              .assignAll(controller.homeController.companies);
+                                                                          controller
+                                                                              .companyTypeSearch
+                                                                              .value = CompanyTypeModel();
+                                                                        } else {
+                                                                          controller
+                                                                              .companies
+                                                                              .assignAll(controller.homeController.companies);
+                                                                          controller
+                                                                              .companyTypeSearch
+                                                                              .value = element;
+                                                                          var data = controller
+                                                                              .companies
+                                                                              .toList();
+                                                                          controller
+                                                                              .companies
+                                                                              .clear();
+
+                                                                          controller
+                                                                              .companies
+                                                                              .assignAll(data.where((e) => e.type!.id == element.id).toList());
+                                                                        }
+                                                                      },
+                                                                      child: Text(
+                                                                        element.type ??
+                                                                            '',
+                                                                        style: TextStyle(
+                                                                            color: controller.companyTypeSearch.value == element
+                                                                                ? Colors.white
+                                                                                : Colors.purple.shade200),
+                                                                      )),
+                                                                ),
+                                                              )
+                                                              .toList(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Card(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Text('comp-title'.tr),
+                                          ),
+                                          Obx(() => SizedBox(
+                                                width: Get.width - 110,
+                                                height: 300,
+                                                child: SingleChildScrollView(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Wrap(
+                                                      children:
+                                                          controller.companies
+                                                              .map(
+                                                                (element) =>
+                                                                    Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child: TextButton(
+                                                                      style: TextButton.styleFrom(
+                                                                        backgroundColor: controller.companySearch.value !=
+                                                                                element
+                                                                            ? Colors.white
+                                                                            : Colors.purple.shade200,
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        if (controller.companySearch.value ==
+                                                                            element) {
+                                                                          controller
+                                                                              .companySearch
+                                                                              .value = CompanyProductDto();
+                                                                        } else {
+                                                                          controller
+                                                                              .companySearch
+                                                                              .value = element;
+                                                                        }
+                                                                      },
+                                                                      child: Text(
+                                                                        element.companyProduct!.company!.name ??
+                                                                            '',
+                                                                        style: TextStyle(
+                                                                            color: controller.companySearch.value == element
+                                                                                ? Colors.white
+                                                                                : Colors.purple.shade200),
+                                                                      )),
+                                                                ),
+                                                              )
+                                                              .toList(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        TextButton(
+                                            onPressed: () async {
+                                              await controller.filter();
+                                            },
+                                            child: Text('filt-title'.tr)),
+                                        TextButton(
+                                            onPressed: () {
+                                              controller.companyTypeSearch
+                                                  .value = CompanyTypeModel();
+                                              controller.companySearch.value =
+                                                  CompanyProductDto();
+                                              controller.companies.assignAll(
+                                                  controller.homeController
+                                                      .companies);
+                                              controller.listPosts.assignAll(
+                                                  controller.homeController
+                                                      .listPosts);
+                                              Overlayment.dismissLast();
+                                            },
+                                            child: Text('clear-title'.tr)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )));
+                            },
+                            child: Icon(
+                              Icons.segment_rounded,
+                              color: Colors.purple.shade200,
+                            ),
+                          ),
+                        ),
+                      ))
+                    ],
+                  ),
                 ),
               ),
               Expanded(

@@ -245,7 +245,8 @@
     "AreyousurewanttoSaveYourData": "Are you sure want to Save Your Data",
     "Addanimage": "Add an image",
     "all-status": "Order Status",
-    "new-price": "New Price"
+    "new-price": "New Price",
+    "two-order": "You Cannot Make Order from many Company"
   },
   "ar_AR": {
     "title": "تطبيق رائع",
@@ -493,6 +494,7 @@
     "AreyousurewanttoSaveYourData": " هل انت متاكد من بياناتك ؟",
     "Addanimage": " اضافة صورة جديدة",
     "all-status": "حالات الطلب",
-    "new-price": "السعر الجديد"
+    "new-price": "السعر الجديد",
+    "two-order": "لا يمكنك الطلب من اكثر من شركة"
   }
 }

@@ -31,7 +31,7 @@ class MenuController extends GetxController {
   final companySearch = CompanyProductDto().obs;
   final companyTypeSearch = CompanyTypeModel().obs;
   final homeController = Get.find<HomeController>();
-
+  final filterString = ''.obs;
   final isEmptyData = true.obs;
   final count = 0.obs;
   final newProduct = Product(
@@ -139,5 +139,63 @@ class MenuController extends GetxController {
     companySearch.value = CompanyProductDto();
     companies.assignAll(homeController.companies);
     Overlayment.dismissLast();
+  }
+
+  Future<void> filterStringMethod() async {
+    if (filterString.value.isNotEmpty) {
+      var data = listPosts
+          .where((p0) => p0.companyProduct!.product!.name!
+              .toLowerCase()
+              .contains(filterString.value.toLowerCase()))
+          .toList();
+      listPosts.assignAll(data);
+    } else {
+      listPosts.assignAll(homeController.listPosts);
+    }
+  }
+
+  Future<void> updateOrderStatus(OrderProduct order) async {
+    var lastStatus = order.bills!.last.orderStatusId;
+    var newId = lastStatus! + 1;
+    var newS = OrderStutas.values.where((e) => e.index == newId).first.name;
+    Overlayment.show(OverDialog(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('Update Status  To $newS !!'),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+            onPressed: () async {
+              if (newId <= 4) {
+                print(
+                    '----------------last Status $lastStatus -----------------');
+                print('----------------New Status $newId -----------------');
+                await OrderService().updateStatusOrder(order.order!.id!, newId);
+                await getPosts();
+                Overlayment.dismissLast();
+              }
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.purple.shade200),
+                foregroundColor: MaterialStateProperty.all(Colors.white)),
+            child: Text('Yes'.tr),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Overlayment.dismissLast();
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.purple.shade200),
+                foregroundColor: MaterialStateProperty.all(Colors.white)),
+            child: Text('Cancel'.tr),
+          ),
+        ]),
+      ],
+    )));
   }
 }

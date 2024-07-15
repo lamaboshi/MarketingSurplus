@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/util.dart';
 import '../../../../shared/widgets/empty_screen.dart';
@@ -80,62 +81,64 @@ class MainCompanyPage extends GetView<HomeController> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await showModalBottomSheet(
-              context: context,
-              builder: (builder) => SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          color: Colors.purple.shade200,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'addpro-title'.tr,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
+          Overlayment.show(OverDialog(
+              height: Get.height / 1.3,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      color: Colors.purple.shade200,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'addpro-title'.tr,
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        await controller.pickImageFun();
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Obx(() => controller.stringPickImage.value.isNotEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(33),
+                                    child: Utility.imageFromBase64String(
+                                        controller.stringPickImage.value,
+                                        75,
+                                        150),
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.image,
+                                  size: 50,
+                                )),
+                          const SizedBox(
+                            height: 5,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Obx(() => controller
-                                    .stringPickImage.value.isNotEmpty
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(33),
-                                      child: Utility.imageFromBase64String(
-                                          controller.stringPickImage.value,
-                                          75,
-                                          150),
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.production_quantity_limits,
-                                    size: 50,
-                                  )),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Center(
-                              child: InkWell(
-                                  onTap: () async {
-                                    await controller.pickImageFun();
-                                  },
-                                  child: Text('Addanimage'.tr)),
-                            ),
-                          ],
-                        ),
-                        SingleChildScrollView(
+                          Center(child: Text('Addanimage'.tr)),
+                        ],
+                      ),
+                    ),
+                    Form(
+                      key: controller.keyForm,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
                           child: Column(
                             children: [
                               TextFieldWidget(
+                                validator: controller.forceValue,
                                 label: 'namepro-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.name = value;
@@ -143,6 +146,7 @@ class MainCompanyPage extends GetView<HomeController> {
                                 textInputType: TextInputType.text,
                               ),
                               TextFieldWidget(
+                                validator: controller.forceValue,
                                 label: 'despro-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.descripation =
@@ -151,6 +155,7 @@ class MainCompanyPage extends GetView<HomeController> {
                                 textInputType: TextInputType.text,
                               ),
                               TextFieldWidget(
+                                validator: controller.forceValue,
                                 label: 'oldpri-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.oldPrice =
@@ -159,19 +164,21 @@ class MainCompanyPage extends GetView<HomeController> {
                                 textInputType: TextInputType.text,
                               ),
                               TextFieldWidget(
+                                validator: controller.forceValue,
                                 label: 'offerpri-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.newPrice =
                                       double.tryParse(value);
                                 },
-                                textInputType: TextInputType.text,
+                                textInputType: TextInputType.number,
                               ),
                               TextFieldWidget(
+                                validator: controller.forceValue,
                                 label: 'amoutth-title'.tr,
                                 onChanged: (value) {
                                   controller.amount.value = int.parse(value);
                                 },
-                                textInputType: TextInputType.text,
+                                textInputType: TextInputType.number,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(5),
@@ -188,8 +195,10 @@ class MainCompanyPage extends GetView<HomeController> {
                                     SizedBox(
                                       height: 120,
                                       child: CupertinoDatePicker(
+                                        minimumYear: 2022,
+                                        maximumYear: 2026,
                                         mode: CupertinoDatePickerMode.date,
-                                        initialDateTime: DateTime(1969, 1, 1),
+                                        initialDateTime: DateTime.now(),
                                         onDateTimeChanged:
                                             (DateTime newDateTime) {
                                           controller.newProduct.value.dateTime =
@@ -215,8 +224,10 @@ class MainCompanyPage extends GetView<HomeController> {
                                     SizedBox(
                                       height: 120,
                                       child: CupertinoDatePicker(
+                                        minimumYear: 2022,
+                                        maximumYear: 2026,
                                         mode: CupertinoDatePickerMode.date,
-                                        initialDateTime: DateTime(1969, 1, 1),
+                                        initialDateTime: DateTime.now(),
                                         onDateTimeChanged: (newDateTime) {
                                           controller.newProduct.value
                                               .expiration = newDateTime;
@@ -232,10 +243,14 @@ class MainCompanyPage extends GetView<HomeController> {
                                     backgroundColor: Colors.purple.shade200,
                                     isExtended: true,
                                     onPressed: () async {
-                                      final rsult =
-                                          await controller.addProduct();
-                                      if (rsult) {
-                                        Navigator.of(context).pop();
+                                      if (controller.keyForm.currentState!
+                                          .validate()) {
+                                        final rsult =
+                                            await controller.addProduct();
+                                        Overlayment.dismissLast();
+                                        if (rsult) {
+                                          Overlayment.dismissLast();
+                                        }
                                       }
                                     },
                                     label: SizedBox(
@@ -254,9 +269,11 @@ class MainCompanyPage extends GetView<HomeController> {
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ));
+                  ],
+                ),
+              )));
         },
         child: const Icon(
           Icons.add,

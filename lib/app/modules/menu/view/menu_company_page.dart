@@ -24,10 +24,12 @@ class MenuCompanyPage extends GetView<co.MenuController> {
                 title: 'order-title'.tr,
                 child: controller.productsOrderCompany.isEmpty
                     ? EmptyData()
-                    : Column(
-                        children: controller.productsOrderCompany
-                            .map((element) => getOneCard(element))
-                            .toList(),
+                    : Obx(
+                        () => Column(
+                          children: controller.productsOrderCompany
+                              .map((element) => getOneCard(element))
+                              .toList(),
+                        ),
                       ),
               ),
               SectionWidget(
@@ -57,17 +59,39 @@ class MenuCompanyPage extends GetView<co.MenuController> {
       child: Card(
         child: ListTile(
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Order Name :'),
-              const SizedBox(
-                width: 5,
+              Row(
+                children: [
+                  Text('ordername-title'.tr),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(element.order!.name ?? ''),
+                ],
               ),
-              Text(element.order!.name ?? ''),
+              Text(
+                element.order!.price != null
+                    ? element.order!.price.toString()
+                    : '',
+                style: TextStyle(fontSize: 16, color: Colors.purple.shade200),
+              ),
             ],
           ),
-          trailing: Text(
-            element.order!.price != null ? element.order!.price.toString() : '',
-            style: const TextStyle(fontSize: 16),
+          trailing: Column(
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                  Icons.update,
+                  color: Colors.orange,
+                  size: 35,
+                ),
+                onPressed: () async {
+                  await controller.updateOrderStatus(element);
+                },
+              ),
+            ],
           ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -75,7 +99,7 @@ class MenuCompanyPage extends GetView<co.MenuController> {
             children: [
               Row(
                 children: [
-                  const Text('Order Descripation :'),
+                  Text('orderdes-title'.tr),
                   const SizedBox(
                     width: 5,
                   ),
@@ -92,7 +116,7 @@ class MenuCompanyPage extends GetView<co.MenuController> {
               ),
               Row(
                 children: [
-                  const Text('Order Stutes :'),
+                  Text('orderstat-title'.tr),
                   const SizedBox(
                     width: 5,
                   ),

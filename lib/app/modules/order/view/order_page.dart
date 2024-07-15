@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/order/controller/order_controller.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/textfield_widget.dart';
 
@@ -139,7 +140,7 @@ class OrderView extends GetView<OrderController> {
                     isExtended: true,
                     onPressed: () async {
                       await controller.saveOrder();
-                      Navigator.of(context).pop();
+                      Overlayment.dismissLast();
                     },
                     label: SizedBox(
                         height: Get.height / 3,
