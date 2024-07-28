@@ -78,15 +78,26 @@ class BillsView extends GetView<BillsController> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'basket-title'.tr,
-                              style: TextStyle(
-                                  fontSize: 21,
-                                  color: Colors.purple.shade200,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox.shrink(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'basket-title'.tr,
+                                  style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.purple.shade200,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    controller.onInit();
+                                  },
+                                  icon: Icon(Icons.refresh))
+                            ],
                           ),
                           const Divider(),
                           Obx(() => controller.list.isNotEmpty
@@ -206,6 +217,55 @@ class BillsView extends GetView<BillsController> {
                                   ),
                                 )
                               : const EmptyBasket()),
+                          FloatingActionButton.extended(
+                              backgroundColor: Colors.purple.shade200,
+                              isExtended: true,
+                              onPressed: () async {
+                                controller.assignAllAmount();
+                                if (controller.list.isNotEmpty) {
+                                  if (Get.isRegistered<OrderController>()) {
+                                    final orderController =
+                                        Get.find<OrderController>();
+                                    orderController.onInit();
+                                  } else {
+                                    Get.put(OrderController());
+                                  }
+                                  if (controller.auth.getTypeEnum() ==
+                                      Auth.charity) {
+                                    Overlayment.show(OverPanel(
+                                      child: const OrderCharityPage(),
+                                      alignment: Alignment.topCenter,
+                                    ));
+                                  } else {
+                                    Overlayment.show(OverPanel(
+                                      child: const OrderView(),
+                                      alignment: Alignment.topCenter,
+                                    ));
+                                  }
+                                } else {
+                                  var snackBar = SnackBar(
+                                      duration: const Duration(seconds: 1),
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(18),
+                                        child: Text(
+                                          'bag-em'.tr,
+                                          style: TextStyle(
+                                              color: Colors.purple.shade200,
+                                              fontSize: 18),
+                                        ),
+                                      ));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                              label: SizedBox(
+                                  height: Get.height / 3,
+                                  child: Center(
+                                      child: Text(
+                                    'buy'.tr,
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  ))))
                         ],
                       ),
                     ),
@@ -241,50 +301,6 @@ class BillsView extends GetView<BillsController> {
                 ],
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: Colors.purple.shade200,
-          isExtended: true,
-          onPressed: () async {
-            controller.assignAllAmount();
-            if (controller.list.isNotEmpty) {
-              if (Get.isRegistered<OrderController>()) {
-                final orderController = Get.find<OrderController>();
-                orderController.onInit();
-              } else {
-                Get.put(OrderController());
-              }
-              if (controller.auth.getTypeEnum() == Auth.charity) {
-                Overlayment.show(OverPanel(
-                  child: const OrderCharityPage(),
-                  alignment: Alignment.topCenter,
-                ));
-              } else {
-                Overlayment.show(OverPanel(
-                  child: const OrderView(),
-                  alignment: Alignment.topCenter,
-                ));
-              }
-            } else {
-              var snackBar = SnackBar(
-                  duration: const Duration(seconds: 1),
-                  content: Padding(
-                    padding: const EdgeInsets.all(18),
-                    child: Text(
-                      'bag-em'.tr,
-                      style: TextStyle(
-                          color: Colors.purple.shade200, fontSize: 18),
-                    ),
-                  ));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          },
-          label: SizedBox(
-              height: Get.height / 3,
-              child: Center(
-                  child: Text(
-                'buy'.tr,
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )))),
     );
   }
 

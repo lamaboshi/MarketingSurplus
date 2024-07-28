@@ -224,7 +224,44 @@ class AppTranslation extends Translations {
           "Addanimage": "Add an image",
           "all-status": "Order Status",
           "new-price": "New Price",
-          "two-order": "You Cannot Make Order from many Company"
+          "two-order": "You Cannot Make Order from many Company",
+          "company-exp-pro": "Expired products",
+          "Advantage_1": "Reducing amount of waste ",
+          "Description_1":
+              "Companies can utilize surplus products, reduce the amount of waste and dispose of it more efficiently",
+          "Advantage_2": "Improving environmental sustainability",
+          "Description_2":
+              "Sustainable consumption can contribute to preserving the environment and reducing the impact of human activities",
+          "Advantage_3": "Saving scarce natural resources",
+          "Description_3":
+              "Companies can reduce the consumption of scarce resources through excess capacity",
+          "Advantage_4": "Improving the circular economy",
+          "Description_4":
+              "Surplus products can be part of a sustainable economic cycle",
+          "Advantage_5": "Promoting sustainability awareness",
+          "Description_5":
+              "Companies can direct attention to sustainability issues through excess capacity",
+          "Advantage_6": "Improving food security",
+          "Description_6":
+              "Surplus produce can provide food for local communities",
+          "Advantage_7": "Reducing dependence on petroleum materials",
+          "Description_7":
+              "Companies can reduce the use of petroleum materials through excess capacity",
+          "Advantage_8": "Improve supplier relationships",
+          "Description_8":
+              "Companies can exchange surplus products with suppliers and enhance cooperation between them",
+          "Advantage_9": "Achieving financial sustainability",
+          "Description_9":
+              "Companies can achieve financial sustainability through excess capacity",
+          "Advantage_10": "Promoting social innovation",
+          "Description_10":
+              "Surplus products can contribute to solving social and economic problems",
+          "Advantage_11": "Providing products at low prices",
+          "Description_11":
+              "Consumers can benefit from purchasing surplus products at discounted prices, making them more affordable in life ",
+          "Advantage_12": "Opening new markets",
+          "Description_12":
+              "Surplus products may be marketed to new markets or to consumers who cannot purchase the products at their original prices"
         },
         "ar_AR": {
           "title": "تطبيق رائع",
@@ -234,7 +271,8 @@ class AppTranslation extends Translations {
           "clean-title": "Clean Out",
           "lest-title": "هيا نحارب هدر الطعام معًا",
           "food-title": "هدر الطعام مشكلة كبيرة، ويمكننا أن نكون لها الحل.",
-          "cleanout-title": "هاااي",
+          "cleanout-title":
+              "  هو التطبيق الذي يتيح لك إنقاذ الطعام غير المباع في أماكنك المفضلة من مصير مفاجئ.",
           "add-title": "أضف نوع الشركة",
           "type-title": "أكتب اسم",
           "typedis-title": "أكتب الوصف",
@@ -268,7 +306,7 @@ class AppTranslation extends Translations {
           "namepro-title": "اسم المنتج",
           "despro-title": "وصف المنتج",
           "oldpri-title": "السعر القديم للمنتج",
-          "offerpri-title": "التخفيض لسعر المنتج",
+          "offerpri-title": "السعر الجديد",
           "amoutth-title": "كمية هذا المنتج",
           "creatda-title": "إنشاء تاريخ المنتج",
           "expda-title": "تاريخ انتهاء الصلاحية المنتج",
@@ -442,7 +480,44 @@ class AppTranslation extends Translations {
           "Addanimage": " اضافة صورة جديدة",
           "all-status": "حالات الطلب",
           "new-price": "السعر الجديد",
-          "two-order": "لا يمكنك الطلب من اكثر من شركة"
+          "two-order": "لا يمكنك الطلب من اكثر من شركة",
+          "company-exp-pro": "منتجات منتهية الصلاحية",
+          "Advantage_1": "تقليل كمية النفايات",
+          "Description_1":
+              "يمكن للشركات الاستفادة من المنتجات الفائضة وتقليل كمية النفايات والتخلص منها بطريقة أكثر فعالية",
+          "Advantage_2": "تحسين الاستدامة البيئية",
+          "Description_2":
+              "يمكن للاستهلاك المستدام أن يساهم في الحفاظ على البيئة والحد من تأثير الأنشطة البشرية",
+          "Advantage_3": "الحفاظ على الموارد الطبيعية النادرة",
+          "Description_3":
+              "يمكن للشركات تقليل استهلاك الموارد النادرة من خلال المواد الفائضة",
+          "Advantage_4": "تحسين الدائرة الاقتصادية ",
+          "Description_4":
+              "يمكن أن تكون المنتجات الفائضة جزءًا من الدائرة الاقتصادية المستدامة",
+          "Advantage_5": "تعزيز الوعي بالاستدامة",
+          "Description_5":
+              "يمكن للشركات توجيه الاهتمام إلى قضايا الاستدامة من خلال المواد الفائضة",
+          "Advantage_6": "تحسين الأمن الغذائي",
+          "Description_6":
+              "يمكن للمنتجات الفائضة توفير الغذاء للمجتمعات المحلية",
+          "Advantage_7": "تقليل اعتماد على المواد البترولية",
+          "Description_7":
+              "يمكن للشركات تقليل استخدام المواد البترولية من خلال المواد الفائضة",
+          "Advantage_8": "تحسين العلاقات مع الموردين",
+          "Description_8":
+              "يمكن للشركات تبادل المواد الفائضة مع الموردين وتعزيز التعاون بينهم",
+          "Advantage_9": "تحقيق الاستدامة المالية",
+          "Description_9":
+              "يمكن للشركات تحقيق الاستدامة المالية من خلال المواد الفائضة",
+          "Advantage_10": "دعم الإبداع الاجتماعي",
+          "Description_10":
+              "المواد الفائضة يمكن أن تساهم في حل المشاكل الاجتماعية والاقتصادية",
+          "Advantage_11": "توفير المنتجات بأسعار منخفضة",
+          "Description_11":
+              "  يمكن للمستهلكين الاستفادة من شراء المنتجات الفائضة بأسعار مخفضة، مما يجعلها أكثر قدرة على تحمل تكاليف الحياة",
+          "Advantage_12": "فتح أسواق جديدة",
+          "Description_12":
+              "يمكن تسويق المنتجات الفائضة في أسواق جديدة أو للمستهلكين الذين لا يستطيعون شراء المنتجات بأسعارها الأصلية"
         }
       };
 }

@@ -3,6 +3,7 @@ import 'package:marketing_surplus/app/modules/admin/binding/admin_binding.dart';
 import 'package:marketing_surplus/app/modules/admin/view/admin_page.dart';
 import 'package:marketing_surplus/app/modules/bills/binding/bills_binding.dart';
 import 'package:marketing_surplus/app/modules/charity/binding/charity_binding.dart';
+import 'package:marketing_surplus/app/modules/charity/view/charity_details.dart';
 import 'package:marketing_surplus/app/modules/company/binding/company_binding.dart';
 import 'package:marketing_surplus/app/modules/company/view/company_view.dart';
 import 'package:marketing_surplus/app/modules/product/binding/product_binding.dart';
@@ -48,7 +49,10 @@ class AppPages {
       MenuBinding(),
       CharityBinding()
     ]),
-
+    GetPage(
+      name: Paths.CharityDetails,
+      page: () => const CharityDetails(),
+    ),
     GetPage(
       name: Paths.Profile,
       page: () => const ProfileView(),

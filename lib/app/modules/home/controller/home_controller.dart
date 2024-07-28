@@ -52,6 +52,7 @@ class HomeController extends GetxController {
   final isloading = false.obs;
   final stringPickImage = ''.obs;
   final products = <CompanyProduct>[].obs;
+  final errorData = ''.obs;
   final newProduct = Product(
           name: 'test',
           descripation: 'Some Data',

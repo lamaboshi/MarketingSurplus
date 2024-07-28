@@ -105,10 +105,14 @@ class OrderService {
     return false;
   }
 
-  Future<List<ProductDonation>> getAllDonation() async {
-    var id = (auth.getDataFromStorage() as Charity).id;
+  Future<List<ProductDonation>> getAllDonation({int? idCh}) async {
+    var dataId = idCh;
+    if (dataId == null) {
+      var id = (auth.getDataFromStorage() as Charity).id;
+      dataId = id;
+    }
 
-    var data = await _dio.get('/api/Donation/GetAllOrder/$id');
+    var data = await _dio.get('/api/Donation/GetAllOrder/$dataId');
     print(data);
     var list = <ProductDonation>[];
     for (var item in data.data) {
@@ -176,6 +180,15 @@ class OrderService {
   Future<bool> updateStatusOrder(int orderId, int status) async {
     var result =
         await _dio.post('/api/Main/UpdateStutasOrder/$orderId', data: status);
+    print('----------------Done Update Status--------------------------');
+    return result.statusCode == 200;
+  }
+
+  Future<bool> updateStatusDonation(
+      int idDonation, bool status, bool isCencal, bool isCompany) async {
+    var result = await _dio.post(
+        '/api/Donation/UpdateStutasDonation/$idDonation',
+        data: {"status": status, "isCompany": isCompany, "isCencal": isCencal});
     print('----------------Done Update Status--------------------------');
     return result.statusCode == 200;
   }

@@ -105,6 +105,7 @@ class SignUpView extends GetView<SignUpController> {
                   ),
                   TextButton(
                       onPressed: () {
+                        Get.rootDelegate.history.clear();
                         Get.rootDelegate.toNamed(Paths.LogIn);
                       },
                       child: Text('alr-title'.tr))

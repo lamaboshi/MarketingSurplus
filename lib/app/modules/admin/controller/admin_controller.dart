@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/company.dart';
+import 'package:marketing_surplus/app/data/model/evalution.dart';
 import 'package:marketing_surplus/app/data/model/order_model.dart';
 import 'package:marketing_surplus/app/data/model/order_type.dart';
 import 'package:marketing_surplus/app/data/model/pay_method.dart';
+import 'package:marketing_surplus/app/data/model/product_donation.dart';
 import 'package:marketing_surplus/app/data/model/user_model.dart';
+import 'package:marketing_surplus/app/modules/admin/data/charity_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/company_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/order_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/order_type_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/pay_method_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/rate_repo.dart';
 import 'package:marketing_surplus/app/modules/admin/data/user_repo.dart';
+import 'package:marketing_surplus/app/modules/admin/view/charity_requst.dart';
 import 'package:marketing_surplus/app/modules/admin/view/company_type_widget.dart';
+import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../data/model/company_type_model.dart';
-import '../../../data/model/rate.dart';
+
 import '../data/company_type_repo.dart';
+import '../view/charity_widget_admin.dart';
 import '../view/company_widget.dart';
 import '../view/order_type_widget.dart';
 import '../view/order_widget.dart';
@@ -57,8 +64,9 @@ class AdminController extends GetxController {
     'Price',
     'Is Delivery',
     'Pay Method',
-    'User ID'
+    'UserID'
   ];
+  final orderColumnSelect = ''.obs;
   final companyColumn = [
     'ID',
     'Name',
@@ -67,15 +75,29 @@ class AdminController extends GetxController {
     'Address',
     'TelePhone',
     'LicenseNumber',
-    'CompanyType ID'
+    'Type ID'
   ];
-  final userColumn = [
+  final companyColumnSelect = ''.obs;
+  final userColumn = ['ID', 'Name', 'Phone', 'Email'];
+  final userColumnSelect = ''.obs;
+  final chRequstColumn = [
+    'ID',
+    'Product Name',
+    'Company Name',
+    'totalPrice',
+    'OrderType Id',
+    'isAccept',
+    'isCompany',
+    'isCencal'
+  ];
+  final charityColumn = [
     'ID',
     'Name',
-    'Phone',
     'Email',
-    'Address',
+    'TargetGroup',
+    'goals',
   ];
+  final charityColumnSelect = ''.obs;
   final typeColumn = ['ID', 'Type Name', 'Description'];
   final methodColumn = ['ID', 'Name'];
   final orderTypeColumn = ['ID', 'Name'];
@@ -86,9 +108,11 @@ class AdminController extends GetxController {
   final typeRepo = CompanyTypeRepository();
   final companys = <Company>[].obs;
   final users = <UserModel>[].obs;
-  final method = <PayMethod>[].obs;
-  final rates = <Rate>[].obs;
+  final method = <CompanyMethods>[].obs;
+  final productDonation = <ProductDonation>[].obs;
+  final rates = <Evalution>[].obs;
   final orderTypes = <OrderType>[].obs;
+  final charitys = <Charity>[].obs;
   final orders = <OrderModel>[].obs;
   final addCompanyType = CompanyTypeModel().obs;
   final userRepo = UsersDataRepository();
@@ -98,7 +122,7 @@ class AdminController extends GetxController {
   final orderTypeRepo = OrderTypeRepositry();
   final companyRepo = CompanyRepository();
   final type = CompanyTypeModel().obs;
-  final pay = PayMethod().obs;
+  final pay = CompanyMethods().obs;
   final orderType = OrderType().obs;
 
   @override
@@ -108,9 +132,15 @@ class AdminController extends GetxController {
     getAllCompany();
     getAllUsers();
     getAllOrders();
+    getAllDonation();
+    getAllcharitys();
     getAllMethod();
     getAllOrderType();
-    // getRates();
+    getRates();
+    userColumnSelect.value = userColumn[1];
+    companyColumnSelect.value = companyColumn[1];
+    orderColumnSelect.value = orderColumn[1];
+    charityColumnSelect.value = charityColumn[1];
   }
 
   Resource setResourceEnum(index) {
@@ -154,8 +184,25 @@ class AdminController extends GetxController {
         return const OrderTypeWidget();
       case Resource.rate:
         return const RateWidget();
+      case Resource.asso:
+        return CharityRequst();
+      case Resource.donation:
+        return CharityWidgetAdmin();
       default:
         return const SizedBox();
+    }
+  }
+
+  Future<void> getAllcharitys() async {
+    var chs = await CharityRepository().getCharities();
+    charitys.addAll(chs);
+  }
+
+  Future<void> getAllDonation() async {
+    var chs = await CharityRepository().getCharities();
+    for (var element in chs) {
+      var data = await OrderService().getAllDonation(idCh: element.id!);
+      productDonation.addAll(data);
     }
   }
 
@@ -165,14 +212,14 @@ class AdminController extends GetxController {
   }
 
   Future<void> getAllMethod() async {
-    var data = await payRepo.getAllMethod();
+    var data = await payRepo.getAllOfMethod();
     method.assignAll(data);
   }
 
-  // Future<void> getRates() async {
-  //   var data = await rateRepo.getRates(1);
-  //   rates.assignAll(data);
-  // }
+  Future<void> getRates() async {
+    var data = await rateRepo.getRates(1);
+    rates.assignAll(data);
+  }
 
   Future<void> getAllOrderType() async {
     var data = await orderTypeRepo.getAllOrderType();
@@ -224,15 +271,15 @@ class AdminController extends GetxController {
     }
   }
 
-  Future<void> addMethod() async {
-    final result = await payRepo.addMethod(pay.value);
-    if (result) {
-      pay.value = PayMethod();
-      Overlayment.dismissLast();
-      method.clear();
-      await getAllMethod();
-    }
-  }
+  // Future<void> addMethod() async {
+  //   final result = await payRepo.addMethod(pay.value);
+  //   if (result) {
+  //     pay.value = PayMethod();
+  //     Overlayment.dismissLast();
+  //     method.clear();
+  //     await getAllMethod();
+  //   }
+  // }
 
   Future<void> deleteMethod(int id) async {
     final result = await payRepo.deleteMethod(id);
@@ -242,15 +289,15 @@ class AdminController extends GetxController {
     }
   }
 
-  Future<void> updateMethod() async {
-    final result = await payRepo.updateMethod(pay.value);
-    if (result) {
-      pay.value = PayMethod();
-      Overlayment.dismissLast();
-      method.clear();
-      await getAllMethod();
-    }
-  }
+  // Future<void> updateMethod() async {
+  //   final result = await payRepo.updateMethod(pay.value);
+  //   if (result) {
+  //     pay.value = C();
+  //     Overlayment.dismissLast();
+  //     method.clear();
+  //     await getAllMethod();
+  //   }
+  // }
 
   Future<void> addOrderType() async {
     final result = await orderTypeRepo.addOrderType(orderType.value);

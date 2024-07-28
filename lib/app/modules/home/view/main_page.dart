@@ -159,21 +159,23 @@ class SingleCompany extends GetView<HomeController> {
                         fontSize: 18,
                       ),
                     ),
-                    Row(
-                      children: Iterable<int>.generate(5)
-                          .toList()
-                          .map((e) => Icon(
-                                Icons.star,
-                                color: product.rateNumber == null
-                                    ? Colors.grey
-                                    : product.rateNumber! < 6
-                                        ? e + 1 <= product.rateNumber!
-                                            ? Colors.amber
-                                            : Colors.grey
-                                        : Colors.amber,
-                              ))
-                          .toList(),
-                    )
+                    controller.auth.getTypeEnum() == Auth.charity
+                        ? SizedBox.shrink()
+                        : Row(
+                            children: Iterable<int>.generate(5)
+                                .toList()
+                                .map((e) => Icon(
+                                      Icons.star,
+                                      color: product.rateNumber == null
+                                          ? Colors.grey
+                                          : product.rateNumber! < 6
+                                              ? e + 1 <= product.rateNumber!
+                                                  ? Colors.amber
+                                                  : Colors.grey
+                                              : Colors.amber,
+                                    ))
+                                .toList(),
+                          )
 
                     // RatingBar.builder(
                     //   initialRating: product.rateNumber == null

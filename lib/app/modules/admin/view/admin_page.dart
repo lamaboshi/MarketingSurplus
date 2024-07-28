@@ -41,7 +41,7 @@ class AdminView extends GetView<AdminController> {
                                       height: 30,
                                       child: Center(
                                         child: Text(
-                                          'setting-title'.tr,
+                                          'settings-title'.tr,
                                           style: TextStyle(
                                               color: Colors.purple.shade200,
                                               fontSize: 19),

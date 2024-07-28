@@ -98,7 +98,25 @@ class SignUpController extends GetxController {
       auth.stroge.saveData('regierterComp', 'New One');
       stringPickImage.value = '';
       Overlayment.dismissLast();
+      Get.rootDelegate.history.clear();
       Get.rootDelegate.toNamed(Paths.LogIn);
+    }
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'requird';
+    }
+    RegExp regex =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    if (value.isEmpty) {
+      return 'Please enter password';
+    } else {
+      if (!regex.hasMatch(value)) {
+        return 'Enter valid password';
+      } else {
+        return null;
+      }
     }
   }
 
@@ -108,6 +126,7 @@ class SignUpController extends GetxController {
     if (data) {
       stringPickImage.value = '';
       Overlayment.dismissLast();
+      Get.rootDelegate.history.clear();
       Get.rootDelegate.toNamed(Paths.LogIn);
     }
   }
@@ -118,6 +137,7 @@ class SignUpController extends GetxController {
     if (data) {
       stringPickImage.value = '';
       Overlayment.dismissLast();
+      Get.rootDelegate.history.clear();
       Get.rootDelegate.toNamed(Paths.LogIn);
     }
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -83,105 +84,138 @@ class ProfileView extends GetView<ProfileController> {
                           Overlayment.show(OverDialog(
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(controller.banfi[controller.value.value]
-                                .entries.first.value),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      '${controller.banfi[controller.value.value].entries.first.key}'
+                                          .tr),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      '${controller.banfi[controller.value.value].entries.first.value}'
+                                          .tr),
+                                ),
+                              ],
+                            ),
                           )));
                         }),
                       ),
-                      Expanded(
-                        child: Obx(
-                          () => getMinCard(
-                              'money-title'.tr,
-                              'saved-title'.tr,
-                              Icons.monetization_on,
-                              '${controller.saved.value} \$', onTab: () {
-                            Overlayment.show(OverDialog(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: controller.details
-                                        .map((element) => Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      child: Row(
-                                                        children: [
-                                                          Text('old-price'.tr),
-                                                          Text(
-                                                              ' ${element.entries.first.key}'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      child: Row(
-                                                        children: [
-                                                          Text('tot-price'.tr),
-                                                          Text(
-                                                              ' ${element.entries.first.value}'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: Row(
+                      controller.auth.getTypeEnum() == Auth.charity
+                          ? SizedBox()
+                          : Expanded(
+                              child: Obx(
+                                () => getMinCard(
+                                    'money-title'.tr,
+                                    'saved-title'.tr,
+                                    Icons.monetization_on,
+                                    '${controller.saved.value} \$', onTab: () {
+                                  Overlayment.show(OverDialog(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: controller.details
+                                              .map((element) => Column(
                                                     children: [
-                                                      Text('result'.tr),
-                                                      Text(
-                                                          ' ${(element.entries.first.key - element.entries.first.value)}'),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Wrap(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text('old-price'
+                                                                        .tr),
+                                                                    Text(
+                                                                        ' ${element.entries.first.key}'),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text('tot-price'
+                                                                        .tr),
+                                                                    Text(
+                                                                        ' ${element.entries.first.value}'),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            child: Wrap(
+                                                              children: [
+                                                                Text('result'
+                                                                    .tr),
+                                                                Text(
+                                                                    ' ${(element.entries.first.key - element.entries.first.value)}'),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color: Colors.grey,
+                                                      )
                                                     ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ))
-                                        .toList(),
-                                  ),
-                                  Divider(
-                                    color: Colors.purple.shade200,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('all-save'.tr),
-                                      Text(
-                                          ' ${controller.saved.value.toString()}'),
-                                    ],
-                                  )
-                                ],
+                                                  ))
+                                              .toList(),
+                                        ),
+                                        Divider(
+                                          color: Colors.purple.shade200,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text('all-save'.tr),
+                                            Text(
+                                                ' ${controller.saved.value.toString()}'),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )));
+                                }),
                               ),
-                            )));
-                          }),
-                        ),
-                      )
+                            )
                     ],
                   ),
                 ),
                 SectionWidget(
                   flex: 2,
                   icon: Icons.layers_outlined,
-                  title: 'lastord-title'.tr,
+                  title: controller.auth.getTypeEnum() == Auth.comapny
+                      ? 'company-exp-pro'.tr
+                      : 'lastord-title'.tr,
                   child: controller.auth.getTypeEnum() == Auth.user
                       ? LastOrderUser(
                           isLast: true,
                         )
                       : controller.auth.getTypeEnum() == Auth.charity
-                          ? LastOrderCharity()
+                          ? LastOrderCharity(
+                              isOld: true,
+                            )
                           : ProductExpiration(),
                 )
               ],
@@ -236,7 +270,7 @@ Widget getMinCard(String title, String subTitle, IconData icon, String value,
                 children: [
                   Flexible(
                     child: Text(
-                      value,
+                      value.tr,
                       style: TextStyle(color: Colors.purple.shade200),
                       overflow: TextOverflow.ellipsis,
                     ),

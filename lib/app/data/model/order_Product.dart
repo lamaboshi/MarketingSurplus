@@ -43,6 +43,8 @@ class OrderProduct {
     json['id'] = id ?? 0;
     json['amount'] = amount;
     json['totalPrice'] = totalPrice;
+    json['order'] = order?.toJson();
+    json['companyProduct'] = companyProduct?.toJson();
     json['companyProductId'] = companyProductId;
     json['orderId'] = orderId;
     return json;

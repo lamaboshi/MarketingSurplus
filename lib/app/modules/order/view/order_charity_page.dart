@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/order_controller.dart';
@@ -28,7 +29,7 @@ class OrderCharityPage extends GetView<OrderController> {
             const SizedBox(
               height: 20,
             ),
-            Obx(() => controller.selectedType.value.id == 2
+            Obx(() => controller.selectedType.value.id == 3
                 ? TextFieldWidget(
                     onChanged: (String value) {
                       controller.donation.value.pricePay =
@@ -98,9 +99,14 @@ class OrderCharityPage extends GetView<OrderController> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    ' ${controller.totalPrice.value} \$',
-                    style: TextStyle(color: Colors.purple.shade200),
+                  child: Row(
+                    children: [
+                      Icon(Icons.money),
+                      Text(
+                        ' ${controller.totalPrice.value}',
+                        style: TextStyle(color: Colors.purple.shade200),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -117,7 +123,7 @@ class OrderCharityPage extends GetView<OrderController> {
                     isExtended: true,
                     onPressed: () async {
                       await controller.saveOrderDonation();
-                      Navigator.of(context).pop();
+                      Overlayment.dismissLast();
                     },
                     label: SizedBox(
                         height: Get.height / 3,

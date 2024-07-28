@@ -2,13 +2,16 @@ import 'package:marketing_surplus/app/data/model/company_type_model.dart';
 import 'package:marketing_surplus/app/data/model/subscription.dart';
 
 import 'company_product.dart';
+import 'rate.dart' as r;
 
 class CompanyProductDto {
   CompanyProduct? companyProduct;
   CompanyTypeModel? type;
   int? rateNumber;
+  r.Rate? rate;
   Subscription? subscription;
-  CompanyProductDto({this.companyProduct, this.rateNumber, this.type});
+  CompanyProductDto(
+      {this.companyProduct, this.rateNumber, this.rate, this.type});
   CompanyProductDto.fromJson(Map<String, dynamic> json) {
     rateNumber = json['rateNumber'] == null
         ? 0
@@ -16,6 +19,7 @@ class CompanyProductDto {
     companyProduct = json['companyProduct'] != null
         ? CompanyProduct.fromJson(json['companyProduct'])
         : null;
+    rate = json['rate'] != null ? r.Rate.fromJson(json['rate']) : null;
     type = json['companyType'] != null
         ? CompanyTypeModel.fromJson(json['companyType'])
         : null;
@@ -26,6 +30,7 @@ class CompanyProductDto {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['companyProduct'] = companyProduct!.toJson();
+    json['rate'] = rate?.toJson();
     json['rateNumber'] = rateNumber?.toString();
     json['companyType'] = type?.toJson();
     json['subscription'] = subscription?.toJson();

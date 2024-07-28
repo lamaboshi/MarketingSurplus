@@ -25,6 +25,7 @@ class IntroPage extends GetView<IntroController> {
         showBackButton: true,
         showSkipButton: false,
         onDone: () {
+          Get.rootDelegate.history.clear();
           Get.rootDelegate.toNamed(Paths.SignUpUserPage);
         },
         back: Text("back-title".tr,
@@ -78,6 +79,7 @@ class IntroPage extends GetView<IntroController> {
               children: [
                 InkWell(
                   onTap: () {
+                    Get.rootDelegate.history.clear();
                     Get.rootDelegate.toNamed(Paths.LogIn);
                   },
                   child: Text(
@@ -90,6 +92,7 @@ class IntroPage extends GetView<IntroController> {
                 ),
                 InkWell(
                   onTap: () {
+                    Get.rootDelegate.history.clear();
                     Get.rootDelegate.toNamed(Paths.HOME);
                   },
                   child: Text(
@@ -147,6 +150,7 @@ class IntroPage extends GetView<IntroController> {
             children: [
               InkWell(
                 onTap: () {
+                  Get.rootDelegate.history.clear();
                   Get.rootDelegate.toNamed(Paths.LogIn);
                 },
                 child: Text(
@@ -159,6 +163,7 @@ class IntroPage extends GetView<IntroController> {
               ),
               InkWell(
                 onTap: () {
+                  Get.rootDelegate.history.clear();
                   Get.rootDelegate.toNamed(Paths.HOME);
                 },
                 child: Text(
@@ -216,6 +221,7 @@ class IntroPage extends GetView<IntroController> {
             children: [
               InkWell(
                 onTap: () {
+                  Get.rootDelegate.history.clear();
                   Get.rootDelegate.toNamed(Paths.LogIn);
                 },
                 child: Text(
@@ -228,6 +234,7 @@ class IntroPage extends GetView<IntroController> {
               ),
               InkWell(
                 onTap: () {
+                  Get.rootDelegate.history.clear();
                   Get.rootDelegate.toNamed(Paths.HOME);
                 },
                 child: Text(

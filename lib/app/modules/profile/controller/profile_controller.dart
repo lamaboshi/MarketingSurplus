@@ -5,6 +5,7 @@ import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
 import 'package:marketing_surplus/shared/service/auth_service.dart';
 
+import '../../../../shared/service/order_service.dart';
 import '../../../data/model/company.dart';
 import '../../../data/model/company_product.dart';
 import '../../../data/model/order_type.dart';
@@ -30,50 +31,22 @@ class ProfileController extends GetxController {
           newPrice: 100)
       .obs;
   final amount = 0.obs;
-  int randomValue() => rng.nextInt(10);
+  int randomValue() => rng.nextInt(12);
   final details = <Map>[].obs;
   final value = 0.obs;
   final banfi = [
-    {
-      'Reducing pressure on waste':
-          'Companies can take advantage of excess capacity to reduce the amount of waste and dispose of it more effectively.'
-    },
-    {
-      'Improving environmental sustainability':
-          'Sustainable consumption can contribute to preserving the environment and reducing the impact of human activities.'
-    },
-    {
-      'Saving scarce natural resources':
-          'Companies can reduce the consumption of scarce resources through excess capacity.'
-    },
-    {
-      'Improving the circular economy':
-          'Surplus products can be part of a sustainable economic cycle.'
-    },
-    {
-      'Promoting sustainability awareness':
-          'Companies can direct attention to sustainability issues through excess capacity.'
-    },
-    {
-      'Improving food security':
-          'Surplus produce can contribute to providing food to local communities.'
-    },
-    {
-      'Reducing dependence on petroleum materials':
-          'Companies can reduce the use of petroleum materials through excess capacity.'
-    },
-    {
-      'Improve supplier relationships':
-          'Companies can exchange surplus products with suppliers and enhance cooperation.'
-    },
-    {
-      'Achieving financial sustainability':
-          'Companies can achieve financial sustainability through excess capacity.'
-    },
-    {
-      'Promoting social innovation':
-          'Surplus products can contribute to solving social and economic problems',
-    }
+    {'Advantage_1': 'Description_1'},
+    {'Advantage_2': 'Description_2'},
+    {'Advantage_3': 'Description_3'},
+    {'Advantage_4': 'Description_4'},
+    {'Advantage_5': 'Description_5'},
+    {'Advantage_6': 'Description_6'},
+    {'Advantage_7': 'Description_7'},
+    {'Advantage_8': 'Description_8'},
+    {'Advantage_9': 'Description_9'},
+    {'Advantage_10': 'Description_10'},
+    {'Advantage_11': 'Description_11'},
+    {'Advantage_12': 'Description_12'},
   ];
   @override
   void onInit() {
@@ -105,25 +78,44 @@ class ProfileController extends GetxController {
 
     for (var element in data) {
       var date = element.product!.expiration!.difference(DateTime.now());
-      if (date.inDays <= 3) {
+      if (date.inDays <= 5) {
         products.assign(element);
       }
+      // var exparItems = data
+      //     .where((element) => element.product!.isExpiration == true)
+      //     .toList();
+      // products.assignAll(exparItems);
     }
   }
 
-  void getsaveOrder() {
+  Future<void> getsaveOrder() async {
     saved.value = 0.0;
     details.clear();
-    for (var element in orderProducts) {
-      var old = element.companyProduct!.product!.oldPrice! *
-          orderProducts.last.amount!;
+    if (auth.getTypeEnum() == Auth.comapny) {
+      final data = await OrderService().getOrderDetailsForCompany();
+      print(
+          '--------------------------------getOrderDetailsForCompany with ${data.length}------------------');
 
-      final newValue = (old - element.totalPrice!);
-      print('-------------------------${newValue}');
-      details.add({old: element.totalPrice!});
-      saved.value = saved.value + newValue;
+      final last = data
+          .where((element) => element.bills!.last.orderStatusId == 4)
+          .toList();
+      for (var element in last) {
+        details.add(
+            {(element.amount! * element.totalPrice!): element.totalPrice!});
+        saved.value = saved.value + element.totalPrice!;
+      }
+    } else {
+      for (var element in orderProducts) {
+        var old = element.companyProduct!.product!.oldPrice! *
+            orderProducts.last.amount!;
+
+        final newValue = (old - element.totalPrice!);
+        print('-------------------------${newValue}');
+        details.add({old: element.totalPrice!});
+        saved.value = saved.value + newValue;
+      }
+      print('-------------------------${saved.value}');
     }
-    print('-------------------------${saved.value}');
   }
 
   Future<bool> addProduct() async {

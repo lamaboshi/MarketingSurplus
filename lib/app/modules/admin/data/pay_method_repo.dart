@@ -6,8 +6,8 @@ import 'package:marketing_surplus/app/modules/admin/data/adapter/pay_method_adap
 class PayMethodRepositry extends IPayMethodRepositry {
   final _dio = Get.find<Dio>();
   @override
-  Future<bool> addMethod(PayMethod payMethod) async {
-    var result = await _dio.post('/api/PayMethod/AddPayMethod',
+  Future<bool> addMethod(PayMethod payMethod, int idCompany) async {
+    var result = await _dio.post('/api/PayMethod/AddPayMethod/$idCompany',
         data: payMethod.toJson());
     return result.statusCode == 200;
   }
@@ -21,12 +21,23 @@ class PayMethodRepositry extends IPayMethodRepositry {
   }
 
   @override
-  Future<List<PayMethod>> getAllMethod() async {
-    var result = await _dio.get('/api/PayMethod/GetPayMethods');
+  Future<List<CompanyMethods>> getAllMethod(int companyId) async {
+    var result = await _dio.get('/api/PayMethod/GetPayMethods/$companyId');
     print(result);
-    var list = <PayMethod>[];
+    var list = <CompanyMethods>[];
     for (var item in result.data) {
-      list.add(PayMethod.fromJson(item));
+      list.add(CompanyMethods.fromJson(item));
+    }
+    return list;
+  }
+
+  @override
+  Future<List<CompanyMethods>> getAllOfMethod() async {
+    var result = await _dio.get('/api/PayMethod/GetAllPayMethod');
+    print(result);
+    var list = <CompanyMethods>[];
+    for (var item in result.data) {
+      list.add(CompanyMethods.fromJson(item));
     }
     return list;
   }

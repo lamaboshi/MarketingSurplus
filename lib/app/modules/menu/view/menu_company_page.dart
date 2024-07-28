@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
+import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 import 'package:marketing_surplus/app/modules/menu/controller/menu_controller.dart'
     as co;
 import 'package:marketing_surplus/shared/widgets/empty_screen.dart';
@@ -25,10 +26,12 @@ class MenuCompanyPage extends GetView<co.MenuController> {
                 child: controller.productsOrderCompany.isEmpty
                     ? EmptyData()
                     : Obx(
-                        () => Column(
-                          children: controller.productsOrderCompany
-                              .map((element) => getOneCard(element))
-                              .toList(),
+                        () => SingleChildScrollView(
+                          child: Column(
+                            children: controller.productsOrderCompany
+                                .map((element) => getOneCard(element))
+                                .toList(),
+                          ),
                         ),
                       ),
               ),
@@ -38,10 +41,12 @@ class MenuCompanyPage extends GetView<co.MenuController> {
                 title: 'lastord-title'.tr,
                 child: controller.lastProductsOrderCompany.isEmpty
                     ? EmptyData()
-                    : Column(
-                        children: controller.lastProductsOrderCompany
-                            .map((element) => getOneCard(element))
-                            .toList(),
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: controller.lastProductsOrderCompany
+                              .map((element) => getOneCard(element))
+                              .toList(),
+                        ),
                       ),
               )
             ],
@@ -49,8 +54,13 @@ class MenuCompanyPage extends GetView<co.MenuController> {
   }
 
   Widget getOneCard(OrderProduct element) {
+    element.companyProduct = Get.find<HomeController>()
+        .products
+        .where((p0) => p0.id == element.companyProductId)
+        .first;
     return InkWell(
       onTap: () {
+        print(element.toJson());
         Overlayment.show(OverDialog(
             child: OrderDetailsPage(
           orderProduct: element,

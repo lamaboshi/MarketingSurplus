@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/admin_controller.dart';
 
 class CompanyWidget extends GetView<AdminController> {
@@ -16,12 +17,82 @@ class CompanyWidget extends GetView<AdminController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Sort By :',
+                        style: TextStyle(color: Colors.purple.shade200),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Obx(() => DropdownButton<String>(
+                            focusNode: FocusNode(),
+                            underline: const SizedBox(),
+                            hint: Text('selectcomp-title'.tr),
+                            value: controller.companyColumnSelect.value,
+                            onChanged: (newValue) async {
+                              FocusScope.of(context).requestFocus(FocusNode());
+
+                              controller.companyColumnSelect.value = controller
+                                  .companyColumn
+                                  .where(
+                                      (element) => element.contains(newValue!))
+                                  .first;
+                            },
+                            items: [
+                              controller.companyColumn[1],
+                              controller.companyColumn[3]
+                            ].map((e) {
+                              return DropdownMenuItem(
+                                value: e,
+                                child: Text(e.tr),
+                              );
+                            }).toList(),
+                          )),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: TextFieldWidget(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.purple.shade200)),
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              if (controller.companyColumnSelect.value
+                                  .contains('Name')) {
+                                var items = controller.companys
+                                    .where((p0) => p0.name!
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.companys.clear();
+                                controller.companys.assignAll(items);
+                              } else {
+                                var items = controller.companys
+                                    .where((p0) => p0.email!
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.companys.clear();
+                                controller.companys.assignAll(items);
+                              }
+                            } else {
+                              controller.getAllCompany();
+                            }
+                          },
+                          textInputType: TextInputType.name,
+                          label: 'Search',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 const SizedBox(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  color: Colors.purple.shade200,
-                )
               ],
             ),
             Obx(() => SizedBox(
@@ -59,6 +130,10 @@ class CompanyWidget extends GetView<AdminController> {
           label: Text('delete-title'.tr,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
+      DataColumn(
+          label: Text('Accept'.tr,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
   List<DataRow> getRows() => controller.companys
       .map((element) => DataRow(cells: [
@@ -88,6 +163,15 @@ class CompanyWidget extends GetView<AdminController> {
             DataCell(IconButton(
               onPressed: () {},
               icon: const Icon(Icons.delete, color: Colors.red),
+            )),
+            DataCell(IconButton(
+              onPressed: () async {},
+              icon: Icon(
+                element.isAccept!
+                    ? Icons.done_outline_rounded
+                    : Icons.circle_outlined,
+                color: Colors.blue,
+              ),
             )),
           ]))
       .toList();

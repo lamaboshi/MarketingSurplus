@@ -33,7 +33,7 @@ class CompanyProduct {
     json['companyId'] = companyId;
 
     json['productId'] = productId;
-    json['product'] = product!.toJson();
+    json['product'] = product?.toJson();
     json['rateNumber'] = rateNumber?.toString();
     json['amount'] = amount.toString();
     json['amountApp'] = amountApp.toString();

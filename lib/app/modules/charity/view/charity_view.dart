@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/donation.dart';
+
 import 'package:marketing_surplus/app/modules/charity/controller/charity_controller.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/util.dart';
+import '../../../../shared/widgets/auth_bottom_sheet.dart';
 import '../../../../shared/widgets/empty_screen.dart';
 import '../../../../shared/widgets/section_widget.dart';
+
+import 'charity_details.dart';
+import 'charity_order.dart';
 
 class CharityView extends GetView<CharityController> {
   const CharityView({super.key});
   @override
   Widget build(BuildContext context) {
+    controller.getData();
     return Obx(() => controller.isLoading.value
         ? const Center(child: CircularProgressIndicator())
         : Column(
@@ -22,25 +28,7 @@ class CharityView extends GetView<CharityController> {
                   icon: Icons.local_fire_department_rounded,
                   title: 'Features'.tr,
                   child: Row(children: [
-                    Expanded(
-                      child: getMinCard(
-                          Icons.add_home_work_rounded, 'last-order-charity'.tr,
-                          onTab: () {
-                        Overlayment.show(OverDialog(
-                            child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            controller.lastOrderCharity.isEmpty
-                                ? EmptyData()
-                                : Column(
-                                    children: controller.lastOrderCharity
-                                        .map((element) => Container())
-                                        .toList(),
-                                  ),
-                          ],
-                        )));
-                      }),
-                    ),
+                    CharityOrder(),
                     Expanded(
                       child: getMinCard(
                           Icons.home_work_rounded, 'all-donation-company'.tr,
@@ -49,13 +37,35 @@ class CharityView extends GetView<CharityController> {
                             child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            controller.allDonationCompany.isEmpty
-                                ? EmptyData()
-                                : Column(
-                                    children: controller.allDonationCompany
-                                        .map((element) => Container())
-                                        .toList(),
-                                  ),
+                            Obx(
+                              () => controller.allDonationCompany.isEmpty
+                                  ? EmptyData()
+                                  : SingleChildScrollView(
+                                      child: Column(
+                                        children: controller.allDonationCompany
+                                            .map((element) => ListTile(
+                                                  title:
+                                                      Text(' # ${element.id}'),
+                                                  subtitle: Column(
+                                                    children: [
+                                                      Text(
+                                                        element.charity!.name ??
+                                                            '',
+                                                        style: TextStyle(
+                                                            color: Colors.purple
+                                                                .shade200,
+                                                            fontSize: 19),
+                                                      ),
+                                                      Text(getType(
+                                                          element.orderTypeId ??
+                                                              0)),
+                                                    ],
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      ),
+                                    ),
+                            )
                           ],
                         )));
                       }),
@@ -68,18 +78,23 @@ class CharityView extends GetView<CharityController> {
                 child: controller.allCharity.isEmpty
                     ? EmptyData()
                     : SingleChildScrollView(
-                        child: Column(
-                          children: controller.allCharity
-                              .map((element) => SingleCharity(
-                                    charity: element,
-                                  ))
-                              .toList(),
+                        child: Obx(
+                          () => Column(
+                            children: controller.allCharity
+                                .map((element) => SingleCharity(
+                                      charity: element,
+                                    ))
+                                .toList(),
+                          ),
                         ),
                       ),
               )
             ],
           ));
   }
+
+  String getType(int id) =>
+      controller.orderTypes.where((p0) => p0.id == id).first.name ?? '';
 }
 
 Widget getMinCard(IconData icon, String value, {Function? onTab}) {
@@ -186,7 +201,7 @@ class SingleDonation extends GetView<CharityController> {
   }
 }
 
-class SingleCharity extends GetView {
+class SingleCharity extends GetView<CharityController> {
   final Charity? charity;
 
   const SingleCharity({super.key, required this.charity});
@@ -194,15 +209,14 @@ class SingleCharity extends GetView {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        // if (!controller.auth.isAuth()) {
-        //   await AuthBottomSheet().modalBottomSheet(context);
-        // } else {
-        //   await controller.saveSelectedCompany(product);
-        //   if (Get.isRegistered<CompanyController>()) {
-        //     Get.find<CompanyController>().onInit();
-        //   }
-        //   await Get.rootDelegate.toNamed(Paths.COMPANY_PAGE);
-        // }
+        if (!controller.auth.isAuth()) {
+          await AuthBottomSheet().modalBottomSheet(context);
+        } else {
+          Overlayment.show(OverPanel(
+              child: CharityDetails(
+            charity: charity,
+          )));
+        }
       },
       child: Card(
         child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/admin_controller.dart';
 
 class OrderWidget extends GetView<AdminController> {
@@ -17,12 +18,94 @@ class OrderWidget extends GetView<AdminController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Sort By :',
+                        style: TextStyle(color: Colors.purple.shade200),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Obx(() => DropdownButton<String>(
+                            focusNode: FocusNode(),
+                            underline: const SizedBox(),
+                            hint: Text('selectcomp-title'.tr),
+                            value: controller.orderColumnSelect.value,
+                            onChanged: (newValue) async {
+                              FocusScope.of(context).requestFocus(FocusNode());
+
+                              controller.orderColumnSelect.value = controller
+                                  .orderColumn
+                                  .where(
+                                      (element) => element.contains(newValue!))
+                                  .first;
+                            },
+                            items: [
+                              controller.orderColumn[1],
+                              controller.orderColumn[4],
+                              controller.orderColumn[7]
+                            ].map((e) {
+                              return DropdownMenuItem(
+                                value: e,
+                                child: Text(e.tr),
+                              );
+                            }).toList(),
+                          )),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: TextFieldWidget(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.purple.shade200)),
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              if (controller.orderColumnSelect.value
+                                  .contains('Name')) {
+                                var items = controller.orders
+                                    .where((p0) => p0.name!
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.orders.clear();
+                                controller.orders.assignAll(items);
+                              } else if (controller.orderColumnSelect.value
+                                  .contains('Price')) {
+                                var items = controller.orders
+                                    .where((p0) => p0.price
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.orders.clear();
+                                controller.orders.assignAll(items);
+                              } else {
+                                var items = controller.orders
+                                    .where((p0) => p0.userId
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.orders.clear();
+                                controller.orders.assignAll(items);
+                              }
+                            } else {
+                              controller.getAllOrders();
+                            }
+                          },
+                          textInputType: TextInputType.name,
+                          label: 'Search',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 const SizedBox(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  color: Colors.purple.shade200,
-                )
               ],
             ),
             Obx(() => SizedBox(
@@ -63,10 +146,6 @@ class OrderWidget extends GetView<AdminController> {
       .toList()
     ..addAll([
       DataColumn(
-          label: Text('edit-title'.tr,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.purple))),
-      DataColumn(
           label: Text('delete-title'.tr,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
@@ -89,13 +168,6 @@ class OrderWidget extends GetView<AdminController> {
                 style: const TextStyle(color: Colors.purple))),
             DataCell(Text(element.userId.toString(),
                 style: const TextStyle(color: Colors.purple))),
-            DataCell(IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.blueGrey,
-              ),
-            )),
             DataCell(IconButton(
               onPressed: () {},
               icon: const Icon(Icons.delete, color: Colors.red),

@@ -62,7 +62,7 @@ class ProfileDetailsChertiy extends GetView<SettingProfileController> {
             isReadOnly: controller.isNotEdit.value,
           ),
           TextFieldWidget(
-            value: controller.charity.value.name,
+            value: controller.charity.value.name ?? '',
             onChanged: (value) {
               controller.charity.value.name = value;
             },

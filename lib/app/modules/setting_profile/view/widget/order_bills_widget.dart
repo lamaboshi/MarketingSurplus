@@ -40,15 +40,15 @@ class OrderBillsWidget extends GetView<SettingProfileController> {
             ],
           )
         : controller.auth.getTypeEnum() == Auth.charity
-            ? controller.lastOrderCharity.isEmpty
-                ? Text('nobil-title'.tr)
+            ? controller.companyCharityWith.isEmpty
+                ? Text('No Company Found'.tr)
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'allbil-title'.tr,
+                          'All Company'.tr,
                           style: TextStyle(
                               fontSize: 21,
                               color: Colors.purple.shade200,
@@ -58,13 +58,15 @@ class OrderBillsWidget extends GetView<SettingProfileController> {
                       Padding(
                         padding: const EdgeInsets.all(15),
                         child: Column(
-                            children: controller.lastOrderCharity
+                            children: controller.companyCharityWith
                                 .map((element) => ListTile(
-                                      title: Text(
-                                          element.donation!.orderType!.name ??
-                                              ""),
-                                      subtitle:
-                                          Text(element.totalPrice.toString()),
+                                      title: Text(element.name ?? ""),
+                                      subtitle: Column(
+                                        children: [
+                                          Text(element.email ?? ""),
+                                          Text(element.phone ?? ""),
+                                        ],
+                                      ),
                                     ))
                                 .toList()),
                       ),

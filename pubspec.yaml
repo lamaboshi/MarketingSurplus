@@ -47,6 +47,7 @@ dependencies:
   badges: ^3.1.2
   fluid_action_card: ^1.0.0+5
   after_layout: ^1.2.0
+  flutter_map: ^7.0.2
 
 dev_dependencies:
   flutter_test:

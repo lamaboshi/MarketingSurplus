@@ -32,4 +32,5 @@ abstract class Paths {
   static const FAVORITES = '/favorites';
   static const ADMIN = '/admin';
   static const Charity = '/charity';
+  static const CharityDetails = '/charity-details';
 }

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_product.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../api/storge/storge_service.dart';
 import '../../app/data/model/charity.dart';
@@ -67,31 +68,40 @@ class AuthService {
   }
 
   Future<Object?> logIn(String email, String password) async {
-    var result = await _dio.get('/api/Auth/GetAuth',
-        queryParameters: {"email": email, "password": password});
-    print(result.data);
-    if (result.statusCode == 200) {
-      switch (result.data['type']) {
-        case 'user':
-          var data =
-              UserModel.fromJson(result.data['data'] as Map<String, dynamic>);
-          stroge.saveData('type', jsonEncode('user'));
-          stroge.saveData('AuthData', jsonEncode(data.toJson()));
-          return data;
-        case 'comapny':
-          var data =
-              Company.fromJson(result.data['data'] as Map<String, dynamic>);
-          stroge.saveData('type', jsonEncode('comapny'));
-          stroge.saveData('AuthData', jsonEncode(data.toJson()));
-          return data;
-        case 'charity':
-          var data =
-              Charity.fromJson(result.data['data'] as Map<String, dynamic>);
-          stroge.saveData('type', jsonEncode('charity'));
-          stroge.saveData('AuthData', jsonEncode(data.toJson()));
-          return data;
+    try {
+      var result = await _dio.get('/api/Auth/GetAuth',
+          queryParameters: {"email": email, "password": password});
+      print(result.data);
+      if (result.statusCode == 200) {
+        switch (result.data['type']) {
+          case 'user':
+            var data =
+                UserModel.fromJson(result.data['data'] as Map<String, dynamic>);
+            stroge.saveData('type', jsonEncode('user'));
+            stroge.saveData('AuthData', jsonEncode(data.toJson()));
+            return data;
+          case 'comapny':
+            var data =
+                Company.fromJson(result.data['data'] as Map<String, dynamic>);
+            stroge.saveData('type', jsonEncode('comapny'));
+            stroge.saveData('AuthData', jsonEncode(data.toJson()));
+            return data;
+          case 'charity':
+            var data =
+                Charity.fromJson(result.data['data'] as Map<String, dynamic>);
+            stroge.saveData('type', jsonEncode('charity'));
+            stroge.saveData('AuthData', jsonEncode(data.toJson()));
+            return data;
+        }
       }
+    } catch (e) {
+      Overlayment.show(OverWindow.simple(
+          alignment: Alignment.center,
+          yesMessage: null,
+          canCancel: false,
+          message: 'There Error With LogIn Please check Again'));
     }
+
     return null;
   }
 

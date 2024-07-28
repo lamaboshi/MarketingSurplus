@@ -42,7 +42,7 @@ class Donation {
     json['orderTypeId'] = orderTypeId;
     json['charityId'] = charityId;
     json['charity'] = charity == null ? null : charity!.toJson();
-    json['pricePay'] = pricePay.toString();
+    json['pricePay'] = pricePay == null ? 0 : pricePay.toString();
     return json;
   }
 }

@@ -73,16 +73,23 @@ class SettingProfileView extends GetView<SettingProfileController> {
           SectionWidget(
             title: 'seting-title'.tr,
             widget: controller.auth.getTypeEnum() != Auth.charity
-                ? [
-                    'accdea-title'.tr,
-                    'paycar-title'.tr,
-                    'vou-title'.tr,
-                    'del-title'.tr
-                  ]
+                ? controller.auth.getTypeEnum() == Auth.user
+                    ? [
+                        'accdea-title'.tr,
+                        'My Acount'.tr,
+                        'vou-title'.tr,
+                        'del-title'.tr
+                      ]
+                    : [
+                        'accdea-title'.tr,
+                        'paycar-title'.tr,
+                        'vou-title'.tr,
+                        'del-title'.tr
+                      ]
                 : [
                     'accdea-title'.tr,
                     'order-type'.tr,
-                    'vou-title'.tr,
+                    'Company Deal With'.tr,
                     'del-title'.tr
                   ],
             onTabs: [

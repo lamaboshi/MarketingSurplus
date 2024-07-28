@@ -64,78 +64,88 @@ class LogInView extends GetView<LogInController> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    children: [
-                      TextFieldWidget(
-                        onChanged: (value) {
-                          controller.email.value = value;
-                        },
-                        textInputType: TextInputType.emailAddress,
-                        label: 'entem-title'.tr,
-                      ),
-                      Obx(
-                        () => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: controller.userPasswordController,
-                            obscureText: !controller.passwordVisible.value,
-                            onChanged: (value) {
-                              controller.password.value = value;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'pass-title'.tr,
-                              hintText: 'entpass-title'.tr,
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white,
+                  child: Form(
+                    key: controller.userForm,
+                    child: Column(
+                      children: [
+                        TextFieldWidget(
+                          validator: controller.forceValue,
+                          onChanged: (value) {
+                            controller.email.value = value;
+                          },
+                          textInputType: TextInputType.emailAddress,
+                          label: 'entem-title'.tr,
+                        ),
+                        Obx(
+                          () => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              validator: controller.forceValue,
+                              keyboardType: TextInputType.text,
+                              controller: controller.userPasswordController,
+                              obscureText: !controller.passwordVisible.value,
+                              onChanged: (value) {
+                                controller.password.value = value;
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'pass-title'.tr,
+                                hintText: 'entpass-title'.tr,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  controller.passwordVisible.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Theme.of(context).primaryColorDark,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.passwordVisible.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                  onPressed: () {
+                                    controller.passwordVisible.value =
+                                        !controller.passwordVisible.value;
+                                  },
                                 ),
-                                onPressed: () {
-                                  controller.passwordVisible.value =
-                                      !controller.passwordVisible.value;
-                                },
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 40,
                 ),
-                ElevatedButton(
-                    onPressed: () async {
-                      await controller.logIn();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple.shade100,
-                        shape: const StadiumBorder()),
-                    child: SizedBox(
-                      width: Get.width / 1.3,
-                      height: 60,
-                      child: Center(
-                        child: Text(
-                          'login-title'.tr,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 21),
-                        ),
-                      ),
-                    )),
+                Obx(() => controller.isLoading.value
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () async {
+                          if (controller.userForm.currentState!.validate()) {
+                            await controller.logIn();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple.shade100,
+                            shape: const StadiumBorder()),
+                        child: SizedBox(
+                          width: Get.width / 1.3,
+                          height: 60,
+                          child: Center(
+                            child: Text(
+                              'login-title'.tr,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 21),
+                            ),
+                          ),
+                        ))),
                 const SizedBox(
                   height: 15,
                 ),
                 TextButton(
                     onPressed: () {
+                      Get.rootDelegate.history.clear();
                       Get.rootDelegate.toNamed(Paths.SignUpUserPage);
                     },
                     child: Text('dontha-title'.tr)),

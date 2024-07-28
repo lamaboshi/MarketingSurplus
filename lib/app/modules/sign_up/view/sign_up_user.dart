@@ -69,7 +69,7 @@ class SignUpUser extends GetView<SignUpController> {
                   () => Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      validator: controller.forceValue,
+                      validator: controller.validatePassword,
                       keyboardType: TextInputType.text,
                       controller: controller.userPasswordController,
                       obscureText: !controller.passwordVisible.value,

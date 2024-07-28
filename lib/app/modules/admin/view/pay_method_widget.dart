@@ -42,7 +42,8 @@ class PayMethodWidget extends GetView<AdminController> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFieldWidget(
                                   onChanged: (value) {
-                                    controller.pay.value.name = value;
+                                    controller.pay.value.payMethod!.name =
+                                        value;
                                   },
                                   textInputType: TextInputType.text,
                                   label: 'namepay-title'.tr,
@@ -50,7 +51,7 @@ class PayMethodWidget extends GetView<AdminController> {
                               ),
                               ElevatedButton(
                                   onPressed: () async {
-                                    await controller.addMethod();
+                                    //  await controller.addMethod();
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.purple.shade200,
@@ -121,7 +122,7 @@ class PayMethodWidget extends GetView<AdminController> {
       .map((element) => DataRow(cells: [
             DataCell(Text(element.id.toString(),
                 style: const TextStyle(color: Colors.purple))),
-            DataCell(Text(element.name.toString(),
+            DataCell(Text(element.payMethod!.name!.toString(),
                 style: const TextStyle(color: Colors.purple))),
             DataCell(IconButton(
               onPressed: () async {
@@ -145,9 +146,9 @@ class PayMethodWidget extends GetView<AdminController> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFieldWidget(
-                              value: controller.pay.value.name,
+                              value: controller.pay.value.payMethod!.name!,
                               onChanged: (value) {
-                                controller.pay.value.name = value;
+                                controller.pay.value.payMethod!.name = value;
                               },
                               textInputType: TextInputType.text,
                               label: 'namepay-title'.tr,
@@ -155,7 +156,7 @@ class PayMethodWidget extends GetView<AdminController> {
                           ),
                           ElevatedButton(
                               onPressed: () async {
-                                await controller.updateMethod();
+                                // await controller.updateMethod();
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.purple.shade200,

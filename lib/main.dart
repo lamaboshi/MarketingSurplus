@@ -20,11 +20,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var auth = 'Basic ' + base64Encode(utf8.encode('11181042:60-dayfreetrial'));
+
     Get.put(Dio(BaseOptions(
       baseUrl: 'http://automtec-001-site1.htempurl.com',
       headers: {'Authorization': auth},
       contentType: 'application/json; charset=UTF-8',
     )));
+    // Get.put(Dio(BaseOptions(
+    //   baseUrl: 'https://localhost:7092',
+    // )));
     Overlayment.navigationKey = Get.key;
     var storage = Get.put(StorageService());
     storage.init();

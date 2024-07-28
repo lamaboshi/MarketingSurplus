@@ -67,7 +67,7 @@ class SignUpCharity extends GetView<SignUpController> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     keyboardType: TextInputType.text,
-                    validator: controller.forceValue,
+                    validator: controller.validatePassword,
                     controller: controller.userPasswordController,
                     obscureText: !controller.passwordVisible.value,
                     onChanged: (value) {

@@ -40,6 +40,8 @@ class MenView extends GetView<con.MenuController> {
                             readOnly: !controller.auth.isAuth(),
                             controller: _controller,
                             onChanged: (value) {
+                              controller.listPosts.assignAll(
+                                  controller.homeController.listPosts);
                               controller.filterString.value = value;
                               controller.filterStringMethod();
                             },
@@ -328,6 +330,9 @@ class MenView extends GetView<con.MenuController> {
                         () => SingleChildScrollView(
                           child: Column(
                             children: controller.listPosts
+                                .where((p0) =>
+                                    p0.companyProduct!.product!.isExpiration ==
+                                    false)
                                 .map((element) => SingleItem(
                                         element.companyProduct!, false, () {
                                       controller

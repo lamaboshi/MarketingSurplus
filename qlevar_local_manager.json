@@ -246,7 +246,8 @@
     "Addanimage": "Add an image",
     "all-status": "Order Status",
     "new-price": "New Price",
-    "two-order": "You Cannot Make Order from many Company"
+    "two-order": "You Cannot Make Order from many Company",
+    "company-exp-pro": "Expired products"
   },
   "ar_AR": {
     "title": "تطبيق رائع",
@@ -296,7 +297,7 @@
     "clean-title": "Clean Out",
     "lest-title": "هيا نحارب هدر الطعام معًا",
     "food-title": "هدر الطعام مشكلة كبيرة، ويمكننا أن نكون لها الحل.",
-    "cleanout-title": "هاااي",
+    "cleanout-title": "Clean Out هو التطبيق الذي يتيح لك إنقاذ الطعام غير المباع في أماكنك المفضلة من مصير مفاجئ.",
     "add-title": "أضف نوع الشركة",
     "type-title": "أكتب اسم",
     "typedis-title": "أكتب الوصف",
@@ -316,7 +317,7 @@
     "orderdes-title": "وصف الطلب :",
     "orderstat-title": "حالة الطلب :",
     "clout-title": "Clout",
-    "itemcomp-title": "عناصر الشركة",
+    "itemcomp-title": "منتجات الشركة",
     "subscription-title": "الاشتراك",
     "selectcomp-title": "اختر الشركة",
     "cl-title": "Cl",
@@ -330,7 +331,7 @@
     "namepro-title": "اسم المنتج",
     "despro-title": "وصف المنتج",
     "oldpri-title": "السعر القديم للمنتج",
-    "offerpri-title": "التخفيض لسعر المنتج",
+    "offerpri-title": "السعر الجديد",
     "amoutth-title": "كمية هذا المنتج",
     "creatda-title": "إنشاء تاريخ المنتج",
     "expda-title": "تاريخ انتهاء الصلاحية المنتج",
@@ -495,6 +496,7 @@
     "Addanimage": " اضافة صورة جديدة",
     "all-status": "حالات الطلب",
     "new-price": "السعر الجديد",
-    "two-order": "لا يمكنك الطلب من اكثر من شركة"
+    "two-order": "لا يمكنك الطلب من اكثر من شركة",
+    "company-exp-pro": "منتجات منتهية الصلاحية"
   }
 }

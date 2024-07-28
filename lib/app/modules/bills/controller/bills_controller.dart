@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_product.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/shared/service/order_service.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
 import '../../../data/model/order_type.dart';
@@ -30,6 +31,16 @@ class BillsController extends GetxController {
     final result = await OrderDataRepository().getOrderDetails();
     orderProducts.assignAll(result);
     print('data in Bills ${result.length}');
+  }
+
+  Future<void> updateDonation(
+      int id, bool status, bool isCencal, bool isCompany) async {
+    var result = await OrderService()
+        .updateStatusDonation(id, status, isCencal, isCompany);
+    if (result) {
+      Overlayment.dismissAll();
+      getData();
+    }
   }
 
   Future<void> getOrderType() async {

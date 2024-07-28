@@ -9,10 +9,16 @@ class ProductDonation {
   int? companyProductId;
   int? donationId;
   int? totalPrice;
+  bool? isAccept;
+  bool? isCompany;
+  bool? isCencal;
   int? amount;
   ProductDonation(
       {this.companyProduct,
       this.companyProductId,
+      this.isAccept,
+      this.isCencal,
+      this.isCompany,
       this.donationId,
       this.donation,
       this.amount,
@@ -20,6 +26,9 @@ class ProductDonation {
   ProductDonation.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     amount = json['amount'] == null ? 0 : int.parse(json['amount'].toString());
+    isAccept = json['isAccept'];
+    isCompany = json['isCompany'];
+    isCencal = json['isCencal'];
     totalPrice = json['totalPrice'] == null
         ? 1
         : int.parse(json['totalPrice'].toString());
@@ -35,6 +44,9 @@ class ProductDonation {
     json['companyProduct'] = companyProduct?.toJson();
     json['companyProductId'] = companyProductId;
     json['donationId'] = donationId;
+    json['isCencal'] = isCencal ?? false;
+    json['isCompany'] = isCompany ?? false;
+    json['isAccept'] = isAccept ?? false;
     json['donation'] = donation?.toJson();
     json['totalPrice'] = totalPrice.toString();
     json['amount'] = amount.toString();

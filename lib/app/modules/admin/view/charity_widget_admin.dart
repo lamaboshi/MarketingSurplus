@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/admin_controller.dart';
 
-class UserWidget extends GetView<AdminController> {
-  const UserWidget({super.key});
-
+class CharityWidgetAdmin extends GetView<AdminController> {
+  CharityWidgetAdmin({super.key});
+  final controllerVertical = ScrollController();
+  final controllerHorizontal = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,19 +33,21 @@ class UserWidget extends GetView<AdminController> {
                             focusNode: FocusNode(),
                             underline: const SizedBox(),
                             hint: Text('selectcomp-title'.tr),
-                            value: controller.userColumnSelect.value,
+                            value: controller.charityColumnSelect.value,
                             onChanged: (newValue) async {
                               FocusScope.of(context).requestFocus(FocusNode());
 
-                              controller.userColumnSelect.value = controller
-                                  .userColumn
+                              controller.charityColumnSelect.value = controller
+                                  .charityColumn
                                   .where(
                                       (element) => element.contains(newValue!))
                                   .first;
                             },
                             items: [
-                              controller.userColumn[1],
-                              controller.userColumn[3]
+                              controller.charityColumn[1],
+                              controller.charityColumn[2],
+                              controller.charityColumn[3],
+                              controller.charityColumn[4]
                             ].map((e) {
                               return DropdownMenuItem(
                                 value: e,
@@ -63,26 +66,44 @@ class UserWidget extends GetView<AdminController> {
                                   BorderSide(color: Colors.purple.shade200)),
                           onChanged: (value) {
                             if (value.isNotEmpty) {
-                              if (controller.userColumnSelect.value
+                              if (controller.charityColumnSelect.value
                                   .contains('Name')) {
-                                var items = controller.users
+                                var items = controller.charitys
                                     .where((p0) => p0.name!
                                         .toLowerCase()
                                         .contains(value.toLowerCase()))
                                     .toList();
-                                controller.users.clear();
-                                controller.users.assignAll(items);
-                              } else {
-                                var items = controller.users
+                                controller.charitys.clear();
+                                controller.charitys.assignAll(items);
+                              } else if (controller.charityColumnSelect.value
+                                  .contains('Email')) {
+                                var items = controller.charitys
                                     .where((p0) => p0.email!
                                         .toLowerCase()
                                         .contains(value.toLowerCase()))
                                     .toList();
-                                controller.users.clear();
-                                controller.users.assignAll(items);
+                                controller.charitys.clear();
+                                controller.charitys.assignAll(items);
+                              } else if (controller.charityColumnSelect.value
+                                  .contains('TargetGroup')) {
+                                var items = controller.charitys
+                                    .where((p0) => p0.targetGroup!
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.charitys.clear();
+                                controller.charitys.assignAll(items);
+                              } else {
+                                var items = controller.charitys
+                                    .where((p0) => p0.goals!
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()))
+                                    .toList();
+                                controller.charitys.clear();
+                                controller.charitys.assignAll(items);
                               }
                             } else {
-                              controller.getAllUsers();
+                              controller.getAllcharitys();
                             }
                           },
                           textInputType: TextInputType.name,
@@ -97,14 +118,24 @@ class UserWidget extends GetView<AdminController> {
             ),
             Obx(() => SizedBox(
                   width: Get.width / 1.3,
-                  child: DataTable(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.purple),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    columns: getColumn(),
-                    rows: getRows(),
-                  ),
+                  child: Scrollbar(
+                      controller: controllerVertical,
+                      trackVisibility: true,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        controller: controllerHorizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DataTable(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.purple),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            columns: getColumn(),
+                            rows: getRows(),
+                          ),
+                        ),
+                      )),
                 )),
             const SizedBox(
               height: 30,
@@ -115,7 +146,7 @@ class UserWidget extends GetView<AdminController> {
     );
   }
 
-  List<DataColumn> getColumn() => controller.userColumn
+  List<DataColumn> getColumn() => controller.charityColumn
       .map((e) => DataColumn(
           label: Text(e,
               style: const TextStyle(
@@ -135,15 +166,17 @@ class UserWidget extends GetView<AdminController> {
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
-  List<DataRow> getRows() => controller.users
+  List<DataRow> getRows() => controller.charitys
       .map((element) => DataRow(cells: [
             DataCell(Text(element.id.toString(),
                 style: const TextStyle(color: Colors.purple))),
             DataCell(Text(element.name.toString(),
                 style: const TextStyle(color: Colors.purple))),
-            DataCell(Text(element.phone.toString(),
-                style: const TextStyle(color: Colors.purple))),
             DataCell(Text(element.email.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.targetGroup.toString(),
+                style: const TextStyle(color: Colors.purple))),
+            DataCell(Text(element.goals.toString(),
                 style: const TextStyle(color: Colors.purple))),
             DataCell(IconButton(
               onPressed: () {},

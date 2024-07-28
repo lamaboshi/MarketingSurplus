@@ -43,9 +43,9 @@ class RateWidget extends GetView<AdminController> {
       .map((element) => DataRow(cells: [
             DataCell(Text(element.id.toString(),
                 style: const TextStyle(color: Colors.purple))),
-            DataCell(Text(element.rateNumber.toString(),
+            DataCell(Text(element.rate!.rateNumber.toString(),
                 style: const TextStyle(color: Colors.purple))),
-            DataCell(Text(element.description.toString(),
+            DataCell(Text(element.rate!.description.toString(),
                 style: const TextStyle(color: Colors.purple))),
           ]))
       .toList();

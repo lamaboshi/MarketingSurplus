@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/product/controller/product_controller.dart';
@@ -5,6 +6,7 @@ import 'package:marketing_surplus/shared/service/auth_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/util.dart';
+import '../../../../shared/widgets/textfield_widget.dart';
 import '../../../data/model/company_product.dart';
 
 class ProductView extends GetView<ProductController> {
@@ -98,7 +100,350 @@ class ProductView extends GetView<ProductController> {
                             ? Row(
                                 children: [
                                   InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        controller.newProduct.value =
+                                            product!.product!;
+
+                                        Overlayment.show(OverDialog(
+                                            height: Get.height / 1.3,
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Container(
+                                                    color:
+                                                        Colors.purple.shade200,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        'editpro-title'.tr,
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      await controller
+                                                          .pickImageFun();
+                                                    },
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .stretch,
+                                                      children: [
+                                                        Obx(() => controller
+                                                                .stringPickImage
+                                                                .value
+                                                                .isNotEmpty
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              33),
+                                                                  child: Utility.imageFromBase64String(
+                                                                      controller
+                                                                          .stringPickImage
+                                                                          .value,
+                                                                      75,
+                                                                      150),
+                                                                ),
+                                                              )
+                                                            : Icon(
+                                                                Icons.image,
+                                                                size: 50,
+                                                              )),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Center(
+                                                            child: Text(
+                                                                'Addanimage'
+                                                                    .tr)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Form(
+                                                    key: controller.keyForm,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5),
+                                                        child: Column(
+                                                          children: [
+                                                            TextFieldWidget(
+                                                              label: controller
+                                                                      .newProduct
+                                                                      .value
+                                                                      .name ??
+                                                                  'namepro-title'
+                                                                      .tr,
+                                                              validator:
+                                                                  controller
+                                                                      .forceValue,
+                                                              onChanged:
+                                                                  (value) {
+                                                                controller
+                                                                    .newProduct
+                                                                    .value
+                                                                    .name = value;
+                                                              },
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .text,
+                                                            ),
+                                                            TextFieldWidget(
+                                                              validator:
+                                                                  controller
+                                                                      .forceValue,
+                                                              label: controller
+                                                                      .newProduct
+                                                                      .value
+                                                                      .descripation ??
+                                                                  'despro-title'
+                                                                      .tr,
+                                                              onChanged:
+                                                                  (value) {
+                                                                controller
+                                                                    .newProduct
+                                                                    .value
+                                                                    .descripation = value;
+                                                              },
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .text,
+                                                            ),
+                                                            TextFieldWidget(
+                                                              validator:
+                                                                  controller
+                                                                      .forceValue,
+                                                              label: controller
+                                                                          .newProduct
+                                                                          .value
+                                                                          .oldPrice !=
+                                                                      null
+                                                                  ? controller
+                                                                      .newProduct
+                                                                      .value
+                                                                      .oldPrice
+                                                                      .toString()
+                                                                  : 'oldpri-title'
+                                                                      .tr,
+                                                              onChanged:
+                                                                  (value) {
+                                                                controller
+                                                                        .newProduct
+                                                                        .value
+                                                                        .newPrice =
+                                                                    double.tryParse(
+                                                                        value);
+                                                              },
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .number,
+                                                            ),
+                                                            TextFieldWidget(
+                                                              validator:
+                                                                  controller
+                                                                      .forceValue,
+                                                              label: controller
+                                                                          .newProduct
+                                                                          .value
+                                                                          .newPrice !=
+                                                                      null
+                                                                  ? controller
+                                                                      .newProduct
+                                                                      .value
+                                                                      .newPrice
+                                                                      .toString()
+                                                                  : 'offerpri-title'
+                                                                      .tr,
+                                                              onChanged:
+                                                                  (value) {
+                                                                controller
+                                                                        .newProduct
+                                                                        .value
+                                                                        .newPrice =
+                                                                    double.tryParse(
+                                                                        value);
+                                                              },
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .number,
+                                                            ),
+                                                            TextFieldWidget(
+                                                              validator:
+                                                                  controller
+                                                                      .forceValue,
+                                                              label:
+                                                                  'amoutth-title'
+                                                                      .tr,
+                                                              onChanged:
+                                                                  (value) {
+                                                                controller
+                                                                        .amount
+                                                                        .value =
+                                                                    int.parse(
+                                                                        value);
+                                                              },
+                                                              textInputType:
+                                                                  TextInputType
+                                                                      .number,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    'creatda-title'
+                                                                        .tr,
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            18),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 120,
+                                                                    child:
+                                                                        CupertinoDatePicker(
+                                                                      minimumYear:
+                                                                          2022,
+                                                                      maximumYear:
+                                                                          2026,
+                                                                      mode: CupertinoDatePickerMode
+                                                                          .date,
+                                                                      initialDateTime:
+                                                                          DateTime
+                                                                              .now(),
+                                                                      onDateTimeChanged:
+                                                                          (DateTime
+                                                                              newDateTime) {
+                                                                        controller
+                                                                            .newProduct
+                                                                            .value
+                                                                            .dateTime = newDateTime;
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    'expda-title'
+                                                                        .tr,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            18),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 120,
+                                                                    child:
+                                                                        CupertinoDatePicker(
+                                                                      minimumYear:
+                                                                          2022,
+                                                                      maximumYear:
+                                                                          2026,
+                                                                      mode: CupertinoDatePickerMode
+                                                                          .date,
+                                                                      initialDateTime:
+                                                                          DateTime
+                                                                              .now(),
+                                                                      onDateTimeChanged:
+                                                                          (newDateTime) {
+                                                                        controller
+                                                                            .newProduct
+                                                                            .value
+                                                                            .expiration = newDateTime;
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: FloatingActionButton
+                                                                  .extended(
+                                                                      backgroundColor: Colors
+                                                                          .purple
+                                                                          .shade200,
+                                                                      isExtended:
+                                                                          true,
+                                                                      onPressed:
+                                                                          () async {
+                                                                        if (controller
+                                                                            .keyForm
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          final rsult =
+                                                                              await controller.updateProduct();
+                                                                          Overlayment
+                                                                              .dismissLast();
+                                                                          if (rsult) {
+                                                                            Overlayment.dismissLast();
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      label: SizedBox(
+                                                                          width: Get.width / 3,
+                                                                          child: Center(
+                                                                              child: Text(
+                                                                            'addd-title'.tr,
+                                                                            style:
+                                                                                const TextStyle(fontSize: 18, color: Colors.white),
+                                                                          )))),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )));
+                                      },
                                       child: Icon(
                                         Icons.edit,
                                         color: Colors.blue,
@@ -107,7 +452,42 @@ class ProductView extends GetView<ProductController> {
                                     width: 15,
                                   ),
                                   InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Overlayment.show(OverDialog(
+                                            child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text('Are you sure'),
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      await controller
+                                                          .deleteProduct(
+                                                              product!.product!
+                                                                  .id!);
+                                                    },
+                                                    child: Text('Yes'.tr),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Overlayment.dismissLast();
+                                                    },
+                                                    child: Text('Cancel'.tr),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )));
+                                      },
                                       child: Icon(
                                         Icons.delete,
                                         color: Colors.red,
@@ -134,6 +514,24 @@ class ProductView extends GetView<ProductController> {
                   ],
                 ),
               ),
+              if (product!.company != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('cmp-name'.tr),
+                      Chip(
+                          side: BorderSide(color: Colors.orange.shade300),
+                          backgroundColor: Colors.green.shade400,
+                          labelPadding: const EdgeInsets.all(2),
+                          label: Text(
+                            product!.company!.name ?? '',
+                            style: const TextStyle(color: Colors.white),
+                          )),
+                    ],
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -236,7 +634,82 @@ class ProductView extends GetView<ProductController> {
         ],
       ),
       bottomNavigationBar: Get.find<AuthService>().getTypeEnum() == Auth.comapny
-          ? null
+          ? InkWell(
+              onTap: () {
+                onTap!();
+                Overlayment.dismissLast();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 50, right: 30),
+                  height: 75.0,
+                  decoration: BoxDecoration(
+                      //  color: Colors.red[300],
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.purple.shade100,
+                            Colors.purple.shade200,
+                            Colors.purple.shade300,
+                            Colors.purple.shade400,
+                          ]),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade100,
+                            spreadRadius: 7,
+                            blurRadius: 4,
+                            offset: const Offset(0, 3))
+                      ],
+                      borderRadius: BorderRadius.circular(40)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.money,
+                                color: Colors.purple,
+                              ),
+                              Text(
+                                product!.product!.newPrice == null
+                                    ? ''
+                                    : ' ${product!.product!.newPrice!}',
+                                style: TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.money,
+                                color: Colors.grey.shade800,
+                              ),
+                              Text(
+                                product!.product!.oldPrice == null
+                                    ? ''
+                                    : ' ${product!.product!.oldPrice!}',
+                                style: TextStyle(
+                                    color: Colors.grey.shade800,
+                                    fontSize: 17,
+                                    decoration: TextDecoration.lineThrough),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ))
           : InkWell(
               onTap: () {
                 onTap!();
@@ -273,23 +746,33 @@ class ProductView extends GetView<ProductController> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            product!.product!.newPrice == null
-                                ? ''
-                                : ' ${product!.product!.newPrice!}\$',
-                            style: TextStyle(
-                              color: Colors.purple,
-                              fontSize: 17,
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.money),
+                              Text(
+                                product!.product!.newPrice == null
+                                    ? ''
+                                    : ' ${product!.product!.newPrice!}',
+                                style: TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            product!.product!.oldPrice == null
-                                ? ''
-                                : ' ${product!.product!.oldPrice!}\$',
-                            style: TextStyle(
-                                color: Colors.grey.shade800,
-                                fontSize: 17,
-                                decoration: TextDecoration.lineThrough),
+                          Row(
+                            children: [
+                              Icon(Icons.money),
+                              Text(
+                                product!.product!.oldPrice == null
+                                    ? ''
+                                    : ' ${product!.product!.oldPrice!}',
+                                style: TextStyle(
+                                    color: Colors.grey.shade800,
+                                    fontSize: 17,
+                                    decoration: TextDecoration.lineThrough),
+                              ),
+                            ],
                           ),
                         ],
                       ),

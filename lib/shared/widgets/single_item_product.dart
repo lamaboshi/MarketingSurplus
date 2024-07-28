@@ -4,6 +4,7 @@ import 'package:marketing_surplus/app/data/model/company_product.dart';
 import 'package:marketing_surplus/shared/widgets/auth_bottom_sheet.dart';
 import 'package:overlayment/overlayment.dart';
 
+import '../../app/modules/product/controller/product_controller.dart';
 import '../../app/modules/product/view/produtc_page.dart';
 import '../service/util.dart';
 
@@ -11,13 +12,18 @@ class SingleItem extends GetView {
   final CompanyProduct product;
   final String? type;
   final bool? enable;
+  final bool? without;
+  final Widget? widget;
   final VoidCallback onTap;
   final VoidCallback editTap;
   final VoidCallback deleteTap;
   final bool? isCompany;
   const SingleItem(this.product, this.isCompany, this.onTap, this.editTap,
       this.deleteTap, this.enable,
-      {this.type, super.key});
+      {this.type,
+      this.widget = const SizedBox.shrink(),
+      this.without = false,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,12 @@ class SingleItem extends GetView {
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {
+            if (Get.isRegistered<ProductController>()) {
+              final orderController = Get.find<ProductController>();
+              orderController.onInit();
+            } else {
+              Get.put(ProductController());
+            }
             Overlayment.show(OverDialog(
                 child: ProductView(
               product: product,
@@ -158,66 +170,84 @@ class SingleItem extends GetView {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
-                                product.product!.newPrice == null
-                                    ? ''
-                                    : ' ${product.product!.newPrice!}\$',
-                                style: TextStyle(color: Colors.purple.shade200),
+                              Row(
+                                children: [
+                                  Icon(Icons.money,
+                                      color: Colors.purple.shade200),
+                                  Text(
+                                    product.product!.newPrice == null
+                                        ? ''
+                                        : ' ${product.product!.newPrice!}',
+                                    style: TextStyle(
+                                        color: Colors.purple.shade200),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                product.product!.oldPrice == null
-                                    ? ''
-                                    : ' ${product.product!.oldPrice!}\$',
-                                style: const TextStyle(
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.money,
                                     color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough),
+                                  ),
+                                  Text(
+                                    product.product!.oldPrice == null
+                                        ? ''
+                                        : ' ${product.product!.oldPrice!}',
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        decoration: TextDecoration.lineThrough),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                           const SizedBox(
                             height: 45,
                           ),
-                          isCompany!
-                              ? Row(
-                                  children: [
-                                    InkWell(
-                                        onTap: () {
-                                          editTap();
-                                        },
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        )),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    InkWell(
-                                        onTap: () {
-                                          deleteTap();
-                                        },
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        )),
-                                  ],
-                                )
-                              : InkWell(
-                                  onTap: () async {
-                                    if (enable!) {
-                                      await AuthBottomSheet()
-                                          .modalBottomSheet(context);
-                                    } else {
-                                      onTap();
-                                    }
-                                  },
-                                  child: Chip(
-                                      backgroundColor: Colors.purple.shade200,
-                                      label: Text(
-                                        'buy'.tr,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      )),
-                                )
+                          without!
+                              ? widget!
+                              : isCompany!
+                                  ? Row(
+                                      children: [
+                                        InkWell(
+                                            onTap: () {
+                                              editTap();
+                                            },
+                                            child: Icon(
+                                              Icons.edit,
+                                              color: Colors.blue,
+                                            )),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        InkWell(
+                                            onTap: () {
+                                              deleteTap();
+                                            },
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            )),
+                                      ],
+                                    )
+                                  : InkWell(
+                                      onTap: () async {
+                                        if (enable!) {
+                                          await AuthBottomSheet()
+                                              .modalBottomSheet(context);
+                                        } else {
+                                          onTap();
+                                        }
+                                      },
+                                      child: Chip(
+                                          backgroundColor:
+                                              Colors.purple.shade200,
+                                          label: Text(
+                                            'buy'.tr,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )),
+                                    )
                         ],
                       ),
                     ),

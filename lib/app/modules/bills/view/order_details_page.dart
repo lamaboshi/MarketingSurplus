@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
+import 'package:marketing_surplus/shared/service/auth_service.dart';
 import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
@@ -43,6 +44,8 @@ class OrderDetailsPage extends GetView<BillsController> {
                     ))
               ],
             ),
+            if (controller.auth.getTypeEnum() == Auth.comapny)
+              getRow('user-type', orderProduct!.order!.userId.toString()),
             getRow('ordername-title', orderProduct!.order!.name ?? ''),
             getRow('orderdes-title', orderProduct!.order!.descripation ?? ''),
             if (orderProduct!.companyProduct!.product != null)

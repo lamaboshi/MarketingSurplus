@@ -47,23 +47,38 @@ class MainCompanyPage extends GetView<HomeController> {
                                   child: ListTile(
                                     title: Row(
                                       children: [
-                                        const Icon(
-                                          Icons.star,
-                                          color: Colors.white,
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          element.rate!.rateNumber.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white),
+                                        Row(
+                                          children: Iterable<int>.generate(5)
+                                              .toList()
+                                              .map((e) => Icon(
+                                                    Icons.star,
+                                                    color: element.rate!
+                                                                .rateNumber ==
+                                                            null
+                                                        ? Colors.grey
+                                                        : element.rate!
+                                                                    .rateNumber! <
+                                                                6
+                                                            ? e + 1 <=
+                                                                    element
+                                                                        .rate!
+                                                                        .rateNumber!
+                                                                ? Colors.amber
+                                                                : Colors.grey
+                                                            : Colors.amber,
+                                                  ))
+                                              .toList(),
                                         ),
                                         const SizedBox(
                                           width: 8,
                                         ),
                                         Text(
                                           element.rate!.description ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          '  Lama Boshi',
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
@@ -155,16 +170,47 @@ class MainCompanyPage extends GetView<HomeController> {
                                 textInputType: TextInputType.text,
                               ),
                               TextFieldWidget(
-                                validator: controller.forceValue,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'requird';
+                                  } else {
+                                    var numb = (double.tryParse(value)) ?? 0;
+                                    if (numb != 0 &&
+                                        controller.newProduct.value.newPrice !=
+                                            null &&
+                                        numb
+                                            .compareTo(controller
+                                                .newProduct.value.newPrice!)
+                                            .isNegative) {
+                                      return 'Error With Price';
+                                    }
+                                  }
+                                  return null;
+                                },
                                 label: 'oldpri-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.oldPrice =
                                       double.tryParse(value);
                                 },
-                                textInputType: TextInputType.text,
+                                textInputType: TextInputType.number,
                               ),
                               TextFieldWidget(
-                                validator: controller.forceValue,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'requird';
+                                  } else {
+                                    var numb = (double.tryParse(value)) ?? 0;
+                                    if (numb != 0 &&
+                                        controller.newProduct.value.oldPrice !=
+                                            null &&
+                                        controller.newProduct.value.oldPrice!
+                                            .compareTo(numb)
+                                            .isNegative) {
+                                      return 'Error With Price';
+                                    }
+                                  }
+                                  return null;
+                                },
                                 label: 'offerpri-title'.tr,
                                 onChanged: (value) {
                                   controller.newProduct.value.newPrice =
@@ -192,19 +238,31 @@ class MainCompanyPage extends GetView<HomeController> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    SizedBox(
-                                      height: 120,
-                                      child: CupertinoDatePicker(
-                                        minimumYear: 2022,
-                                        maximumYear: 2026,
-                                        mode: CupertinoDatePickerMode.date,
-                                        initialDateTime: DateTime.now(),
-                                        onDateTimeChanged:
-                                            (DateTime newDateTime) {
-                                          controller.newProduct.value.dateTime =
-                                              newDateTime;
-                                        },
-                                      ),
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 120,
+                                          child: CupertinoDatePicker(
+                                            minimumYear: 2022,
+                                            maximumYear: 2026,
+                                            mode: CupertinoDatePickerMode.date,
+                                            initialDateTime: DateTime.now(),
+                                            onDateTimeChanged:
+                                                (DateTime newDateTime) {
+                                              controller.newProduct.value
+                                                  .dateTime = newDateTime;
+                                            },
+                                          ),
+                                        ),
+                                        Obx(() =>
+                                            controller.errorData.value.isEmpty
+                                                ? SizedBox.shrink()
+                                                : Text(
+                                                    controller.errorData.value,
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ))
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -221,18 +279,30 @@ class MainCompanyPage extends GetView<HomeController> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    SizedBox(
-                                      height: 120,
-                                      child: CupertinoDatePicker(
-                                        minimumYear: 2022,
-                                        maximumYear: 2026,
-                                        mode: CupertinoDatePickerMode.date,
-                                        initialDateTime: DateTime.now(),
-                                        onDateTimeChanged: (newDateTime) {
-                                          controller.newProduct.value
-                                              .expiration = newDateTime;
-                                        },
-                                      ),
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 120,
+                                          child: CupertinoDatePicker(
+                                            minimumYear: 2022,
+                                            maximumYear: 2026,
+                                            mode: CupertinoDatePickerMode.date,
+                                            initialDateTime: DateTime.now(),
+                                            onDateTimeChanged: (newDateTime) {
+                                              controller.newProduct.value
+                                                  .expiration = newDateTime;
+                                            },
+                                          ),
+                                        ),
+                                        Obx(() =>
+                                            controller.errorData.value.isEmpty
+                                                ? SizedBox.shrink()
+                                                : Text(
+                                                    controller.errorData.value,
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ))
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -245,11 +315,17 @@ class MainCompanyPage extends GetView<HomeController> {
                                     onPressed: () async {
                                       if (controller.keyForm.currentState!
                                           .validate()) {
-                                        final rsult =
-                                            await controller.addProduct();
-                                        Overlayment.dismissLast();
-                                        if (rsult) {
-                                          Overlayment.dismissLast();
+                                        if (validData()) {
+                                          controller.errorData.value = '';
+                                          final rsult =
+                                              await controller.addProduct();
+
+                                          if (rsult) {
+                                            Overlayment.dismissLast();
+                                          }
+                                        } else {
+                                          controller.errorData.value =
+                                              'Expiration Data Should be after Created Data';
                                         }
                                       }
                                     },
@@ -283,4 +359,10 @@ class MainCompanyPage extends GetView<HomeController> {
       ),
     );
   }
+
+  bool validData() =>
+      controller.newProduct.value.expiration != null &&
+      controller.newProduct.value.dateTime != null &&
+      controller.newProduct.value.expiration!
+          .isAfter(controller.newProduct.value.dateTime!);
 }

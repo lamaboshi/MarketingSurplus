@@ -17,7 +17,7 @@ import '../../../data/model/charity.dart';
 import '../../../data/model/company.dart';
 import '../../../data/model/order_type.dart';
 import '../../../data/model/pay_method.dart';
-import '../../../data/model/product_donation.dart';
+
 import '../../../data/model/user_model.dart';
 import '../../admin/data/company_type_repo.dart';
 import '../../admin/data/order_repo.dart';
@@ -41,10 +41,11 @@ class SettingProfileController extends GetxController {
   final company = Company().obs;
   final user = UserModel().obs;
   final charity = Charity().obs;
-  final pays = <PayMethod>[].obs;
+  final account = 0.0.obs;
+  final pays = <CompanyMethods>[].obs;
   final orderProducts = <OrderProduct>[].obs;
   final companyUsers = <UserModel>[].obs;
-  final lastOrderCharity = <ProductDonation>[].obs;
+  final companyCharityWith = <Company>[].obs;
   final stringPickImage = ''.obs;
   final listTextTabToggle = ["عربي", "English"];
   RxInt tabTextIndexSelected = 0.obs;
@@ -70,8 +71,19 @@ class SettingProfileController extends GetxController {
   }
 
   Future<void> getPayMethod() async {
-    final result = await PayMethodRepositry().getAllMethod();
-    pays.assignAll(result);
+    final result = await PayMethodRepositry().getAllOfMethod();
+    for (var element in result) {
+      if (!pays.any(
+          (e) => e.payMethod!.name!.compareTo(element.payMethod!.name!) == 0)) {
+        pays.assign(element);
+      }
+    }
+  }
+
+  void getAmount() {
+    account.value = 0;
+    var value = auth.stroge.getData('account');
+    account.value = double.parse(value ?? '0.0');
   }
 
   Future pickImageFun() async {
@@ -100,8 +112,8 @@ class SettingProfileController extends GetxController {
   }
 
   Future<void> getLastOrderCharity() async {
-    final result = await OrderService().getAllDonation();
-    lastOrderCharity.assignAll(result);
+    final result = await OrderService().getAllCompanyForCharity();
+    companyCharityWith.assignAll(result);
   }
 
   Future<void> getOrderDetailsForCompany() async {
@@ -227,6 +239,7 @@ class SettingProfileController extends GetxController {
     if (res) {
       auth.stroge.deleteAllKeys();
       Overlayment.dismissLast();
+      Get.rootDelegate.history.clear();
       Get.rootDelegate.offAndToNamed(Paths.LogIn);
     }
   }
