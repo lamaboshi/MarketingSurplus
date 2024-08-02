@@ -20,6 +20,15 @@ class BillsController extends GetxController {
   final orderProducts = <OrderProduct>[].obs;
   final lastOrderCharity = <ProductDonation>[].obs;
   final orderStatus = OrderStutas.none.obs;
+  final descr = {0: ''}.obs;
+  final food1 = ''.obs;
+  final food2 = ''.obs;
+  final food3 = ''.obs;
+  final food4 = ''.obs;
+  final cloth1 = ''.obs;
+  final cloth2 = ''.obs;
+  final cloth3 = ''.obs;
+
   @override
   void onInit() {
     getData();

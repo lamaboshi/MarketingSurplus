@@ -1,3 +1,5 @@
+import 'user_model.dart';
+
 class OrderModel {
   int? id;
   String? name;
@@ -5,7 +7,9 @@ class OrderModel {
   double? price;
   bool? isDelivery;
   int? payMethodId;
+  DateTime? createdAt;
   int? userId;
+  UserModel? user;
   String? descripation;
   OrderModel({
     this.id,
@@ -15,6 +19,8 @@ class OrderModel {
     this.isDelivery = false,
     this.payMethodId,
     this.userId,
+    this.createdAt,
+    this.user,
     this.descripation,
   });
 
@@ -22,9 +28,13 @@ class OrderModel {
     id = json['id'];
     name = json['name'];
     amount = json['amount'];
+    createdAt = DateTime.parse(json['createdAt']);
     price = json['price'] == null
         ? null
         : double.tryParse(json['price'].toString());
+    user = json['user'] == null
+        ? null
+        : UserModel.fromJson(json['user'] as Map<String, dynamic>);
     isDelivery = json['isDelivery'];
     payMethodId = json['payMethodId'];
     userId = json['userId'];
@@ -40,6 +50,7 @@ class OrderModel {
     json['isDelivery'] = isDelivery;
     json['payMethodId'] = payMethodId;
     json['userId'] = userId;
+    json['createdAt'] = createdAt?.toIso8601String();
     json['descripation'] = descripation;
     return json;
   }

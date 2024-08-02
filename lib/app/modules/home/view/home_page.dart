@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
+import 'package:marketing_surplus/app/modules/home/view/notifications_page.dart';
 import 'package:marketing_surplus/shared/service/auth_service.dart';
 import 'package:marketing_surplus/shared/widgets/auth_bottom_sheet.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../routes/app_routes.dart';
 import '../controller/home_controller.dart';
@@ -74,7 +76,20 @@ class HomeView extends GetView<HomeController> {
                           color: Colors.purple.shade200,
                         )),
                   )
-                : const SizedBox.shrink()
+                : const SizedBox.shrink(),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: IconButton(
+                  onPressed: () async {
+                    Overlayment.show(OverPanel(
+                        alignment: Alignment.centerLeft,
+                        child: NotificationsPage()));
+                  },
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Colors.purple.shade200,
+                  )),
+            )
           ],
           title: Row(
             children: [

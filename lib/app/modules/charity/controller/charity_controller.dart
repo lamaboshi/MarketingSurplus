@@ -74,6 +74,20 @@ class CharityController extends GetxController {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    Colors.purple.shade200)),
+                            onPressed: () {
+                              Overlayment.dismissLast();
+                            },
+                            icon: Icon(Icons.arrow_back)),
+                      ),
+                    ),
                     Obx(() => toPayProduct.isEmpty
                         ? SizedBox.shrink()
                         : Align(
@@ -139,6 +153,7 @@ class CharityController extends GetxController {
     var productDonation = <ProductDonation>[];
     var donation = Donation(
       charityId: charityId,
+      createdAt: DateTime.now(),
       orderTypeId: 2,
     );
     for (var element in toPayProduct) {

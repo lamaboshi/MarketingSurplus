@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../../shared/service/auth_service.dart';
 import '../../../../../shared/widgets/textfield_widget.dart';
+import '../../../admin/data/pay_method_repo.dart';
 import '../../controller/setting_profile_controller.dart';
 
 class PayMethodView extends GetView<SettingProfileController> {
@@ -111,11 +114,97 @@ class PayMethodView extends GetView<SettingProfileController> {
                           ),
                         ),
                         controller.auth.getTypeEnum() == Auth.comapny
-                            ? Text(
-                                'addd-title'.tr,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.purple.shade200),
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Overlayment.show(
+                                      OverDialog(
+                                        width: 250,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  'addpay-title'.tr,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors
+                                                          .purple.shade200),
+                                                ),
+                                              ),
+                                              Wrap(
+                                                children: listSug
+                                                    .map((e) => InkWell(
+                                                        onTap: () {
+                                                          controller.pay.value
+                                                              .name = e;
+                                                        },
+                                                        child: Chip(
+                                                            label: Text(e))))
+                                                    .toList(),
+                                              ),
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Obx(
+                                                    () => TextFieldWidget(
+                                                      value: controller
+                                                              .pay.value.name ??
+                                                          '',
+                                                      onChanged: (value) {
+                                                        controller.pay.value
+                                                            .name = value;
+                                                      },
+                                                      textInputType:
+                                                          TextInputType.text,
+                                                      label: 'namepay-title'.tr,
+                                                    ),
+                                                  )),
+                                              ElevatedButton(
+                                                  onPressed: () async {
+                                                    await controller
+                                                        .addMethod();
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor: Colors
+                                                          .purple.shade200,
+                                                      shape:
+                                                          const StadiumBorder()),
+                                                  child: SizedBox(
+                                                    width: 150,
+                                                    height: 30,
+                                                    child: Center(
+                                                      child: Text(
+                                                        'save-title'.tr,
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 19),
+                                                      ),
+                                                    ),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'addd-title'.tr,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.purple.shade200),
+                                  ),
+                                ),
                               )
                             : SizedBox.shrink()
                       ],
@@ -132,6 +221,15 @@ class PayMethodView extends GetView<SettingProfileController> {
                                       color: Colors.cyan,
                                     ),
                                     title: Text(element.payMethod!.name ?? ""),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () async {
+                                        await PayMethodRepositry()
+                                            .deleteMethod(element.id!);
+                                        await controller.getPayMethod();
+                                        Overlayment.dismissLast();
+                                      },
+                                    ),
                                   ))
                               .toList()),
                     ),
@@ -142,4 +240,6 @@ class PayMethodView extends GetView<SettingProfileController> {
                 ],
               ));
   }
+
+  List<String> get listSug => ['PayPal', 'Credit Card', 'Cash Pay'];
 }

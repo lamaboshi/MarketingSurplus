@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'company_type_model.dart';
+
 class Company {
   int? id;
   String? name;
@@ -13,6 +15,7 @@ class Company {
   String? licenseNumber;
   String? onlineImage;
   int? companyTypeId;
+  CompanyTypeModel? companyType;
   bool? isAccept;
   Company({
     this.id,
@@ -24,6 +27,7 @@ class Company {
     this.telePhone,
     this.image,
     this.companyTypeId,
+    this.companyType,
     this.isAccept,
     this.description,
   });
@@ -38,6 +42,9 @@ class Company {
     password = json['password'];
     telePhone = json['telePhone'];
     description = json['description'];
+    companyType = json['companyType'] == null
+        ? null
+        : CompanyTypeModel.fromJson(json['companyType']);
     isAccept = json['isAccept'];
     companyTypeId = json['companyTypeId'];
     licenseNumber = json['licenseNumber'];

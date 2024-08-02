@@ -118,21 +118,23 @@ class OrderCharityPage extends GetView<OrderController> {
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: FloatingActionButton.extended(
-                    backgroundColor: Colors.purple.shade200,
-                    isExtended: true,
-                    onPressed: () async {
-                      await controller.saveOrderDonation();
-                      Overlayment.dismissLast();
-                    },
-                    label: SizedBox(
-                        height: Get.height / 3,
-                        child: Center(
-                            child: Text(
-                          'conf-title'.tr,
-                          style: const TextStyle(
-                              fontSize: 18, color: Colors.white),
-                        )))),
+                child: Obx(() => controller.isProssing.value
+                    ? CircularProgressIndicator()
+                    : FloatingActionButton.extended(
+                        backgroundColor: Colors.purple.shade200,
+                        isExtended: true,
+                        onPressed: () async {
+                          await controller.saveOrderDonation();
+                          Overlayment.dismissLast();
+                        },
+                        label: SizedBox(
+                            height: Get.height / 3,
+                            child: Center(
+                                child: Text(
+                              'conf-title'.tr,
+                              style: const TextStyle(
+                                  fontSize: 18, color: Colors.white),
+                            ))))),
               ),
             )
           ],

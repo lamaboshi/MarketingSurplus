@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_product.dart';
 import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
+import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 
 import '../../../../api/storge/storge_service.dart';
 import '../../../../shared/service/auth_service.dart';
@@ -62,7 +63,10 @@ class CompanyController extends GetxController {
 
   Future<void> addRate(Rate rate, int subId) async {
     await rateRepo.regierterRate(rate, subId);
-    dto.value.rateNumber = rate.rateNumber;
+  }
+
+  Future<void> deleteRate(int rateId) async {
+    await rateRepo.deleteRate(rateId);
   }
 
   Future<void> addSubscription(int companyId) async {
@@ -72,6 +76,19 @@ class CompanyController extends GetxController {
           Subscription(id: 0, companyId: companyId, userId: userId));
       if (result) {
         await getAllProduct(companyId);
+      }
+    }
+  }
+
+  Future<void> deleteSubscription(int id) async {
+    if (auth.getTypeEnum() == Auth.user) {
+      final result = await profileRepo.deleteuserCompany(id);
+      if (result) {
+        if (Get.isRegistered<HomeController>()) {
+          await Get.find<HomeController>().getPosts();
+          await Get.find<HomeController>().getAllCompanyType();
+        }
+        Get.back();
       }
     }
   }

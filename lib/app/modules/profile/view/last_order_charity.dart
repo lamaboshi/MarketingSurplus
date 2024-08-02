@@ -57,63 +57,82 @@ class LastOrderCharity extends GetView<BillsController> {
                 Text(element.companyProduct!.product!.name ?? ''),
               ],
             ),
-            trailing: InkWell(
-              onTap:
-                  element.isCompany! && !element.isAccept! && !element.isCencal!
-                      ? () {
-                          Overlayment.show(OverDialog(
-                              child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Do You want To Accept This Donation'),
-                              Row(
-                                children: [
-                                  TextButton(
-                                      onPressed: () async {
-                                        await controller.updateDonation(
-                                            element.donation!.id!,
-                                            true,
-                                            false,
-                                            element.isCompany!);
-                                      },
-                                      child: Text('Yes')),
-                                  TextButton(
-                                      onPressed: () async {
-                                        await controller.updateDonation(
-                                            element.donation!.id!,
-                                            false,
-                                            true,
-                                            element.isCompany!);
-                                      },
-                                      child: Text('No')),
-                                ],
-                              )
-                            ],
-                          )));
-                        }
-                      : null,
-              child: Chip(
-                  side: const BorderSide(
-                    color: Color.fromARGB(255, 240, 210, 210),
-                  ),
-                  backgroundColor: element.isCompany!
-                      ? Colors.purple.shade200
-                      : Colors.white,
-                  label: Text(
-                    element.isCompany!
-                        ? !element.isAccept! && !element.isCencal!
-                            ? 'Accept Donation'
-                            : getStatus(element)
-                        : !element.isAccept! && !element.isCencal!
-                            ? 'WaitingAccepted'
-                            : getStatus(element),
-                    style: TextStyle(
-                      color: !element.isCompany!
-                          ? Colors.purple.shade200
-                          : Colors.white,
-                    ),
-                  )),
-            ),
+            trailing:
+                element.isCompany! && !element.isAccept! && !element.isCencal!
+                    ? SizedBox(
+                        width: 150,
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                await controller.updateDonation(
+                                    element.donation!.id!,
+                                    true,
+                                    false,
+                                    element.isCompany!);
+                              },
+                              child: Chip(
+                                  padding: EdgeInsets.zero,
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 240, 210, 210),
+                                  ),
+                                  backgroundColor: element.isCompany!
+                                      ? Colors.purple.shade200
+                                      : Colors.white,
+                                  label: Text(
+                                    'Accept',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  )),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                await controller.updateDonation(
+                                    element.donation!.id!,
+                                    false,
+                                    true,
+                                    element.isCompany!);
+                              },
+                              child: Chip(
+                                  padding: EdgeInsets.zero,
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 240, 210, 210),
+                                  ),
+                                  backgroundColor: element.isCompany!
+                                      ? Colors.purple.shade200
+                                      : Colors.white,
+                                  label: Text(
+                                    'NotAccept',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      )
+                    : Chip(
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 240, 210, 210),
+                        ),
+                        backgroundColor: element.isCompany!
+                            ? Colors.purple.shade200
+                            : Colors.white,
+                        label: Text(
+                          element.isCompany!
+                              ? !element.isAccept! && !element.isCencal!
+                                  ? 'Accept Donation'
+                                  : getStatus(element)
+                              : !element.isAccept! && !element.isCencal!
+                                  ? 'WaitingAccepted'
+                                  : getStatus(element),
+                          style: TextStyle(
+                            color: !element.isCompany!
+                                ? Colors.purple.shade200
+                                : Colors.white,
+                          ),
+                        )),
             subtitle: Column(
               children: [
                 Row(

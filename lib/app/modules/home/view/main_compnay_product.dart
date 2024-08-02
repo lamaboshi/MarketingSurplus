@@ -86,9 +86,10 @@ class MainCompanyProduct extends GetView<HomeController> {
                                       child: Column(
                                         children: [
                                           TextFieldWidget(
-                                            label: controller
+                                            label: 'namepro-title'.tr,
+                                            value: controller
                                                     .newProduct.value.name ??
-                                                'namepro-title'.tr,
+                                                '',
                                             validator: controller.forceValue,
                                             onChanged: (value) {
                                               controller.newProduct.value.name =
@@ -98,9 +99,10 @@ class MainCompanyProduct extends GetView<HomeController> {
                                           ),
                                           TextFieldWidget(
                                             validator: controller.forceValue,
-                                            label: controller.newProduct.value
+                                            label: 'despro-title'.tr,
+                                            value: controller.newProduct.value
                                                     .descripation ??
-                                                'despro-title'.tr,
+                                                '',
                                             onChanged: (value) {
                                               controller.newProduct.value
                                                   .descripation = value;
@@ -109,13 +111,14 @@ class MainCompanyProduct extends GetView<HomeController> {
                                           ),
                                           TextFieldWidget(
                                             validator: controller.forceValue,
-                                            label: controller.newProduct.value
+                                            label: 'oldpri-title'.tr,
+                                            value: controller.newProduct.value
                                                         .oldPrice !=
                                                     null
                                                 ? controller
                                                     .newProduct.value.oldPrice
                                                     .toString()
-                                                : 'oldpri-title'.tr,
+                                                : '',
                                             onChanged: (value) {
                                               controller.newProduct.value
                                                       .newPrice =
@@ -125,13 +128,14 @@ class MainCompanyProduct extends GetView<HomeController> {
                                           ),
                                           TextFieldWidget(
                                             validator: controller.forceValue,
-                                            label: controller.newProduct.value
+                                            label: 'offerpri-title'.tr,
+                                            value: controller.newProduct.value
                                                         .newPrice !=
                                                     null
                                                 ? controller
                                                     .newProduct.value.newPrice
                                                     .toString()
-                                                : 'offerpri-title'.tr,
+                                                : '',
                                             onChanged: (value) {
                                               controller.newProduct.value
                                                       .newPrice =
@@ -140,7 +144,17 @@ class MainCompanyProduct extends GetView<HomeController> {
                                             textInputType: TextInputType.number,
                                           ),
                                           TextFieldWidget(
-                                            validator: controller.forceValue,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'requird';
+                                              } else {
+                                                if (int.parse(value) < 1) {
+                                                  return 'Entre Real Value';
+                                                }
+                                              }
+                                              return null;
+                                            },
                                             label: 'amoutth-title'.tr,
                                             onChanged: (value) {
                                               controller.amount.value =
@@ -166,7 +180,7 @@ class MainCompanyProduct extends GetView<HomeController> {
                                                   height: 120,
                                                   child: CupertinoDatePicker(
                                                     minimumYear: 2022,
-                                                    maximumYear: 2026,
+                                                    maximumYear: 2024,
                                                     mode:
                                                         CupertinoDatePickerMode
                                                             .date,
@@ -200,8 +214,8 @@ class MainCompanyProduct extends GetView<HomeController> {
                                                 SizedBox(
                                                   height: 120,
                                                   child: CupertinoDatePicker(
-                                                    minimumYear: 2022,
-                                                    maximumYear: 2026,
+                                                    minimumYear: 2024,
+                                                    maximumYear: 2027,
                                                     mode:
                                                         CupertinoDatePickerMode
                                                             .date,

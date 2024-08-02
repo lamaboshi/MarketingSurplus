@@ -77,8 +77,12 @@ class MainCompanyPage extends GetView<HomeController> {
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
                                         Text(
-                                          '  Lama Boshi',
+                                          element.subscription!.user!.name ??
+                                              '',
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),

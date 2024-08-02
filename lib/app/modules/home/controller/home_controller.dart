@@ -15,11 +15,14 @@ import 'package:overlayment/overlayment.dart';
 
 import '../../../../api/storge/storge_service.dart';
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/notification_service.dart';
 import '../../../../shared/service/order_service.dart';
 import '../../../../shared/service/util.dart';
 import '../../../data/model/company_product.dart';
 import '../../../data/model/company_type_model.dart';
 import '../../../data/model/evalution.dart';
+import '../../../data/model/notification_charity.dart';
+import '../../../data/model/notification.dart' as n;
 import '../../../data/model/order_model.dart';
 import '../../admin/data/company_repo.dart';
 import '../../admin/data/company_type_repo.dart';
@@ -47,6 +50,8 @@ class HomeController extends GetxController {
   final orders = <OrderModel>[].obs;
   final orderRepo = OrderDataRepository();
   final rateRepo = RateRepository();
+  final allUserNotification = <n.Notification>[].obs;
+  final allCharityNotification = <NotificationCharity>[].obs;
   final isAll = true.obs;
   final isAccept = false.obs;
   final isloading = false.obs;
@@ -69,10 +74,20 @@ class HomeController extends GetxController {
   void onInit() {
     selectType.value = CompanyTypeModel();
     getData();
-
+    getNotification();
     getPosts();
     getAllCompanyType();
     super.onInit();
+  }
+
+  Future<void> getNotification() async {
+    if (auth.getTypeEnum() == Auth.user) {
+      var data = await NotificationService().getNotifications();
+      allUserNotification.assignAll(data);
+    } else if (auth.getTypeEnum() == Auth.charity) {
+      var data = await NotificationService().getNotificationCharity();
+      allCharityNotification.assignAll(data);
+    }
   }
 
   void isNew() {
@@ -232,8 +247,11 @@ class HomeController extends GetxController {
   }
 
   Future<bool> addProduct() async {
-    newProduct.value.image =
-        Utility.dataFromBase64String(stringPickImage.value);
+    if (stringPickImage.value.trim().isNotEmpty) {
+      newProduct.value.image =
+          Utility.dataFromBase64String(stringPickImage.value);
+    }
+
     newProduct.value.isExpiration =
         newProduct.value.expiration!.isBefore(DateTime.now());
     final save = SaveProduct(product: newProduct.value, amount: amount.value);
@@ -250,6 +268,10 @@ class HomeController extends GetxController {
   }
 
   Future<bool> updateProduct() async {
+    if (stringPickImage.value.trim().isNotEmpty) {
+      newProduct.value.image =
+          Utility.dataFromBase64String(stringPickImage.value);
+    }
     var result = await OrderService().updateProduct(newProduct.value);
     if (result) {
       Overlayment.dismissLast();

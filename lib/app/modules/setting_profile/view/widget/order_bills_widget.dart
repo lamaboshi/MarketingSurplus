@@ -30,6 +30,7 @@ class OrderBillsWidget extends GetView<SettingProfileController> {
                       padding: const EdgeInsets.all(15),
                       child: Column(
                           children: controller.orderProducts
+                              .where((p0) => p0.bills!.last.orderStatusId == 4)
                               .map((element) => ListTile(
                                     title: Text(element.order!.name ?? ""),
                                     subtitle:

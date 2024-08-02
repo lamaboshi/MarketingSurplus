@@ -28,14 +28,20 @@ class Utility {
   }
 
   static Widget getImage(
-      {Uint8List? base64StringPh, String? link, double? width, double? hight}) {
+      {Uint8List? base64StringPh,
+      String? link,
+      double? width,
+      double? hight,
+      bool isStratch = true}) {
     if (base64StringPh != null) {
       var image = base64String(base64StringPh);
       return imageFromBase64String(image, width, hight);
     } else if (link != null) {
       return Image.network(
         link.trimLeft(),
-        fit: BoxFit.cover,
+        fit: isStratch ? BoxFit.cover : BoxFit.contain,
+        width: width,
+        height: hight,
       );
     } else {
       return Image.asset(

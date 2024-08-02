@@ -55,7 +55,8 @@ class Product {
     json['expiration'] = expiration?.toIso8601String();
     json['isExpiration'] = isExpiration;
     json['onlineImage'] = onlineImage;
-    json['image'] = image == null ? null : Uint8List.fromList(image!);
+    json['image'] =
+        image == null || image!.isEmpty ? null : Uint8List.fromList(image!);
     return json;
   }
 }

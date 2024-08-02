@@ -9,12 +9,14 @@ class Donation {
   int? charityId;
   int? orderTypeId;
   double? pricePay;
+  DateTime? createdAt;
   List<ProductDonation>? productDonations;
   Donation({
     this.charity,
     this.orderType,
     this.charityId,
     this.orderTypeId,
+    this.createdAt,
     this.pricePay,
   });
   Donation.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class Donation {
         ? 1
         : double.parse(json['pricePay'].toString());
     orderTypeId = json['orderTypeId'];
+    createdAt = DateTime.parse(json['createdAt']);
     charity =
         json['charity'] != null ? Charity.fromJson(json['charity']) : null;
     orderType = json['orderType'] != null
@@ -40,6 +43,7 @@ class Donation {
     json['id'] = id ?? 0;
     json['orderType'] = orderType == null ? null : orderType?.toJson();
     json['orderTypeId'] = orderTypeId;
+    json['createdAt'] = createdAt?.toIso8601String();
     json['charityId'] = charityId;
     json['charity'] = charity == null ? null : charity!.toJson();
     json['pricePay'] = pricePay == null ? 0 : pricePay.toString();

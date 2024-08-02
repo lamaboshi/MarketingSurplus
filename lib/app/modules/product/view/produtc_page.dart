@@ -67,7 +67,8 @@ class ProductView extends GetView<ProductController> {
           Utility.getImage(
               base64StringPh: product!.product!.image,
               link: product!.product!.onlineImage,
-              hight: Get.height / 2,
+              isStratch: false,
+              hight: Get.height / 4,
               width: Get.width),
           const Padding(padding: EdgeInsets.only(top: 30.0)),
         ],
@@ -190,12 +191,14 @@ class ProductView extends GetView<ProductController> {
                                                         child: Column(
                                                           children: [
                                                             TextFieldWidget(
-                                                              label: controller
+                                                              label:
+                                                                  'namepro-title'
+                                                                      .tr,
+                                                              value: controller
                                                                       .newProduct
                                                                       .value
                                                                       .name ??
-                                                                  'namepro-title'
-                                                                      .tr,
+                                                                  '',
                                                               validator:
                                                                   controller
                                                                       .forceValue,
@@ -214,12 +217,14 @@ class ProductView extends GetView<ProductController> {
                                                               validator:
                                                                   controller
                                                                       .forceValue,
-                                                              label: controller
+                                                              label:
+                                                                  'despro-title'
+                                                                      .tr,
+                                                              value: controller
                                                                       .newProduct
                                                                       .value
                                                                       .descripation ??
-                                                                  'despro-title'
-                                                                      .tr,
+                                                                  '',
                                                               onChanged:
                                                                   (value) {
                                                                 controller
@@ -235,7 +240,10 @@ class ProductView extends GetView<ProductController> {
                                                               validator:
                                                                   controller
                                                                       .forceValue,
-                                                              label: controller
+                                                              label:
+                                                                  'oldpri-title'
+                                                                      .tr,
+                                                              value: controller
                                                                           .newProduct
                                                                           .value
                                                                           .oldPrice !=
@@ -245,8 +253,7 @@ class ProductView extends GetView<ProductController> {
                                                                       .value
                                                                       .oldPrice
                                                                       .toString()
-                                                                  : 'oldpri-title'
-                                                                      .tr,
+                                                                  : '',
                                                               onChanged:
                                                                   (value) {
                                                                 controller
@@ -264,7 +271,10 @@ class ProductView extends GetView<ProductController> {
                                                               validator:
                                                                   controller
                                                                       .forceValue,
-                                                              label: controller
+                                                              label:
+                                                                  'offerpri-title'
+                                                                      .tr,
+                                                              value: controller
                                                                           .newProduct
                                                                           .value
                                                                           .newPrice !=
@@ -274,8 +284,7 @@ class ProductView extends GetView<ProductController> {
                                                                       .value
                                                                       .newPrice
                                                                       .toString()
-                                                                  : 'offerpri-title'
-                                                                      .tr,
+                                                                  : '',
                                                               onChanged:
                                                                   (value) {
                                                                 controller
@@ -291,8 +300,21 @@ class ProductView extends GetView<ProductController> {
                                                             ),
                                                             TextFieldWidget(
                                                               validator:
-                                                                  controller
-                                                                      .forceValue,
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return 'requird';
+                                                                } else {
+                                                                  if (int.parse(
+                                                                          value) <
+                                                                      1) {
+                                                                    return 'Entre Real Value';
+                                                                  }
+                                                                }
+                                                                return null;
+                                                              },
                                                               label:
                                                                   'amoutth-title'
                                                                       .tr,
@@ -332,9 +354,9 @@ class ProductView extends GetView<ProductController> {
                                                                     child:
                                                                         CupertinoDatePicker(
                                                                       minimumYear:
-                                                                          2022,
+                                                                          2024,
                                                                       maximumYear:
-                                                                          2026,
+                                                                          2024,
                                                                       mode: CupertinoDatePickerMode
                                                                           .date,
                                                                       initialDateTime:
@@ -377,9 +399,9 @@ class ProductView extends GetView<ProductController> {
                                                                     child:
                                                                         CupertinoDatePicker(
                                                                       minimumYear:
-                                                                          2022,
+                                                                          2024,
                                                                       maximumYear:
-                                                                          2026,
+                                                                          2027,
                                                                       mode: CupertinoDatePickerMode
                                                                           .date,
                                                                       initialDateTime:
@@ -507,7 +529,7 @@ class ProductView extends GetView<ProductController> {
                             product!.product!.descripation ?? '',
                             style:
                                 TextStyle(fontSize: 18.0, color: Colors.grey),
-                          ))
+                          )),
                         ],
                       ),
                     )

@@ -46,6 +46,8 @@ class OrderDetailsPage extends GetView<BillsController> {
             ),
             if (controller.auth.getTypeEnum() == Auth.comapny)
               getRow('user-type', orderProduct!.order!.userId.toString()),
+            if (controller.auth.getTypeEnum() == Auth.comapny)
+              getRow('user-type', orderProduct!.order!.user!.name ?? ''),
             getRow('ordername-title', orderProduct!.order!.name ?? ''),
             getRow('orderdes-title', orderProduct!.order!.descripation ?? ''),
             if (orderProduct!.companyProduct!.product != null)

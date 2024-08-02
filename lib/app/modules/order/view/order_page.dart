@@ -210,24 +210,26 @@ class OrderView extends GetView<OrderController> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          FloatingActionButton.extended(
-                              backgroundColor: Colors.purple.shade200,
-                              isExtended: true,
-                              onPressed: () async {
-                                if (controller.keyForm.currentState!
-                                    .validate()) {
-                                  await controller.saveOrder();
-                                  Overlayment.dismissLast();
-                                }
-                              },
-                              label: SizedBox(
-                                  height: Get.height / 3,
-                                  child: Center(
-                                      child: Text(
-                                    'conf-title'.tr,
-                                    style: const TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  )))),
+                          Obx(() => controller.isProssing.value
+                              ? CircularProgressIndicator()
+                              : FloatingActionButton.extended(
+                                  backgroundColor: Colors.purple.shade200,
+                                  isExtended: true,
+                                  onPressed: () async {
+                                    if (controller.keyForm.currentState!
+                                        .validate()) {
+                                      await controller.saveOrder();
+                                      Overlayment.dismissLast();
+                                    }
+                                  },
+                                  label: SizedBox(
+                                      height: Get.height / 3,
+                                      child: Center(
+                                          child: Text(
+                                        'conf-title'.tr,
+                                        style: const TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ))))),
                           SizedBox(
                             width: 8,
                           ),

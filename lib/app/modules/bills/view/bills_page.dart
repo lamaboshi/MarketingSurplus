@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
+import 'package:marketing_surplus/app/modules/bills/view/details_product.dart';
 import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
@@ -106,109 +107,153 @@ class BillsView extends GetView<BillsController> {
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: controller.list.map((e) {
-                                        return Card(
-                                          child: ListTile(
-                                            title: Text(e.product!.name ?? ''),
-                                            trailing: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      if (e.amountApp! <
-                                                          e.amount!) {
-                                                        e.amountApp =
-                                                            e.amountApp! + 1;
+                                        return InkWell(
+                                          onTap: () {
+                                            print(
+                                                '/////////// ${e.company!.companyTypeId}////////////');
+                                            Overlayment.show(OverDialog(
+                                                child: DetailsProduct(
+                                              typeId: e.company!.companyTypeId,
+                                              id: e.id!,
+                                            )));
+                                          },
+                                          child: Card(
+                                            child: ListTile(
+                                              title:
+                                                  Text(e.product!.name ?? ''),
+                                              trailing: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        if (e.amountApp! <
+                                                            e.amount!) {
+                                                          e.amountApp =
+                                                              e.amountApp! + 1;
 
-                                                        controller.list
-                                                            .refresh();
-                                                      }
-                                                    },
-                                                    child:
-                                                        const Icon(Icons.add)),
-                                                Text(e.amountApp!.toString()),
-                                                TextButton(
+                                                          controller.list
+                                                              .refresh();
+                                                        }
+                                                      },
+                                                      child: const Icon(
+                                                          Icons.add)),
+                                                  Text(e.amountApp!.toString()),
+                                                  TextButton(
+                                                      onPressed: () async {
+                                                        if (e.amountApp! > 0) {
+                                                          e.amountApp =
+                                                              e.amountApp! - 1;
+
+                                                          controller.list
+                                                              .refresh();
+                                                          if (e.amountApp ==
+                                                              0) {
+                                                            await Get.find<
+                                                                    AuthService>()
+                                                                .deleteFromBasket(
+                                                                    e);
+                                                            controller
+                                                                .getData();
+                                                          }
+                                                        }
+                                                      },
+                                                      child: const Icon(
+                                                          Icons.minimize)),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red,
+                                                    ),
                                                     onPressed: () async {
-                                                      if (e.amountApp! > 0) {
-                                                        e.amountApp =
-                                                            e.amountApp! - 1;
-
-                                                        controller.list
-                                                            .refresh();
-                                                        if (e.amountApp == 0) {
+                                                      final data =
                                                           await Get.find<
                                                                   AuthService>()
                                                               .deleteFromBasket(
                                                                   e);
-                                                          controller.getData();
-                                                        }
-                                                      }
+                                                      controller.list
+                                                          .assignAll(data);
                                                     },
-                                                    child: const Icon(
-                                                        Icons.minimize)),
-                                                IconButton(
-                                                  icon: const Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
                                                   ),
-                                                  onPressed: () async {
-                                                    final data = await Get.find<
-                                                            AuthService>()
-                                                        .deleteFromBasket(e);
-                                                    controller.list
-                                                        .assignAll(data);
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                            subtitle: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(e.product!.newPrice != null
-                                                    ? e.product!.newPrice
-                                                        .toString()
-                                                    : ''),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      e.product!.oldPrice !=
-                                                              null
-                                                          ? e.product!.oldPrice
-                                                              .toString()
-                                                          : '',
-                                                      style: const TextStyle(
-                                                          color: Colors.grey),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Chip(
-                                                        side: BorderSide(
-                                                            color: Colors.green
-                                                                .shade400),
-                                                        backgroundColor: Colors
-                                                            .green.shade400,
-                                                        labelPadding:
-                                                            const EdgeInsets
-                                                                .all(2),
-                                                        label: Text(
-                                                          e.amount != null
-                                                              ? e.amount
-                                                                  .toString()
-                                                              : '0',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
+                                                ],
+                                              ),
+                                              subtitle: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(e.product!.newPrice !=
+                                                          null
+                                                      ? e.product!.newPrice
+                                                          .toString()
+                                                      : ''),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        e.product!.oldPrice !=
+                                                                null
+                                                            ? e.product!
+                                                                .oldPrice
+                                                                .toString()
+                                                            : '',
+                                                        style: const TextStyle(
+                                                            color: Colors.grey),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Chip(
+                                                          side: BorderSide(
+                                                              color: Colors
+                                                                  .green
+                                                                  .shade400),
+                                                          backgroundColor:
+                                                              Colors.green
+                                                                  .shade400,
+                                                          labelPadding:
+                                                              const EdgeInsets
+                                                                  .all(2),
+                                                          label: Text(
+                                                            e.amount != null
+                                                                ? e.amount
+                                                                    .toString()
+                                                                : '0',
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Flexible(
+                                                          child: Text(
+                                                        controller.descr.entries
+                                                                .where((element) =>
+                                                                    element
+                                                                        .key ==
+                                                                    e.id)
+                                                                .isEmpty
+                                                            ? ''
+                                                            : controller
+                                                                .descr.entries
+                                                                .where((element) =>
+                                                                    element
+                                                                        .key ==
+                                                                    e.id)
+                                                                .first
+                                                                .value,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ))
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );
@@ -217,55 +262,66 @@ class BillsView extends GetView<BillsController> {
                                   ),
                                 )
                               : const EmptyBasket()),
-                          FloatingActionButton.extended(
-                              backgroundColor: Colors.purple.shade200,
-                              isExtended: true,
-                              onPressed: () async {
-                                controller.assignAllAmount();
-                                if (controller.list.isNotEmpty) {
-                                  if (Get.isRegistered<OrderController>()) {
-                                    final orderController =
-                                        Get.find<OrderController>();
-                                    orderController.onInit();
-                                  } else {
-                                    Get.put(OrderController());
-                                  }
-                                  if (controller.auth.getTypeEnum() ==
-                                      Auth.charity) {
-                                    Overlayment.show(OverPanel(
-                                      child: const OrderCharityPage(),
-                                      alignment: Alignment.topCenter,
-                                    ));
-                                  } else {
-                                    Overlayment.show(OverPanel(
-                                      child: const OrderView(),
-                                      alignment: Alignment.topCenter,
-                                    ));
-                                  }
-                                } else {
-                                  var snackBar = SnackBar(
-                                      duration: const Duration(seconds: 1),
-                                      content: Padding(
-                                        padding: const EdgeInsets.all(18),
-                                        child: Text(
-                                          'bag-em'.tr,
-                                          style: TextStyle(
-                                              color: Colors.purple.shade200,
-                                              fontSize: 18),
-                                        ),
-                                      ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                }
-                              },
-                              label: SizedBox(
-                                  height: Get.height / 3,
-                                  child: Center(
-                                      child: Text(
-                                    'buy'.tr,
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  ))))
+                          controller.list.isNotEmpty
+                              ? FloatingActionButton.extended(
+                                  backgroundColor: Colors.purple.shade200,
+                                  isExtended: true,
+                                  onPressed: () async {
+                                    controller.assignAllAmount();
+                                    if (controller.list.isNotEmpty) {
+                                      if (Get.isRegistered<OrderController>()) {
+                                        final orderController =
+                                            Get.find<OrderController>();
+                                        orderController.onInit();
+                                        orderController
+                                                .order.value.descripation =
+                                            controller.descr.values.join('-');
+                                      } else {
+                                        Get.put(OrderController());
+                                        final orderController =
+                                            Get.find<OrderController>();
+
+                                        orderController
+                                                .order.value.descripation =
+                                            controller.descr.values.join('-');
+                                      }
+                                      if (controller.auth.getTypeEnum() ==
+                                          Auth.charity) {
+                                        Overlayment.show(OverPanel(
+                                          child: const OrderCharityPage(),
+                                          alignment: Alignment.topCenter,
+                                        ));
+                                      } else {
+                                        Overlayment.show(OverPanel(
+                                          child: const OrderView(),
+                                          alignment: Alignment.topCenter,
+                                        ));
+                                      }
+                                    } else {
+                                      var snackBar = SnackBar(
+                                          duration: const Duration(seconds: 1),
+                                          content: Padding(
+                                            padding: const EdgeInsets.all(18),
+                                            child: Text(
+                                              'bag-em'.tr,
+                                              style: TextStyle(
+                                                  color: Colors.purple.shade200,
+                                                  fontSize: 18),
+                                            ),
+                                          ));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+                                  },
+                                  label: SizedBox(
+                                      height: Get.height / 3,
+                                      child: Center(
+                                          child: Text(
+                                        'buy'.tr,
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ))))
+                              : SizedBox.shrink()
                         ],
                       ),
                     ),

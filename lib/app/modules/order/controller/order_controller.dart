@@ -72,6 +72,7 @@ class OrderController extends GetxController {
   }
 
   Future<void> saveOrder() async {
+    isProssing.value = true;
     //TODO add userid in order
     var rng = Random().nextInt(10000);
 
@@ -81,7 +82,7 @@ class OrderController extends GetxController {
     order.value.payMethodId = selectedPayMethod.value.id;
     order.value.price = totalPrice.value;
     order.value.amount = data.length;
-
+    order.value.createdAt = DateTime.now();
     var orderProduct = <OrderProduct>[];
     for (var element in data) {
       var total = element.product!.newPrice! * element.amountApp!;
@@ -92,11 +93,13 @@ class OrderController extends GetxController {
     }
 
     await OrderService().saveOrder(order.value, orderProduct);
+    isProssing.value = false;
     getData();
     Overlayment.dismissLast();
   }
 
   Future<void> saveOrderDonation() async {
+    isProssing.value = true;
     var productDonation = <ProductDonation>[];
     print('object');
     var data = await Get.find<AuthService>().getDataBasket();
@@ -131,6 +134,7 @@ class OrderController extends GetxController {
         await OrderService().saveDonation(donation.value, productDonation);
       }
     }
+    isProssing.value = false;
     getData();
     Overlayment.dismissLast();
   }

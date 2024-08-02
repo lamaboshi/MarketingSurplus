@@ -13,6 +13,7 @@ class SingleItem extends GetView {
   final String? type;
   final bool? enable;
   final bool? without;
+  final bool? stratshImage;
   final Widget? widget;
   final VoidCallback onTap;
   final VoidCallback editTap;
@@ -21,6 +22,7 @@ class SingleItem extends GetView {
   const SingleItem(this.product, this.isCompany, this.onTap, this.editTap,
       this.deleteTap, this.enable,
       {this.type,
+      this.stratshImage = true,
       this.widget = const SizedBox.shrink(),
       this.without = false,
       super.key});
@@ -74,9 +76,9 @@ class SingleItem extends GetView {
                                   height: Get.height / 6,
                                   width: Get.width / 4,
                                   child: Utility.getImage(
-                                    base64StringPh: product.product!.image,
-                                    link: product.product!.onlineImage,
-                                  ),
+                                      base64StringPh: product.product!.image,
+                                      link: product.product!.onlineImage,
+                                      isStratch: stratshImage!),
                                 )
                               ],
                             )),

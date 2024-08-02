@@ -68,23 +68,28 @@ class ProfileController extends GetxController {
     orderTypes.assignAll(billsController.orderTypes);
 
     if (auth.getTypeEnum() == Auth.comapny) {
-      var id = (auth.getDataFromStorage() as Company).id;
-      await getAllProduct(id!);
+      var id = (auth.getDataFromStorage() as Company);
+      await getAllProduct(id.id!, id.companyTypeId!);
     }
   }
 
-  Future<void> getAllProduct(int companyId) async {
+  Future<void> getAllProduct(int companyId, int typeId) async {
     final data = await CompanyRepository().getAllCompanyProduct(companyId);
 
     for (var element in data) {
       var date = element.product!.expiration!.difference(DateTime.now());
-      if (date.inDays <= 5) {
+      int time = typeId == 1
+          ? 30
+          : typeId == 4
+              ? 3
+              : 50;
+      if (date.inDays <= time) {
         products.assign(element);
       }
-      // var exparItems = data
-      //     .where((element) => element.product!.isExpiration == true)
-      //     .toList();
-      // products.assignAll(exparItems);
+      var exparItems = data
+          .where((element) => element.product!.isExpiration == true)
+          .toList();
+      products.addAll(exparItems);
     }
   }
 

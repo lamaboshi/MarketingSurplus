@@ -29,7 +29,7 @@ class MenuCompanyPage extends GetView<co.MenuController> {
                         () => SingleChildScrollView(
                           child: Column(
                             children: controller.productsOrderCompany
-                                .map((element) => getOneCard(element))
+                                .map((element) => getOneCard(element, true))
                                 .toList(),
                           ),
                         ),
@@ -44,7 +44,7 @@ class MenuCompanyPage extends GetView<co.MenuController> {
                     : SingleChildScrollView(
                         child: Column(
                           children: controller.lastProductsOrderCompany
-                              .map((element) => getOneCard(element))
+                              .map((element) => getOneCard(element, false))
                               .toList(),
                         ),
                       ),
@@ -53,7 +53,7 @@ class MenuCompanyPage extends GetView<co.MenuController> {
           ));
   }
 
-  Widget getOneCard(OrderProduct element) {
+  Widget getOneCard(OrderProduct element, bool withIcon) {
     element.companyProduct = Get.find<HomeController>()
         .products
         .where((p0) => p0.id == element.companyProductId)
@@ -88,21 +88,23 @@ class MenuCompanyPage extends GetView<co.MenuController> {
               ),
             ],
           ),
-          trailing: Column(
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(
-                  Icons.update,
-                  color: Colors.orange,
-                  size: 35,
-                ),
-                onPressed: () async {
-                  await controller.updateOrderStatus(element);
-                },
-              ),
-            ],
-          ),
+          trailing: withIcon
+              ? Column(
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
+                        Icons.update,
+                        color: Colors.orange,
+                        size: 35,
+                      ),
+                      onPressed: () async {
+                        await controller.updateOrderStatus(element);
+                      },
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

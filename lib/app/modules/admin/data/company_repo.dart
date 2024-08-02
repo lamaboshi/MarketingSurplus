@@ -64,6 +64,7 @@ class CompanyRepository extends ICompanyDataRepository {
     if (auth.getTypeEnum() == Auth.comapny) {
       final id = (auth.getDataFromStorage() as Company).id!;
       product.companyId = id;
+      product.product!.id = 0;
       print(product.toJson());
       var data = await _dio.post('/api/Main/AddCompanyProduct',
           data: product.toJson());

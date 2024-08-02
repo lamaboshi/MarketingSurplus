@@ -46,6 +46,7 @@ class SettingProfileController extends GetxController {
   final orderProducts = <OrderProduct>[].obs;
   final companyUsers = <UserModel>[].obs;
   final companyCharityWith = <Company>[].obs;
+  final pay = PayMethod().obs;
   final stringPickImage = ''.obs;
   final listTextTabToggle = ["عربي", "English"];
   RxInt tabTextIndexSelected = 0.obs;
@@ -71,13 +72,9 @@ class SettingProfileController extends GetxController {
   }
 
   Future<void> getPayMethod() async {
-    final result = await PayMethodRepositry().getAllOfMethod();
-    for (var element in result) {
-      if (!pays.any(
-          (e) => e.payMethod!.name!.compareTo(element.payMethod!.name!) == 0)) {
-        pays.assign(element);
-      }
-    }
+    var id = (auth.getDataFromStorage() as Company).id!;
+    final result = await PayMethodRepositry().getAllMethod(id);
+    pays.assignAll(result);
   }
 
   void getAmount() {
@@ -222,6 +219,13 @@ class SettingProfileController extends GetxController {
     }
     isNotEdit.value = true;
     loading.value = false;
+  }
+
+  Future<void> addMethod() async {
+    var id = (auth.getDataFromStorage() as Company).id!;
+    await PayMethodRepositry().addMethod(pay.value, id);
+    Overlayment.dismissLast();
+    await getPayMethod();
   }
 
   Future<void> deleteAccount() async {

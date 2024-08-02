@@ -8,10 +8,10 @@ class CompanyProductDto {
   CompanyProduct? companyProduct;
   CompanyTypeModel? type;
   int? rateNumber;
-  r.Rate? rate;
+  List<r.Rate>? rates;
   Subscription? subscription;
   CompanyProductDto(
-      {this.companyProduct, this.rateNumber, this.rate, this.type});
+      {this.companyProduct, this.rateNumber, this.rates, this.type});
   CompanyProductDto.fromJson(Map<String, dynamic> json) {
     rateNumber = json['rateNumber'] == null
         ? 0
@@ -19,7 +19,11 @@ class CompanyProductDto {
     companyProduct = json['companyProduct'] != null
         ? CompanyProduct.fromJson(json['companyProduct'])
         : null;
-    rate = json['rate'] != null ? r.Rate.fromJson(json['rate']) : null;
+    rates = json['rates'] == null || json['rates'] == [null]
+        ? []
+        : List<r.Rate>.from(
+            json['rates'].map<r.Rate>((i) => r.Rate.fromJson(i)));
+
     type = json['companyType'] != null
         ? CompanyTypeModel.fromJson(json['companyType'])
         : null;
@@ -30,7 +34,9 @@ class CompanyProductDto {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['companyProduct'] = companyProduct!.toJson();
-    json['rate'] = rate?.toJson();
+    json['rates'] = rates == null || rates!.isEmpty
+        ? []
+        : rates!.map((e) => e.toJson()).toList();
     json['rateNumber'] = rateNumber?.toString();
     json['companyType'] = type?.toJson();
     json['subscription'] = subscription?.toJson();

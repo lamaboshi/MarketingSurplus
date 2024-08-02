@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
 import 'package:marketing_surplus/app/routes/app_routes.dart';
+import 'package:marketing_surplus/shared/widgets/empty_screen.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
@@ -80,97 +81,133 @@ class CompanyView extends GetView<CompanyController> {
                     ),
                     controller.auth.getTypeEnum() == Auth.charity
                         ? SizedBox.shrink()
-                        : controller.dto.value.rate != null
-                            ? Row(
-                                children: Iterable<int>.generate(5)
-                                    .toList()
-                                    .map((e) => Icon(
-                                          Icons.star,
-                                          color: controller.dto.value.rate!
-                                                      .rateNumber! <
-                                                  6
-                                              ? e + 1 <=
-                                                      controller.dto.value.rate!
-                                                          .rateNumber!
-                                                  ? Colors.amber
-                                                  : Colors.grey
-                                              : Colors.amber,
-                                        ))
-                                    .toList(),
-                              )
-                            : RatingBar.builder(
-                                initialRating: controller.rate.value,
-                                itemSize: 22,
-                                minRating: 0,
-                                direction: Axis.horizontal,
-                                unratedColor: Colors.black,
-                                itemCount: 5,
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                  Overlayment.show(OverDialog(
-                                      child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Rate to ${controller.companyName.value}',
-                                          style: TextStyle(fontSize: 18),
+                        : InkWell(
+                            onTap: () {
+                              Overlayment.show(OverPanel(
+                                  child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(),
+                                        Text(
+                                          'Your Rates',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.purple.shade200),
                                         ),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: controller.rate.value,
-                                        itemSize: 22,
-                                        minRating: 0,
-                                        direction: Axis.horizontal,
-                                        unratedColor: Colors.black,
-                                        itemCount: 5,
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
-                                          controller.rate.value = rating;
-                                        },
-                                      ),
-                                      TextFieldWidget(
-                                        onChanged: (value) {
-                                          controller.rateDes.value = value;
-                                        },
-                                        textInputType:
-                                            TextInputType.emailAddress,
-                                        label: 'Description'.tr,
-                                      ),
-                                      InkWell(
-                                          onTap: () async {
-                                            await controller.addRate(
-                                                Rate(
-                                                    rateNumber: controller
-                                                        .rate.value
-                                                        .toInt(),
-                                                    description: controller
-                                                        .rateDes.value),
-                                                controller.dto.value
-                                                    .subscription!.id!);
-                                            Overlayment.dismissLast();
-                                          },
-                                          child: Chip(
-                                              backgroundColor:
-                                                  Colors.purple.shade200,
-                                              label: const Text(
-                                                'Save',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ))),
-                                    ],
-                                  )));
-                                },
-                              )
+                                        InkWell(
+                                            onTap: () {
+                                              Overlayment.show(OverDialog(
+                                                  child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      'Rate to ${controller.companyName.value}',
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                  ),
+                                                  RatingBar.builder(
+                                                    initialRating:
+                                                        controller.rate.value,
+                                                    itemSize: 22,
+                                                    minRating: 0,
+                                                    direction: Axis.horizontal,
+                                                    unratedColor: Colors.black,
+                                                    itemCount: 5,
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {
+                                                      print(rating);
+                                                      controller.rate.value =
+                                                          rating;
+                                                    },
+                                                  ),
+                                                  TextFieldWidget(
+                                                    onChanged: (value) {
+                                                      controller.rateDes.value =
+                                                          value;
+                                                    },
+                                                    textInputType: TextInputType
+                                                        .emailAddress,
+                                                    label: 'Description'.tr,
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () async {
+                                                        await controller.addRate(
+                                                            Rate(
+                                                                rateNumber:
+                                                                    controller
+                                                                        .rate
+                                                                        .value
+                                                                        .toInt(),
+                                                                description:
+                                                                    controller
+                                                                        .rateDes
+                                                                        .value),
+                                                            controller
+                                                                .dto
+                                                                .value
+                                                                .subscription!
+                                                                .id!);
+                                                        Overlayment
+                                                            .dismissAll();
+                                                        Get.back();
+                                                      },
+                                                      child: Chip(
+                                                          backgroundColor:
+                                                              Colors.purple
+                                                                  .shade200,
+                                                          label: const Text(
+                                                            'Save',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ))),
+                                                ],
+                                              )));
+                                            },
+                                            child: Text('Add Rate'))
+                                      ],
+                                    ),
+                                  ),
+                                  Obx(() => controller.dto.value.rates!.isEmpty
+                                      ? EmptyData()
+                                      : Column(
+                                          children: controller.dto.value.rates!
+                                              .map((e) => ListTile(
+                                                    title: getRateStar(
+                                                        e.rateNumber),
+                                                    subtitle: Text(
+                                                        e.description ?? ''),
+                                                    trailing: IconButton(
+                                                      icon: Icon(Icons.delete),
+                                                      onPressed: () {
+                                                        controller
+                                                            .deleteRate(e.id!);
+                                                        Overlayment
+                                                            .dismissAll();
+                                                        Get.back();
+                                                      },
+                                                    ),
+                                                  ))
+                                              .toList()))
+                                ],
+                              )));
+                            },
+                            child: getRateStar(controller.dto.value.rateNumber))
                   ],
                 ),
               ),
@@ -282,8 +319,9 @@ class CompanyView extends GetView<CompanyController> {
                     child: InkWell(
                       onTap: () async {
                         final companyId =
-                            controller.dto.value.companyProduct!.companyId;
+                            controller.dto.value.companyProduct!.company!.id;
                         await controller.addSubscription(companyId!);
+                        Get.back();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -298,7 +336,29 @@ class CompanyView extends GetView<CompanyController> {
                       ),
                     ),
                   )
-                : const SizedBox.shrink(),
+                : controller.dto.value.subscription != null &&
+                        controller.auth.getTypeEnum() == Auth.user
+                    ? Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () async {
+                            await controller.deleteSubscription(
+                                controller.dto.value.subscription!.id!);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Chip(
+                                backgroundColor: Colors.white,
+                                label: Text(
+                                  'Un subscription'.tr,
+                                  style: TextStyle(
+                                    color: Colors.purple.shade200,
+                                  ),
+                                )),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -320,4 +380,20 @@ class CompanyView extends GetView<CompanyController> {
           )),
     );
   }
+
+  Widget getRateStar(int? rateNumber) => Row(
+        children: Iterable<int>.generate(5)
+            .toList()
+            .map((e) => Icon(
+                  Icons.star,
+                  color: rateNumber == null
+                      ? Colors.grey
+                      : rateNumber < 6
+                          ? e + 1 <= rateNumber
+                              ? Colors.amber
+                              : Colors.grey
+                          : Colors.amber,
+                ))
+            .toList(),
+      );
 }

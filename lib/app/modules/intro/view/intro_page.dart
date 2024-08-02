@@ -91,14 +91,14 @@ class IntroPage extends GetView<IntroController> {
                   width: 10,
                 ),
                 InkWell(
-                  onTap: () {
-                    Get.rootDelegate.history.clear();
-                    Get.rootDelegate.toNamed(Paths.HOME);
-                  },
                   child: Text(
                     'viwer-title'.tr,
                     style: const TextStyle(fontSize: 18, color: Colors.purple),
                   ),
+                  onTap: () {
+                    Get.rootDelegate.history.clear();
+                    Get.rootDelegate.toNamed(Paths.HOME);
+                  },
                 ),
               ],
             ),

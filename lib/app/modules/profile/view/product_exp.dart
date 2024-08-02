@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:marketing_surplus/app/modules/charity/controller/charity_controller.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/empty_screen.dart';
 import '../../../../shared/widgets/single_item_product.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
+import '../../home/controller/home_controller.dart';
 import '../controller/profile_controller.dart';
 
 class ProductExpiration extends GetView<ProfileController> {
@@ -267,6 +269,46 @@ class ProductExpiration extends GetView<ProfileController> {
                           },
                           !controller.auth.isAuth(),
                           without: true,
+                          widget: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    Colors.purple.shade200)),
+                            child: Text(
+                              'Donation',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              final controlCharity =
+                                  Get.find<CharityController>();
+                              controlCharity.toPayProduct.add(element);
+                              Overlayment.show(OverDialog(
+                                  child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      'The Item Addded in list To Dontain Do You want to Contun and Select Charity To Donation ?!'),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Overlayment.dismissLast();
+                                            Get.find<HomeController>()
+                                                .pageIndex
+                                                .value = 2;
+                                          },
+                                          child: Text('Yes')),
+                                      TextButton(
+                                          onPressed: () {
+                                            controlCharity.toPayProduct.clear();
+                                            Overlayment.dismissLast();
+                                          },
+                                          child: Text('No'))
+                                    ],
+                                  )
+                                ],
+                              )));
+                            },
+                          ),
                         ))
                     .toList()),
           ));
