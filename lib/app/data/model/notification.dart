@@ -1,37 +1,39 @@
-import 'package:marketing_surplus/app/data/model/user_model.dart';
+import 'order_Product.dart';
 
 class Notification {
   int? id;
-  UserModel? user;
-  int? userId;
+  OrderProduct? orderProduct;
+  int? orderProductId;
   String? message;
   String? type;
   DateTime? createdAt;
   bool? isRead;
   Notification({
-    this.userId,
+    this.orderProductId,
     this.message,
     this.type,
     this.isRead,
     this.createdAt,
-    this.user,
+    this.orderProduct,
   });
   Notification.fromJson(Map<String, dynamic> json) {
     id = json['id'];
 
-    userId = json['userId'];
+    orderProductId = json['orderProductId'];
     message = json['message'];
     type = json['type'];
     isRead = json['isRead'] ?? false;
-    createdAt = json['createdAt'];
-    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
+    createdAt = DateTime.parse(json['createdAt']);
+    orderProduct = json['orderProduct'] != null
+        ? OrderProduct.fromJson(json['orderProduct'])
+        : null;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['id'] = id ?? 0;
-    json['user'] = user?.toJson();
-    json['userId'] = userId;
-    json['createdAt'] = createdAt;
+    json['orderProduct'] = orderProduct?.toJson();
+    json['orderProductId'] = orderProductId;
+    json['createdAt'] = createdAt?.toIso8601String();
     json['message'] = message;
     json['type'] = type;
     json['isRead'] = isRead ?? false;

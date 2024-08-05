@@ -9,6 +9,7 @@ class Donation {
   int? charityId;
   int? orderTypeId;
   double? pricePay;
+  double? percentage;
   DateTime? createdAt;
   List<ProductDonation>? productDonations;
   Donation({
@@ -25,6 +26,9 @@ class Donation {
     pricePay = json['pricePay'] == null
         ? 1
         : double.parse(json['pricePay'].toString());
+    percentage = json['percentage'] == null
+        ? 0
+        : double.parse(json['percentage'].toString());
     orderTypeId = json['orderTypeId'];
     createdAt = DateTime.parse(json['createdAt']);
     charity =
@@ -45,8 +49,9 @@ class Donation {
     json['orderTypeId'] = orderTypeId;
     json['createdAt'] = createdAt?.toIso8601String();
     json['charityId'] = charityId;
-    json['charity'] = charity == null ? null : charity!.toJson();
+    json['charity'] = charity?.toJson();
     json['pricePay'] = pricePay == null ? 0 : pricePay.toString();
+    json['percentage'] = percentage == null ? 0 : percentage.toString();
     return json;
   }
 }

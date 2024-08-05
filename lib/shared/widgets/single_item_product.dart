@@ -30,7 +30,7 @@ class SingleItem extends GetView {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5),
         child: InkWell(
           onTap: () {
             if (Get.isRegistered<ProductController>()) {

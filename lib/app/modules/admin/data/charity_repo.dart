@@ -19,6 +19,12 @@ class CharityRepository extends ICharityRepository {
     return false;
   }
 
+  Future<bool> acceptCharity(int id, bool accept) async {
+    var result =
+        await _dio.post('/api/Charity/AcceptCharity/$id?accept=$accept');
+    return result.statusCode == 200;
+  }
+
   @override
   Future<bool> deleteCharity(int id) async {
     var result = await _dio.delete(

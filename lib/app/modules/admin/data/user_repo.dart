@@ -43,4 +43,10 @@ class UsersDataRepository extends IUsersDataRepository {
         await _dio.put('/api/User/Put/${object.id}', data: object.toJson());
     return result.statusCode == 200;
   }
+
+  @override
+  Future<bool> acceptUser(int id, bool accept) async {
+    var result = await _dio.post('/api/User/AcceptUser/$id?accept=$accept');
+    return result.statusCode == 200;
+  }
 }

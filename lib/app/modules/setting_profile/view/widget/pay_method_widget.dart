@@ -22,7 +22,7 @@ class PayMethodView extends GetView<SettingProfileController> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Your Account Value',
+                  'account-value'.tr,
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -48,14 +48,14 @@ class PayMethodView extends GetView<SettingProfileController> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Deposit Process',
+                                  'deposit-process'.tr,
                                   style: TextStyle(
                                       color: Colors.purple.shade200,
                                       fontSize: 21),
                                 ),
                               ),
                               Text(
-                                'The withdrawal will be from your bank account to be deposited into your account here.',
+                                'dep-title'.tr,
                                 style: TextStyle(color: Colors.grey),
                               ),
                               TextFieldWidget(
@@ -65,13 +65,13 @@ class PayMethodView extends GetView<SettingProfileController> {
                                       double.parse(value);
                                 },
                                 textInputType: TextInputType.number,
-                                label: 'Amount '.tr,
+                                label: 'amount-title'.tr,
                               ),
                               TextFieldWidget(
                                 icon: Icons.payment,
                                 onChanged: (value) {},
                                 textInputType: TextInputType.emailAddress,
-                                label: 'Bank account number'.tr,
+                                label: 'bank-num'.tr,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -82,19 +82,19 @@ class PayMethodView extends GetView<SettingProfileController> {
                                       controller.getAmount();
                                       Overlayment.dismissLast();
                                     },
-                                    child: Text('Done')),
+                                    child: Text('done'.tr)),
                               )
                             ],
                           )));
                         },
-                        child: Text('Deposit'))
+                        child: Text('deposit-process'.tr))
                   ],
                 ),
               )
             ],
           )
         : Obx(() => controller.pays.isEmpty
-            ? const Text('No Data')
+            ? Text('nodat-title'.tr)
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

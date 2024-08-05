@@ -116,6 +116,10 @@ class OrderTypeWidget extends GetView<AdminController> {
           label: Text('delete-title'.tr,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
+      DataColumn(
+          label: Text('Accept'.tr,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
   List<DataRow> getRows() => controller.orderTypes
       .map((element) => DataRow(cells: [
@@ -191,6 +195,19 @@ class OrderTypeWidget extends GetView<AdminController> {
                 await controller.deleteOrderType(element.id!);
               },
               icon: const Icon(Icons.delete, color: Colors.red),
+            )),
+            DataCell(IconButton(
+              onPressed: () async {
+                if (!element.isAccept!) {
+                  controller.acceptOrderType(element.id!, true);
+                }
+              },
+              icon: Icon(
+                element.isAccept!
+                    ? Icons.done_outline_rounded
+                    : Icons.circle_outlined,
+                color: Colors.blue,
+              ),
             )),
           ]))
       .toList();

@@ -195,7 +195,32 @@ class AdminController extends GetxController {
 
   Future<void> getAllcharitys() async {
     var chs = await CharityRepository().getCharities();
-    charitys.addAll(chs);
+    charitys.assignAll(chs);
+  }
+
+  Future<void> acceptCharity(int id, bool accept) async {
+    await CharityRepository().acceptCharity(id, accept);
+    await getAllcharitys();
+  }
+
+  Future<void> acceptCompany(int id, bool accept) async {
+    await CompanyRepository().acceptCompany(id, accept);
+    await getAllCompany();
+  }
+
+  Future<void> acceptUser(int id, bool accept) async {
+    await UsersDataRepository().acceptUser(id, accept);
+    await getAllUsers();
+  }
+
+  Future<void> acceptMethod(int id, bool accept) async {
+    await PayMethodRepositry().acceptMethod(id, accept);
+    await getAllMethod();
+  }
+
+  Future<void> acceptOrderType(int id, bool accept) async {
+    await OrderTypeRepositry().acceptOrderType(id, accept);
+    await getAllOrderType();
   }
 
   Future<void> getAllDonation() async {
@@ -212,6 +237,7 @@ class AdminController extends GetxController {
   }
 
   Future<void> getAllMethod() async {
+    method.clear();
     var data = await payRepo.getAllOfMethod();
     method.assignAll(data);
   }

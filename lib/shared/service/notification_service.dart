@@ -4,6 +4,7 @@ import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/notification.dart';
 import 'package:marketing_surplus/app/data/model/user_model.dart';
 
+import '../../app/data/model/company.dart';
 import '../../app/data/model/notification_charity.dart';
 import 'auth_service.dart';
 
@@ -35,7 +36,34 @@ class NotificationService {
     return list;
   }
 
+  Future<List<Notification>> getNotificationCompanyForUser() async {
+    var id = (auth.getDataFromStorage() as Company).id;
+
+    var data =
+        await _dio.get('/api/Notifications/GetNotificationCompanyForUser/$id');
+    print(' Notification :$data');
+    var list = <Notification>[];
+    for (var item in data.data) {
+      list.add(Notification.fromJson(item));
+    }
+    return list;
+  }
+
+  Future<List<NotificationCharity>> getNotificationCompanyForCharity() async {
+    var id = (auth.getDataFromStorage() as Company).id;
+
+    var data = await _dio
+        .get('/api/Notifications/GetNotificationCompanyForCharity/$id');
+    print(' NotificationCharity :$data');
+    var list = <NotificationCharity>[];
+    for (var item in data.data) {
+      list.add(NotificationCharity.fromJson(item));
+    }
+    return list;
+  }
+
   Future<bool> addNotification(Notification notification) async {
+    print('To Addddddddddd ${notification.toJson()}');
     var result = await _dio.post('/api/Notifications/AddNotification',
         data: notification.toJson());
     return result.statusCode == 200;

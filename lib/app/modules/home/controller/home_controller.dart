@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:marketing_surplus/app/data/model/charity.dart';
 import 'package:marketing_surplus/app/data/model/company.dart';
 import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
 import 'package:marketing_surplus/app/data/model/product.dart';
@@ -52,6 +53,7 @@ class HomeController extends GetxController {
   final rateRepo = RateRepository();
   final allUserNotification = <n.Notification>[].obs;
   final allCharityNotification = <NotificationCharity>[].obs;
+
   final isAll = true.obs;
   final isAccept = false.obs;
   final isloading = false.obs;
@@ -74,7 +76,13 @@ class HomeController extends GetxController {
   void onInit() {
     selectType.value = CompanyTypeModel();
     getData();
-    getNotification();
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      await getNotification();
+    });
+    // Future.delayed(const Duration(seconds: 3), () async {
+    //   await logInToAdminAccept();
+    // });
+
     getPosts();
     getAllCompanyType();
     super.onInit();
@@ -87,6 +95,46 @@ class HomeController extends GetxController {
     } else if (auth.getTypeEnum() == Auth.charity) {
       var data = await NotificationService().getNotificationCharity();
       allCharityNotification.assignAll(data);
+    } else {
+      var dataCharity =
+          await NotificationService().getNotificationCompanyForCharity();
+      allCharityNotification.assignAll(dataCharity);
+      var data = await NotificationService().getNotificationCompanyForUser();
+      allUserNotification.assignAll(data);
+    }
+  }
+
+  Future<void> makeRead(int id, {bool? fromUser}) async {
+    if (auth.getTypeEnum() == Auth.user) {
+      var item = allUserNotification.where((p0) => p0.id == id).first;
+      if (item.type!.contains('User')) return;
+      var data = await NotificationService().markAsRead(id);
+      if (data) {
+        await getNotification();
+      }
+    } else if (auth.getTypeEnum() == Auth.charity) {
+      var item = allCharityNotification.where((p0) => p0.id == id).first;
+      if (item.type!.contains('Charity')) return;
+      var data = await NotificationService().markAsReadCharity(id);
+      if (data) {
+        await getNotification();
+      }
+    } else {
+      if (fromUser != null && fromUser) {
+        var item = allUserNotification.where((p0) => p0.id == id).first;
+        if (item.type!.contains('Company')) return;
+        var data = await NotificationService().markAsRead(id);
+        if (data) {
+          await getNotification();
+        }
+      } else if (fromUser != null && !fromUser) {
+        var item = allCharityNotification.where((p0) => p0.id == id).first;
+        if (item.type!.contains('Company')) return;
+        var data = await NotificationService().markAsReadCharity(id);
+        if (data) {
+          await getNotification();
+        }
+      }
     }
   }
 
@@ -124,7 +172,12 @@ class HomeController extends GetxController {
   Future<void> getRates() async {
     final id = (auth.getDataFromStorage() as Company).id!;
     var data = await rateRepo.getRates(id);
-    rates.assignAll(data);
+    for (var e in data) {
+      if (!rates.any((element) =>
+          element.subscription!.user!.id == e.subscription!.user!.id)) {
+        rates.add(e);
+      }
+    }
   }
 
   Future<void> saveSelectedCompany(CompanyProductDto productDto) async {
@@ -168,14 +221,7 @@ class HomeController extends GetxController {
         companies.clear();
         final data = await mainRepo.getSubscriptionPosts(userId);
         data.shuffle();
-        listPosts.assignAll(data);
-        for (var e in data) {
-          if (!companies.any((element) =>
-              element.companyProduct!.company!.id ==
-              e.companyProduct!.company!.id)) {
-            companies.assign(e);
-          }
-        }
+        sortList(data, isAllData: isAllData);
       }
     }
 
@@ -285,6 +331,44 @@ class HomeController extends GetxController {
     if (result) {
       Overlayment.dismissLast();
       onInit();
+    }
+  }
+
+  bool getIsAccept() {
+    if (auth.getTypeEnum() == Auth.user) {
+      var data = (auth.getDataFromStorage() as UserModel);
+
+      if (data.isAccept!) return true;
+    } else if (auth.getTypeEnum() == Auth.charity) {
+      var data = (auth.getDataFromStorage() as Charity);
+      if (data.isAccept!) return true;
+    } else if (auth.getTypeEnum() == Auth.comapny) {
+      var data = (auth.getDataFromStorage() as Company);
+      if (data.isAccept!) return true;
+    } else {
+      if (auth.getDataFromStorage() == null) return true;
+    }
+    return false;
+  }
+
+  Future<void> logInToAdminAccept() async {
+    if (!getIsAccept()) {
+      auth.stroge.deleteDataByKey('type');
+      auth.stroge.deleteDataByKey('AuthData');
+
+      if (auth.getTypeEnum() == Auth.comapny) {
+        var data = (auth.getDataFromStorage() as Company);
+        onInit();
+        await auth.logIn(data.email!, data.password!);
+      } else if (auth.getTypeEnum() == Auth.charity) {
+        var data = (auth.getDataFromStorage() as Charity);
+        await auth.logIn(data.email!, data.password!);
+        onInit();
+      } else if (auth.getTypeEnum() == Auth.user) {
+        var data = (auth.getDataFromStorage() as UserModel);
+        await auth.logIn(data.email!, data.password!);
+        onInit();
+      }
     }
   }
 

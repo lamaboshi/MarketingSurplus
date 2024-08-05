@@ -1,38 +1,39 @@
-import 'package:marketing_surplus/app/data/model/charity.dart';
+import 'product_donation.dart';
 
 class NotificationCharity {
   int? id;
-  Charity? charity;
-  int? charityId;
+  ProductDonation? productDonation;
+  int? productDonationId;
   String? message;
   String? type;
   DateTime? createdAt;
   bool? isRead;
   NotificationCharity({
-    this.charityId,
+    this.productDonationId,
     this.message,
     this.type,
     this.isRead,
     this.createdAt,
-    this.charity,
+    this.productDonation,
   });
   NotificationCharity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
 
-    charityId = json['charityId'];
+    productDonationId = json['productDonationId'];
     message = json['message'];
     type = json['type'];
     isRead = json['isRead'] ?? false;
-    createdAt = json['createdAt'];
-    charity =
-        json['charity'] != null ? Charity.fromJson(json['charity']) : null;
+    createdAt = DateTime.parse(json['createdAt']);
+    productDonation = json['productDonation'] != null
+        ? ProductDonation.fromJson(json['productDonation'])
+        : null;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['id'] = id ?? 0;
-    json['charity'] = charity?.toJson();
-    json['charityId'] = charityId;
-    json['createdAt'] = createdAt;
+    json['productDonation'] = productDonation?.toJson();
+    json['productDonationId'] = productDonationId;
+    json['createdAt'] = createdAt?.toIso8601String();
     json['message'] = message;
     json['type'] = type;
     json['isRead'] = isRead ?? false;

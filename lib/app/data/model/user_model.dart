@@ -35,7 +35,8 @@ class UserModel {
     age = json['age'];
     password = json['password'];
     userName = json['userName'];
-    isAccept = json['isAccept'];
+    isAccept = json['isAccept'] ?? false;
+
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
@@ -54,6 +55,7 @@ class UserModel {
     json['address'] = address;
     json['age'] = age;
     json['password'] = password;
+    json['isAccept'] = isAccept ?? false;
     json['userName'] = userName;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
     json['qrCode'] = qRCode == null ? null : Uint8List.fromList(qRCode!);

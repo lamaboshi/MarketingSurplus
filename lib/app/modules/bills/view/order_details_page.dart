@@ -44,6 +44,8 @@ class OrderDetailsPage extends GetView<BillsController> {
                     ))
               ],
             ),
+            if (orderProduct!.order!.createdAt != null)
+              getRow('Created At', orderProduct!.order!.createdAt.toString()),
             if (controller.auth.getTypeEnum() == Auth.comapny)
               getRow('user-type', orderProduct!.order!.userId.toString()),
             if (controller.auth.getTypeEnum() == Auth.comapny)

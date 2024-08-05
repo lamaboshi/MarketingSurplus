@@ -8,6 +8,9 @@ import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/notification_service.dart';
+import '../../../data/model/company.dart';
+import '../../../data/model/notification_charity.dart';
 import '../../../data/model/order_type.dart';
 import '../../../data/model/product_donation.dart';
 import '../../admin/data/order_repo.dart';
@@ -20,6 +23,7 @@ class BillsController extends GetxController {
   final orderProducts = <OrderProduct>[].obs;
   final lastOrderCharity = <ProductDonation>[].obs;
   final orderStatus = OrderStutas.none.obs;
+  final notAccept = ''.obs;
   final descr = {0: ''}.obs;
   final food1 = ''.obs;
   final food2 = ''.obs;
@@ -42,11 +46,30 @@ class BillsController extends GetxController {
     print('data in Bills ${result.length}');
   }
 
-  Future<void> updateDonation(
-      int id, bool status, bool isCencal, bool isCompany) async {
+  Future<void> updateDonation(int id, bool status, bool isCencal,
+      bool isCompany, Company company, int proId) async {
     var result = await OrderService()
-        .updateStatusDonation(id, status, isCencal, isCompany);
+        .updateStatusDonation(id, status, isCencal, isCompany, notAccept.value);
     if (result) {
+      if (status && !isCencal) {
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Charity Accept',
+            isRead: false,
+            message:
+                'Charity Accept Donation for Company: id${company.id} name${company.name}',
+            productDonationId: proId);
+        await NotificationService().addNotificationCahrity(notif);
+      } else if (!status && isCencal) {
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Charity Not Accept',
+            isRead: false,
+            message:
+                'Charity Not Accept Donation for Company: id${company.id} name${company.name} for ${notAccept.value}',
+            productDonationId: id);
+        await NotificationService().addNotificationCahrity(notif);
+      }
       Overlayment.dismissAll();
       getData();
     }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:overlayment/overlayment.dart';
 
-import '../../../../shared/widgets/textfield_widget.dart';
 import '../controller/order_controller.dart';
 
 class OrderCharityPage extends GetView<OrderController> {
@@ -30,13 +28,25 @@ class OrderCharityPage extends GetView<OrderController> {
               height: 20,
             ),
             Obx(() => controller.selectedType.value.id == 3
-                ? TextFieldWidget(
-                    onChanged: (String value) {
-                      controller.donation.value.pricePay =
-                          double.tryParse(value);
-                    },
-                    textInputType: TextInputType.number,
-                    label: 'num-pay'.tr,
+                ? Row(
+                    children: controller.parc
+                        .map((e) => InkWell(
+                            onTap: () {
+                              controller.selectPers.value = e;
+                            },
+                            child: Obx(() => Chip(
+                                color: MaterialStatePropertyAll(
+                                    controller.selectPers.value != e
+                                        ? Colors.white
+                                        : Colors.purple.shade200),
+                                label: Text(
+                                  '$e %',
+                                  style: TextStyle(
+                                      color: controller.selectPers.value == e
+                                          ? Colors.white
+                                          : Colors.purple.shade200),
+                                )))))
+                        .toList(),
                   )
                 : SizedBox.shrink()),
             Padding(
@@ -125,7 +135,6 @@ class OrderCharityPage extends GetView<OrderController> {
                         isExtended: true,
                         onPressed: () async {
                           await controller.saveOrderDonation();
-                          Overlayment.dismissLast();
                         },
                         label: SizedBox(
                             height: Get.height / 3,

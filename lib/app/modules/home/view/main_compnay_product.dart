@@ -110,7 +110,29 @@ class MainCompanyProduct extends GetView<HomeController> {
                                             textInputType: TextInputType.text,
                                           ),
                                           TextFieldWidget(
-                                            validator: controller.forceValue,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'requird';
+                                              } else {
+                                                var numb =
+                                                    (double.tryParse(value)) ??
+                                                        0;
+                                                if (numb != 0 &&
+                                                    controller.newProduct.value
+                                                            .newPrice !=
+                                                        null &&
+                                                    numb
+                                                        .compareTo(controller
+                                                            .newProduct
+                                                            .value
+                                                            .newPrice!)
+                                                        .isNegative) {
+                                                  return 'Error With Price';
+                                                }
+                                              }
+                                              return null;
+                                            },
                                             label: 'oldpri-title'.tr,
                                             value: controller.newProduct.value
                                                         .oldPrice !=
@@ -127,7 +149,27 @@ class MainCompanyProduct extends GetView<HomeController> {
                                             textInputType: TextInputType.number,
                                           ),
                                           TextFieldWidget(
-                                            validator: controller.forceValue,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'requird';
+                                              } else {
+                                                var numb =
+                                                    (double.tryParse(value)) ??
+                                                        0;
+                                                if (numb != 0 &&
+                                                    controller.newProduct.value
+                                                            .oldPrice !=
+                                                        null &&
+                                                    controller.newProduct.value
+                                                        .oldPrice!
+                                                        .compareTo(numb)
+                                                        .isNegative) {
+                                                  return 'Error With Price';
+                                                }
+                                              }
+                                              return null;
+                                            },
                                             label: 'offerpri-title'.tr,
                                             value: controller.newProduct.value
                                                         .newPrice !=
@@ -176,23 +218,43 @@ class MainCompanyProduct extends GetView<HomeController> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                SizedBox(
-                                                  height: 120,
-                                                  child: CupertinoDatePicker(
-                                                    minimumYear: 2022,
-                                                    maximumYear: 2024,
-                                                    mode:
-                                                        CupertinoDatePickerMode
-                                                            .date,
-                                                    initialDateTime:
-                                                        DateTime.now(),
-                                                    onDateTimeChanged:
-                                                        (DateTime newDateTime) {
-                                                      controller.newProduct
-                                                              .value.dateTime =
-                                                          newDateTime;
-                                                    },
-                                                  ),
+                                                Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 120,
+                                                      child:
+                                                          CupertinoDatePicker(
+                                                        minimumYear: 2022,
+                                                        maximumYear: 2024,
+                                                        mode:
+                                                            CupertinoDatePickerMode
+                                                                .date,
+                                                        initialDateTime:
+                                                            DateTime.now(),
+                                                        onDateTimeChanged:
+                                                            (DateTime
+                                                                newDateTime) {
+                                                          controller
+                                                                  .newProduct
+                                                                  .value
+                                                                  .dateTime =
+                                                              newDateTime;
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Obx(() => controller
+                                                            .errorData
+                                                            .value
+                                                            .isEmpty
+                                                        ? SizedBox.shrink()
+                                                        : Text(
+                                                            controller.errorData
+                                                                .value,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ))
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -211,25 +273,42 @@ class MainCompanyProduct extends GetView<HomeController> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                SizedBox(
-                                                  height: 120,
-                                                  child: CupertinoDatePicker(
-                                                    minimumYear: 2024,
-                                                    maximumYear: 2027,
-                                                    mode:
-                                                        CupertinoDatePickerMode
-                                                            .date,
-                                                    initialDateTime:
-                                                        DateTime.now(),
-                                                    onDateTimeChanged:
-                                                        (newDateTime) {
-                                                      controller
-                                                              .newProduct
-                                                              .value
-                                                              .expiration =
-                                                          newDateTime;
-                                                    },
-                                                  ),
+                                                Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 120,
+                                                      child:
+                                                          CupertinoDatePicker(
+                                                        minimumYear: 2024,
+                                                        maximumYear: 2027,
+                                                        mode:
+                                                            CupertinoDatePickerMode
+                                                                .date,
+                                                        initialDateTime:
+                                                            DateTime.now(),
+                                                        onDateTimeChanged:
+                                                            (newDateTime) {
+                                                          controller
+                                                                  .newProduct
+                                                                  .value
+                                                                  .expiration =
+                                                              newDateTime;
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Obx(() => controller
+                                                            .errorData
+                                                            .value
+                                                            .isEmpty
+                                                        ? SizedBox.shrink()
+                                                        : Text(
+                                                            controller.errorData
+                                                                .value,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ))
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -245,14 +324,21 @@ class MainCompanyProduct extends GetView<HomeController> {
                                                       if (controller
                                                           .keyForm.currentState!
                                                           .validate()) {
-                                                        final rsult =
-                                                            await controller
-                                                                .updateProduct();
-                                                        Overlayment
-                                                            .dismissLast();
-                                                        if (rsult) {
-                                                          Overlayment
-                                                              .dismissLast();
+                                                        if (validData()) {
+                                                          controller.errorData
+                                                              .value = '';
+                                                          final rsult =
+                                                              await controller
+                                                                  .updateProduct();
+
+                                                          if (rsult) {
+                                                            Overlayment
+                                                                .dismissLast();
+                                                          }
+                                                        } else {
+                                                          controller.errorData
+                                                                  .value =
+                                                              'Expiration Data Should be after Created Data';
                                                         }
                                                       }
                                                     },
@@ -314,4 +400,10 @@ class MainCompanyProduct extends GetView<HomeController> {
                     }, !controller.auth.isAuth()))
                 .toList()));
   }
+
+  bool validData() =>
+      controller.newProduct.value.expiration != null &&
+      controller.newProduct.value.dateTime != null &&
+      controller.newProduct.value.expiration!
+          .isAfter(controller.newProduct.value.dateTime!);
 }

@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/charity/controller/charity_controller.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/empty_screen.dart';
+import '../../../../shared/widgets/textfield_widget.dart';
 import '../../../data/model/donation.dart';
 import '../../../data/model/product_donation.dart';
 
@@ -14,92 +17,100 @@ class CharityOrder extends GetView<CharityController> {
     return Expanded(
       child: getMinCard(Icons.add_home_work_rounded, 'last-order-charity'.tr,
           onTab: () {
+        controller.getLastOrderCharity();
         Overlayment.show(OverPanel(
-            child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(() => controller.lastOrderCharity.isEmpty
-                ? EmptyData()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: controller.lastOrderCharity.map((element) {
-                        return ListTile(
-                          title: Text(' # ${element.id}'),
-                          subtitle: Column(
-                            children: [
-                              Text(
-                                element.charity!.name ?? '',
-                                style: TextStyle(
-                                    color: Colors.purple.shade200,
-                                    fontSize: 19),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(getType(element.orderTypeId ?? 0)),
-                                  FloatingActionButton.extended(
-                                    backgroundColor: Colors.purple.shade200,
-                                    isExtended: true,
-                                    onPressed: () {
-                                      controller
-                                          .getAllDonation(element.charity!.id!);
-                                      Overlayment.show(OverDialog(
+            child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: IconButton(
+                      onPressed: () {
+                        print('object');
+                        Overlayment.dismissLast();
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.purple.shade200,
+                      )),
+                ),
+              ),
+              Obx(() => controller.lastOrderCharityJustCharity.isEmpty
+                  ? EmptyData()
+                  : SingleChildScrollView(
+                      child: Column(
+                        children: controller.lastOrderCharityJustCharity
+                            .map((element) {
+                          return ListTile(
+                            title: Text(' # ${element.id}'),
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                  element.charity!.name ?? '',
+                                  style: TextStyle(
+                                      color: Colors.purple.shade200,
+                                      fontSize: 19),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(getType(element.orderTypeId ?? 0)),
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.purple.shade200)),
+                                      onPressed: () {
+                                        controller.getAllDonation(
+                                            element.charity!.id!);
+                                        Overlayment.show(OverDialog(
+                                            child: SingleChildScrollView(
                                           child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'Accept Donation Requst',
-                                              style: TextStyle(
-                                                  color: Colors.purple.shade200,
-                                                  fontSize: 19),
-                                            ),
-                                          ),
-                                          Obx(() => Column(
-                                                  children: controller.product
-                                                      .where((p0) =>
-                                                          p0.companyProduct!
-                                                              .company!.id! ==
-                                                          controller
-                                                              .getCompanyId())
-                                                      .map((e) {
-                                                print(
-                                                    ' isCompany ${e.isCompany!}');
-                                                return e.isCompany!
-                                                    ? getListTitle(
-                                                        e,
-                                                        element,
-                                                        e.isAccept!
-                                                            ? Text(
-                                                                'Item Accepetd',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .purple
-                                                                        .shade200),
-                                                              )
-                                                            : !e.isAccept! &&
-                                                                    !e.isCencal!
-                                                                ? Text(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  'Accept Donation Requst',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .purple.shade200,
+                                                      fontSize: 19),
+                                                ),
+                                              ),
+                                              Obx(() => Column(
+                                                      children: controller
+                                                          .product
+                                                          .map((e) {
+                                                    print(
+                                                        ' isCompany ${e.isCompany!}');
+
+                                                    return e.isCompany!
+                                                        ? getListTitle(
+                                                            e,
+                                                            element,
+                                                            getStatus(
+                                                                e,
+                                                                Text(
                                                                     'Waiting to Accpted ',
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .purple
-                                                                            .shade200))
-                                                                : e.isCencal!
-                                                                    ? Text(
-                                                                        'Not Accpted ',
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .purple.shade200))
-                                                                    : SizedBox())
-                                                    : getListTitle(
-                                                        e,
-                                                        element,
-                                                        widget:
-                                                            element.orderTypeId ==
-                                                                    2
+                                                                            .shade200,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold))))
+                                                        : getListTitle(
+                                                            e,
+                                                            element,
+                                                            widget: e.donation!
+                                                                        .orderTypeId ==
+                                                                    3
                                                                 ? Wrap(
                                                                     children: [
                                                                       Text(
@@ -110,67 +121,126 @@ class CharityOrder extends GetView<CharityController> {
                                                                     ],
                                                                   )
                                                                 : SizedBox(),
-                                                        Row(
-                                                          children: [
-                                                            FloatingActionButton
-                                                                .extended(
-                                                                    backgroundColor: Colors
-                                                                        .purple
-                                                                        .shade200,
-                                                                    onPressed:
-                                                                        () async {
-                                                                      await controller.updateDonation(
-                                                                          element
-                                                                              .id!,
-                                                                          true,
-                                                                          false,
-                                                                          e.isCompany!);
-                                                                    },
-                                                                    label: Text(
-                                                                        'Accept')),
-                                                            FloatingActionButton
-                                                                .extended(
-                                                                    backgroundColor: Colors
-                                                                        .purple
-                                                                        .shade200,
-                                                                    onPressed:
-                                                                        () async {
-                                                                      await controller.updateDonation(
-                                                                          element
-                                                                              .id!,
-                                                                          false,
-                                                                          true,
-                                                                          e.isCompany!);
-                                                                    },
-                                                                    label: Text(
-                                                                        'Decliend'))
-                                                          ],
-                                                        ));
-                                              }).toList()))
-                                        ],
-                                      )));
-                                    },
-                                    label: Text(
-                                      'Deltails',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  )),
-          ],
+                                                            getStatus(
+                                                                e,
+                                                                Row(
+                                                                  children: [
+                                                                    ElevatedButton(
+                                                                        style: ButtonStyle(
+                                                                            backgroundColor: MaterialStatePropertyAll(Colors
+                                                                                .purple.shade200)),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          await controller.updateDonation(
+                                                                              e.donation!.id!,
+                                                                              true,
+                                                                              false,
+                                                                              e.isCompany!,
+                                                                              getType(element.orderTypeId!),
+                                                                              element.charity!,
+                                                                              e.id!);
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'Accept',
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )),
+                                                                    ElevatedButton(
+                                                                        style: ButtonStyle(
+                                                                            backgroundColor: MaterialStatePropertyAll(Colors
+                                                                                .purple.shade200)),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          Overlayment.show(OverDialog(
+                                                                              child: Column(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.min,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Text(
+                                                                                  'Why You Didn\'t Want to Accept',
+                                                                                  style: TextStyle(color: Colors.purple.shade200),
+                                                                                ),
+                                                                              ),
+                                                                              TextFieldWidget(
+                                                                                icon: Icons.adjust_sharp,
+                                                                                onChanged: (value) {
+                                                                                  controller.notAccept.value = value;
+                                                                                },
+                                                                                textInputType: TextInputType.emailAddress,
+                                                                                label: 'Not Accept reason'.tr,
+                                                                              ),
+                                                                              SizedBox(
+                                                                                height: 8,
+                                                                              ),
+                                                                              FloatingActionButton.extended(
+                                                                                  backgroundColor: Colors.purple.shade200,
+                                                                                  onPressed: () async {
+                                                                                    await controller.updateDonation(e.donation!.id!, false, true, e.isCompany!, getType(element.orderTypeId!), element.charity!, e.id!);
+                                                                                  },
+                                                                                  label: Text(
+                                                                                    'Done',
+                                                                                    style: TextStyle(color: Colors.white),
+                                                                                  ))
+                                                                            ],
+                                                                          )));
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'Decliend',
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )),
+                                                                  ],
+                                                                )));
+                                                  }).toList()))
+                                            ],
+                                          ),
+                                        )));
+                                      },
+                                      child: Text(
+                                        'Deltails',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    )),
+            ],
+          ),
         )));
       }),
     );
   }
 
+  Widget getStatus(ProductDonation e, Widget subWait) => e.isAccept!
+      ? Text(
+          'Item Accepetd',
+          style: TextStyle(
+              color: Colors.purple.shade200, fontWeight: FontWeight.bold),
+        )
+      : !e.isAccept! && !e.isCencal!
+          ? subWait
+          : e.isCencal!
+              ? Column(
+                  children: [
+                    Text('Not Accpted ',
+                        style: TextStyle(
+                            color: Colors.purple.shade200,
+                            fontWeight: FontWeight.bold)),
+                    Text(e.commintCencal ?? '')
+                  ],
+                )
+              : SizedBox();
   String getPrice(ProductDonation e, Donation element) =>
-      (e.totalPrice! - element.pricePay!).toString();
+      (e.totalPrice! - e.donation!.pricePay!).toString();
   String getType(int id) =>
       controller.orderTypes.where((p0) => p0.id == id).first.name ?? '';
 
@@ -181,7 +251,7 @@ class CharityOrder extends GetView<CharityController> {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(getType(element.orderTypeId ?? 0)),
+            Text(getType(e.donation!.orderTypeId ?? 0)),
             Row(
               children: [
                 Chip(
@@ -198,8 +268,8 @@ class CharityOrder extends GetView<CharityController> {
                     ))
               ],
             ),
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget,
                 trailing,

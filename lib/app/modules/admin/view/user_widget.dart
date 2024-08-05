@@ -22,7 +22,7 @@ class UserWidget extends GetView<AdminController> {
                   child: Row(
                     children: [
                       Text(
-                        'Sort By :',
+                        'sort-title'.tr,
                         style: TextStyle(color: Colors.purple.shade200),
                       ),
                       const SizedBox(
@@ -86,7 +86,7 @@ class UserWidget extends GetView<AdminController> {
                             }
                           },
                           textInputType: TextInputType.name,
-                          label: 'Search',
+                          label: 'Search'.tr,
                         ),
                       )
                     ],
@@ -157,7 +157,11 @@ class UserWidget extends GetView<AdminController> {
               icon: const Icon(Icons.delete, color: Colors.red),
             )),
             DataCell(IconButton(
-              onPressed: () async {},
+              onPressed: () async {
+                if (!element.isAccept!) {
+                  controller.acceptUser(element.id!, true);
+                }
+              },
               icon: Icon(
                 element.isAccept!
                     ? Icons.done_outline_rounded

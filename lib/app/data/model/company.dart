@@ -45,7 +45,8 @@ class Company {
     companyType = json['companyType'] == null
         ? null
         : CompanyTypeModel.fromJson(json['companyType']);
-    isAccept = json['isAccept'];
+    isAccept = json['isAccept'] ?? false;
+    ;
     companyTypeId = json['companyTypeId'];
     licenseNumber = json['licenseNumber'];
     image = json['image'] == null
@@ -61,7 +62,7 @@ class Company {
     json['email'] = email;
     json['address'] = address;
     json['password'] = password;
-
+    json['isAccept'] = isAccept ?? false;
     json['telePhone'] = telePhone;
     json['description'] = description;
     json['onlineImage'] = onlineImage;

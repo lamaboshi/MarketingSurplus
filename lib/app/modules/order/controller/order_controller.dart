@@ -1,23 +1,31 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:get/get.dart';
+
+import 'package:marketing_surplus/app/data/model/notification_charity.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/data/model/order_model.dart';
 import 'package:marketing_surplus/app/data/model/order_type.dart';
 import 'package:marketing_surplus/app/data/model/pay_method.dart';
 import 'package:marketing_surplus/app/data/model/product_donation.dart';
+import 'package:marketing_surplus/app/data/model/notification.dart' as n;
+
 import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
+import '../../../../shared/service/notification_service.dart';
 import '../../../data/model/donation.dart';
+
 import '../../admin/data/pay_method_repo.dart';
+import '../../profile/controller/profile_controller.dart';
 
 class OrderController extends GetxController {
   final order = OrderModel().obs;
   final pays = <CompanyMethods>[].obs;
+  final auth = Get.find<AuthService>();
   final donation = Donation().obs;
   final orderTypes = <OrderType>[].obs;
   final selectedPayMethod = CompanyMethods().obs;
@@ -26,6 +34,8 @@ class OrderController extends GetxController {
   final keyForm = GlobalKey<FormState>();
   final isProssing = false.obs;
   final selectedArea = 5.obs;
+  final parc = [25, 40, 50, 75];
+  final selectPers = 0.obs;
   final colorWay = [
     Colors.purple.shade200.withOpacity(0.6),
     Colors.orange.withOpacity(0.6),
@@ -47,8 +57,8 @@ class OrderController extends GetxController {
   }
 
   Future<void> getData() async {
+    isProssing.value = false;
     totalPrice.value = 0;
-
     var data = await Get.find<AuthService>().getDataBasket();
     var companyId = data.first.company!.id!;
     await getPayMethod(companyId);
@@ -68,21 +78,48 @@ class OrderController extends GetxController {
   Future<void> getPayMethod(int companyId) async {
     final result = await PayMethodRepositry().getAllMethod(companyId);
     pays.assignAll(result);
+    if (pays.isEmpty) {
+      var data = await PayMethodRepositry().addMethod(
+          PayMethod(id: 0, name: 'App Account', isAccept: true), companyId);
+      if (data) {
+        print('**********TOAdd*');
+        final result = await PayMethodRepositry().getAllMethod(companyId);
+        pays.assignAll(result);
+      }
+    }
     selectedPayMethod.value = pays.first;
   }
 
   Future<void> saveOrder() async {
     isProssing.value = true;
-    //TODO add userid in order
-    var rng = Random().nextInt(10000);
 
+    var account = auth.stroge.getData('account');
+    if (account == null || double.parse(account) < totalPrice.value) {
+      Overlayment.dismissLast();
+      var snackBar = const SnackBar(
+          content: Text('You don\'t have Mony place Dispost in Setting'));
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+      return;
+    }
     var data = await Get.find<AuthService>().getDataBasket();
-    order.value.name = rng.toString();
+
+    var rng = Random().nextInt(10000);
+    order.value.name = '#$rng';
     order.value.descripation = order.value.descripation ?? '  ';
     order.value.payMethodId = selectedPayMethod.value.id;
     order.value.price = totalPrice.value;
     order.value.amount = data.length;
     order.value.createdAt = DateTime.now();
+    if (selectedPayMethod.value.payMethodId == 3 ||
+        selectedPayMethod.value.payMethod!.name!.trim() ==
+            'App Account'.trim()) {
+      auth.stroge.deleteDataByKey('account');
+      print('****************Account  ${account}');
+      var newAccount = double.parse(account) - totalPrice.value;
+      print('****************newAccount  ${newAccount}');
+      auth.stroge.saveData('account', newAccount.toString());
+    }
+
     var orderProduct = <OrderProduct>[];
     for (var element in data) {
       var total = element.product!.newPrice! * element.amountApp!;
@@ -92,9 +129,21 @@ class OrderController extends GetxController {
           totalPrice: total.toInt()));
     }
 
-    await OrderService().saveOrder(order.value, orderProduct);
+    var result = await OrderService().saveOrder(order.value, orderProduct);
     isProssing.value = false;
-    getData();
+
+    for (var element in result) {
+      var notif = n.Notification(
+          createdAt: DateTime.now(),
+          type: 'User Create',
+          isRead: false,
+          message:
+              'User Create Order Name ${order.value.name} for Company: id${data.first.company!.id} name${data.first.company!.name}',
+          orderProductId: element);
+      await NotificationService().addNotification(notif);
+    }
+
+    await Get.find<ProfileController>().getData();
     Overlayment.dismissLast();
   }
 
@@ -104,6 +153,7 @@ class OrderController extends GetxController {
     print('object');
     var data = await Get.find<AuthService>().getDataBasket();
     donation.value.orderTypeId = selectedType.value.id;
+    donation.value.createdAt = DateTime.now();
     // 1 for normal
     //2 for donation
     //3 for ACh
@@ -117,25 +167,53 @@ class OrderController extends GetxController {
             amount: element.amountApp,
             totalPrice: total));
       }
-      await OrderService().saveDonation(donation.value, productDonation);
+      var result =
+          await OrderService().saveDonation(donation.value, productDonation);
+
+      for (var element in result) {
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Charity Create',
+            isRead: false,
+            message:
+                'Charity Create OrderType ${selectedType.value.name}  for Company: id${data.first.company!.id} name${data.first.company!.name}',
+            productDonationId: element);
+        await NotificationService().addNotificationCahrity(notif);
+      }
     } else {
-      var valueInt2 = int.tryParse(totalPrice.value.toString());
-      var valueInt = int.tryParse(donation.value.pricePay.toString());
-      if (valueInt2 == valueInt) {
-        for (var element in data) {
-          var value = element.product!.newPrice! * element.amountApp!;
-          var total = value.toInt();
-          productDonation.add(ProductDonation(
-              isCompany: false,
-              companyProductId: element.id,
-              amount: element.amountApp,
-              totalPrice: total));
-        }
-        await OrderService().saveDonation(donation.value, productDonation);
+      print(
+          '///////////////////////////////////////////////////////////////////////////////////');
+      var valueInt2 = totalPrice.value;
+
+      var payTo = (valueInt2 * (1 - (selectPers.value / 100)));
+      donation.value.pricePay = payTo;
+      donation.value.percentage = double.tryParse(selectPers.value.toString());
+      print(
+          'total ${valueInt2} pricePay ${donation.value.pricePay}  percentage ${donation.value.percentage}');
+      for (var element in data) {
+        var value = element.product!.newPrice! * element.amountApp!;
+        var total = value.toInt();
+        productDonation.add(ProductDonation(
+            isCompany: false,
+            companyProductId: element.id,
+            amount: element.amountApp,
+            totalPrice: total));
+      }
+      var result =
+          await OrderService().saveDonation(donation.value, productDonation);
+      for (var element in result) {
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Charity Create',
+            isRead: false,
+            message:
+                'Charity Create OrderType ${selectedType.value.name}  for Company: id${data.first.company!.id} name${data.first.company!.name} With percentage ${selectPers.value}%',
+            productDonationId: element);
+        await NotificationService().addNotificationCahrity(notif);
       }
     }
     isProssing.value = false;
-    getData();
     Overlayment.dismissLast();
+    await Get.find<ProfileController>().getData();
   }
 }

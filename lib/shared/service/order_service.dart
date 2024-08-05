@@ -41,7 +41,7 @@ class OrderService {
     return null;
   }
 
-  Future<bool> saveOrder(
+  Future<List<int>> saveOrder(
       OrderModel order, List<OrderProduct> orderProduct) async {
     if (auth.getTypeEnum() == Auth.user) {
       final userId = (auth.getDataFromStorage() as UserModel).id!;
@@ -53,29 +53,33 @@ class OrderService {
       print('****************** add order');
       final orderId = int.parse(data.data.toString());
 //ToAddAll Products
+      List<int> ids = [];
       for (var element in orderProduct) {
         element.orderId = orderId;
         print(element.toJson());
-        await _dio.post('/api/Main/SaveOrderProduct', data: element.toJson());
+        var result1 = await _dio.post('/api/Main/SaveOrderProduct',
+            data: element.toJson());
+        final id = int.parse(result1.data.toString());
+        ids.add(id);
         print('****************** add Product');
       }
 
       //TOSaveOrder
-      final order = await getOrder(orderId);
-      stroge.saveData(
-          orderTypeKay, jsonEncode(OrderStutas.waitingAccepte.name));
-      stroge.saveData(orderKay, jsonEncode(order.toJson()));
+      // final order = await getOrder(orderId);
+      // stroge.saveData(
+      //     orderTypeKay, jsonEncode(OrderStutas.waitingAccepte.name));
+      // stroge.saveData(orderKay, jsonEncode(order.toJson()));
       const key = 'basket-Item';
       stroge.deleteDataByKey(key);
 
-      return true;
+      return ids;
     } else {
       print(data.statusMessage);
     }
-    return false;
+    return [];
   }
 
-  Future<bool> saveDonation(
+  Future<List<int>> saveDonation(
       Donation donation, List<ProductDonation> product) async {
     if (auth.getTypeEnum() == Auth.charity) {
       final charityId = (auth.getDataFromStorage() as Charity).id!;
@@ -89,20 +93,23 @@ class OrderService {
       print('****************** add donation');
       final donationId = int.parse(data.data.toString());
 //ToAddAll Products
+      List<int> ids = [];
       for (var element in product) {
         element.donationId = donationId;
         print(element.toJson());
-        await _dio.post('/api/Donation/SaveProductDonation',
+        var result1 = await _dio.post('/api/Donation/SaveProductDonation',
             data: element.toJson());
+        final id = int.parse(result1.data.toString());
+        ids.add(id);
         print('****************** add donation Product');
       }
       const key = 'basket-Item';
       stroge.deleteDataByKey(key);
-      return true;
+      return ids;
     } else {
       print(data.statusMessage);
     }
-    return false;
+    return [];
   }
 
   Future<List<ProductDonation>> getAllDonation({int? idCh}) async {
@@ -184,12 +191,17 @@ class OrderService {
     return result.statusCode == 200;
   }
 
-  Future<bool> updateStatusDonation(
-      int idDonation, bool status, bool isCencal, bool isCompany) async {
-    var result = await _dio.post(
-        '/api/Donation/UpdateStutasDonation/$idDonation',
-        data: {"status": status, "isCompany": isCompany, "isCencal": isCencal});
-    print('----------------Done Update Status--------------------------');
+  Future<bool> updateStatusDonation(int idDonation, bool status, bool isCencal,
+      bool isCompany, String commint) async {
+    var result = await _dio
+        .post('/api/Donation/UpdateStutasDonation/$idDonation', data: {
+      "status": status,
+      "isCompany": isCompany,
+      "isCencal": isCencal,
+      "commint": commint
+    });
+    print(
+        '----------------Done Update Status with $idDonation status $status isCencal $isCencal--------------------------');
     return result.statusCode == 200;
   }
 

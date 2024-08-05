@@ -107,9 +107,11 @@ class AuthService {
 
   Future<List<CompanyProduct>> getDataBasket() async {
     if (!stroge.containsKey(key)) return [];
-    final data = (json.decode(stroge.getData(key)!) as List<dynamic>)
-        .map<CompanyProduct>((item) => CompanyProduct.fromJson(item))
-        .toList();
+    final data = stroge.getData(key) == null
+        ? <CompanyProduct>[]
+        : (json.decode(stroge.getData(key)!) as List<dynamic>)
+            .map<CompanyProduct>((item) => CompanyProduct.fromJson(item))
+            .toList();
     return data;
   }
 

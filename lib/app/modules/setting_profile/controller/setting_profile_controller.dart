@@ -58,6 +58,10 @@ class SettingProfileController extends GetxController {
     } else {
       Get.updateLocale(Locale('en', 'EN'));
     }
+    if (auth.stroge.containsKey('Local')) {
+      auth.stroge.deleteDataByKey('Local');
+    }
+    auth.stroge.saveData('Local', index == 0 ? 'ar' : 'en');
   }
 
   @override
@@ -72,9 +76,12 @@ class SettingProfileController extends GetxController {
   }
 
   Future<void> getPayMethod() async {
-    var id = (auth.getDataFromStorage() as Company).id!;
-    final result = await PayMethodRepositry().getAllMethod(id);
-    pays.assignAll(result);
+    if (auth.getTypeEnum() == Auth.comapny) {
+      var id = (auth.getDataFromStorage() as Company).id!;
+      final result = await PayMethodRepositry().getAllMethod(id);
+      pays.assignAll(result);
+    }
+    getAmount();
   }
 
   void getAmount() {
@@ -110,7 +117,11 @@ class SettingProfileController extends GetxController {
 
   Future<void> getLastOrderCharity() async {
     final result = await OrderService().getAllCompanyForCharity();
-    companyCharityWith.assignAll(result);
+    for (var e in result) {
+      if (!companyCharityWith.any((element) => element.id == e.id)) {
+        companyCharityWith.add(e);
+      }
+    }
   }
 
   Future<void> getOrderDetailsForCompany() async {

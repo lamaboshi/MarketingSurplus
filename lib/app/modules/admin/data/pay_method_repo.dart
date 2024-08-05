@@ -20,6 +20,13 @@ class PayMethodRepositry extends IPayMethodRepositry {
     return result.statusCode == 200;
   }
 
+  Future<bool> acceptMethod(int id, bool accept) async {
+    var result =
+        await _dio.post('/api/PayMethod/AcceptMethod/$id?accept=$accept');
+    print('-------------------Done Accept------------------');
+    return result.statusCode == 200;
+  }
+
   @override
   Future<List<CompanyMethods>> getAllMethod(int companyId) async {
     var result = await _dio.get('/api/PayMethod/GetPayMethods/$companyId');

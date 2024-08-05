@@ -41,10 +41,6 @@ class OrderTypeView extends GetView<SettingProfileController> {
                                 color: Colors.cyan,
                               ),
                               title: Text(element.name ?? ""),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {},
-                              ),
                             ))
                         .toList()),
               ),

@@ -162,6 +162,9 @@ class CompanyView extends GetView<CompanyController> {
                                                                 .value
                                                                 .subscription!
                                                                 .id!);
+                                                        Get.find<
+                                                                HomeController>()
+                                                            .onInit();
                                                         Overlayment
                                                             .dismissAll();
                                                         Get.back();
@@ -194,11 +197,15 @@ class CompanyView extends GetView<CompanyController> {
                                                         e.description ?? ''),
                                                     trailing: IconButton(
                                                       icon: Icon(Icons.delete),
-                                                      onPressed: () {
-                                                        controller
+                                                      onPressed: () async {
+                                                        await controller
                                                             .deleteRate(e.id!);
+                                                        Get.find<
+                                                                HomeController>()
+                                                            .onInit();
                                                         Overlayment
                                                             .dismissAll();
+
                                                         Get.back();
                                                       },
                                                     ),
@@ -296,6 +303,11 @@ class CompanyView extends GetView<CompanyController> {
                                         children: controller.products
                                             .map((element) =>
                                                 SingleItem(element, false, () {
+                                                  element.company = controller
+                                                      .dto
+                                                      .value
+                                                      .companyProduct!
+                                                      .company!;
                                                   controller
                                                       .addToBasket(element);
                                                 }, () {}, () {},

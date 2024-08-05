@@ -41,7 +41,7 @@ class Charity {
     onlineImage = json['onlineImage'];
     password = json['password'];
     goals = json['goals'];
-    isAccept = json['isAccept'];
+    isAccept = json['isAccept'] ?? false;
     image = json['image'] == null
         ? null
         : Uint8List.fromList(List<int>.from(json['image']!));
@@ -59,6 +59,7 @@ class Charity {
     json['goals'] = goals;
     json['address'] = address;
     json['targetGroup'] = targetGroup;
+    json['isAccept'] = isAccept ?? false;
     json['onlineImage'] = onlineImage;
     json['password'] = password;
     json['associationLicense'] = associationLicense;

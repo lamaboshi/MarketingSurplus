@@ -26,7 +26,7 @@ class WorkWayPage extends GetView<SettingProfileController> {
               width: 10,
             ),
             Text(
-              'Clout',
+              'clean-title'.tr,
               style: TextStyle(
                   color: Colors.purple.shade200,
                   fontWeight: FontWeight.bold,

@@ -58,6 +58,12 @@ class CompanyRepository extends ICompanyDataRepository {
     return list;
   }
 
+  Future<bool> acceptCompany(int id, bool accept) async {
+    var result =
+        await _dio.post('/api/Company/AcceptCompany/$id?accept=$accept');
+    return result.statusCode == 200;
+  }
+
   @override
   Future<bool> addProduct(SaveProduct product) async {
     final auth = Get.find<AuthService>();

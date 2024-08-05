@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/product_donation.dart';
 import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
+import 'package:marketing_surplus/shared/date_extation.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/widgets/empty_screen.dart';
+import '../../../../shared/widgets/textfield_widget.dart';
 import 'last_order_charity_details.dart';
 
 class LastOrderCharity extends GetView<BillsController> {
@@ -12,32 +14,34 @@ class LastOrderCharity extends GetView<BillsController> {
   const LastOrderCharity({this.isOld = false, super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Any Item Has Accpetd You should Connaction With Company For all Details',
-            style: TextStyle(color: Colors.grey, fontSize: 15),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Any Item Has Accpetd You should Connaction With Company For all Details',
+              style: TextStyle(color: Colors.grey, fontSize: 15),
+            ),
           ),
-        ),
-        Obx(() => controller.lastOrderCharity.isEmpty
-            ? EmptyOrder()
-            : Obx(
-                () => SingleChildScrollView(
-                  child: Column(
-                    children: isOld!
-                        ? controller.lastOrderCharity
-                            .where((p0) => p0.isAccept! || p0.isCencal!)
-                            .map((e) => getWidget(e))
-                            .toList()
-                        : controller.lastOrderCharity
-                            .map((element) => getWidget(element))
-                            .toList(),
+          Obx(() => controller.lastOrderCharity.isEmpty
+              ? EmptyOrder()
+              : Obx(
+                  () => SingleChildScrollView(
+                    child: Column(
+                      children: isOld!
+                          ? controller.lastOrderCharity
+                              .where((p0) => p0.isAccept! || p0.isCencal!)
+                              .map((e) => getWidget(e))
+                              .toList()
+                          : controller.lastOrderCharity
+                              .map((element) => getWidget(element))
+                              .toList(),
+                    ),
                   ),
-                ),
-              )),
-      ],
+                )),
+        ],
+      ),
     );
   }
 
@@ -65,11 +69,14 @@ class LastOrderCharity extends GetView<BillsController> {
                           children: [
                             InkWell(
                               onTap: () async {
+                                var company = element.companyProduct!.company!;
                                 await controller.updateDonation(
                                     element.donation!.id!,
                                     true,
                                     false,
-                                    element.isCompany!);
+                                    element.isCompany!,
+                                    company,
+                                    element.id!);
                               },
                               child: Chip(
                                   padding: EdgeInsets.zero,
@@ -88,11 +95,48 @@ class LastOrderCharity extends GetView<BillsController> {
                             ),
                             InkWell(
                               onTap: () async {
-                                await controller.updateDonation(
-                                    element.donation!.id!,
-                                    false,
-                                    true,
-                                    element.isCompany!);
+                                Overlayment.show(OverDialog(
+                                    child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Why You Didn\'t Want to Accept',
+                                        style: TextStyle(
+                                            color: Colors.purple.shade200),
+                                      ),
+                                    ),
+                                    TextFieldWidget(
+                                      icon: Icons.adjust_sharp,
+                                      onChanged: (value) {
+                                        controller.notAccept.value = value;
+                                      },
+                                      textInputType: TextInputType.emailAddress,
+                                      label: 'Not Accept reason'.tr,
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    FloatingActionButton.extended(
+                                        backgroundColor: Colors.purple.shade200,
+                                        onPressed: () async {
+                                          var company =
+                                              element.companyProduct!.company!;
+                                          await controller.updateDonation(
+                                              element.donation!.id!,
+                                              false,
+                                              true,
+                                              element.isCompany!,
+                                              company,
+                                              element.id!);
+                                        },
+                                        label: Text(
+                                          'Done',
+                                          style: TextStyle(color: Colors.white),
+                                        ))
+                                  ],
+                                )));
                               },
                               child: Chip(
                                   padding: EdgeInsets.zero,
@@ -148,16 +192,16 @@ class LastOrderCharity extends GetView<BillsController> {
                 ),
                 Row(
                   children: [
-                    const Text('Price Pay :'),
+                    Text('CreatedAt :'.tr),
                     Text(
-                      element.donation!.pricePay != null
-                          ? element.donation!.pricePay.toString()
+                      element.donation!.createdAt != null
+                          ? getFormattedDate(element.donation!.createdAt)
                           : '',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
-                Text(getType(element.donation!.orderTypeId ?? 0))
+                Text(getType(element.donation!.orderTypeId ?? 0)),
               ],
             ),
           ),

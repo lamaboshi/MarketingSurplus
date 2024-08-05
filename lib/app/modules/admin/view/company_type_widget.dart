@@ -23,7 +23,7 @@ class CompanyTypeWidget extends GetView<AdminController> {
                   child: Row(
                     children: [
                       Text(
-                        'Sort By :',
+                        'sort-title'.tr,
                         style: TextStyle(color: Colors.purple.shade200),
                       ),
                       const SizedBox(

@@ -24,7 +24,7 @@ class MenView extends GetView<con.MenuController> {
       body: Container(
         color: Colors.grey.shade200,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
           child: Column(
             children: [
               Expanded(

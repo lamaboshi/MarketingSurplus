@@ -19,67 +19,7 @@ class PayMethodWidget extends GetView<AdminController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                IconButton(
-                  onPressed: () {
-                    Overlayment.show(
-                      OverDialog(
-                        width: 250,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'addpay-title'.tr,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.purple.shade200),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFieldWidget(
-                                  onChanged: (value) {
-                                    controller.pay.value.payMethod!.name =
-                                        value;
-                                  },
-                                  textInputType: TextInputType.text,
-                                  label: 'namepay-title'.tr,
-                                ),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    //  await controller.addMethod();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.purple.shade200,
-                                      shape: const StadiumBorder()),
-                                  child: SizedBox(
-                                    width: 150,
-                                    height: 30,
-                                    child: Center(
-                                      child: Text(
-                                        'save-title'.tr,
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 19),
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.add),
-                  color: Colors.purple.shade200,
-                )
+                const SizedBox(),
               ],
             ),
             Obx(() => SizedBox(
@@ -115,6 +55,10 @@ class PayMethodWidget extends GetView<AdminController> {
                   fontWeight: FontWeight.bold, color: Colors.purple))),
       DataColumn(
           label: Text('delete-title'.tr,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.purple))),
+      DataColumn(
+          label: Text('Accept'.tr,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.purple))),
     ]);
@@ -192,6 +136,19 @@ class PayMethodWidget extends GetView<AdminController> {
                 await controller.deleteMethod(element.id!);
               },
               icon: const Icon(Icons.delete, color: Colors.red),
+            )),
+            DataCell(IconButton(
+              onPressed: () async {
+                if (!element.payMethod!.isAccept!) {
+                  controller.acceptMethod(element.payMethodId!, true);
+                }
+              },
+              icon: Icon(
+                element.payMethod!.isAccept ?? false
+                    ? Icons.done_outline_rounded
+                    : Icons.circle_outlined,
+                color: Colors.blue,
+              ),
             )),
           ]))
       .toList();

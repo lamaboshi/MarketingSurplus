@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/modules/setting_profile/controller/setting_profile_controller.dart';
 import 'package:marketing_surplus/shared/widgets/empty_screen.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../../../../../shared/service/auth_service.dart';
 
@@ -46,6 +47,14 @@ class OrderBillsWidget extends GetView<SettingProfileController> {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(25),
+                        child: IconButton(
+                            onPressed: () {
+                              Overlayment.dismissLast();
+                            },
+                            icon: Icon(Icons.arrow_back)),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(

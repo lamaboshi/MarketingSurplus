@@ -37,14 +37,6 @@ class OrderView extends GetView<OrderController> {
               key: controller.keyForm,
               child: Column(
                 children: [
-                  // TextFieldWidget(
-                  //   validator: controller.forceValue,
-                  //   onChanged: (String value) {
-                  //     controller.order.value.descripation = value;
-                  //   },
-                  //   textInputType: TextInputType.text,
-                  //   label: 'orderdes-title'.tr,
-                  // ),
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
@@ -108,6 +100,9 @@ class OrderView extends GetView<OrderController> {
                       onChanged: (newValue) {
                         controller.order.value.isDelivery = newValue;
                         controller.selectedArea.value = 5;
+                        if (newValue == false) {
+                          controller.getData();
+                        }
                         controller.order.refresh();
                       },
                       controlAffinity: ListTileControlAffinity.trailing,
@@ -122,10 +117,17 @@ class OrderView extends GetView<OrderController> {
                                   .map((e) => Padding(
                                         padding: const EdgeInsets.all(5),
                                         child: TextButton(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               controller.selectedArea.value =
                                                   controller.colorWay
                                                       .indexOf(e);
+                                              await controller.getData();
+                                              controller.totalPrice.value =
+                                                  controller.totalPrice.value +
+                                                      controller.costs[
+                                                          controller
+                                                              .selectedArea
+                                                              .value];
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor: controller

@@ -8,7 +8,9 @@ import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/auth_service.dart';
 
+import '../../../../shared/service/notification_service.dart';
 import '../../../data/model/company_product.dart';
+import '../../../data/model/notification.dart' as n;
 import '../../../data/model/company_product_dto.dart';
 import '../../../data/model/company_type_model.dart';
 import '../../../data/model/product.dart';
@@ -171,6 +173,16 @@ class MenuController extends GetxController {
                     '----------------last Status $lastStatus -----------------');
                 print('----------------New Status $newId -----------------');
                 await OrderService().updateStatusOrder(order.order!.id!, newId);
+
+                var notif = n.Notification(
+                    createdAt: DateTime.now(),
+                    type: 'Company Update',
+                    isRead: false,
+                    message:
+                        'Company Update Order Name ${order.order!.name} for User: id${order.order!.user!.id} name${order.order!.user!.name} to $newS',
+                    orderProductId: order.id);
+                await NotificationService().addNotification(notif);
+
                 await getPosts();
                 Overlayment.dismissLast();
               }

@@ -20,7 +20,7 @@ class DetailsProduct extends GetView<BillsController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Choose More Details',
+            'choos-detail'.tr,
             style: TextStyle(color: Colors.purple.shade200, fontSize: 18),
           ),
           typeId == 4
@@ -165,7 +165,7 @@ class DetailsProduct extends GetView<BillsController> {
                   height: Get.height / 3,
                   child: Center(
                       child: Text(
-                    'Done'.tr,
+                    'done'.tr,
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ))))
         ],

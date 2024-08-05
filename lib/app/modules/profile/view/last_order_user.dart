@@ -60,17 +60,34 @@ class LastOrderUser extends GetView<ProfileController> {
               const SizedBox(
                 width: 5,
               ),
-              Text(element.order!.name ?? ''),
+              Text(
+                element.order!.name ?? '',
+                style: TextStyle(color: Colors.purple),
+              ),
             ],
           ),
           trailing: Text(
-            element.order!.price != null ? element.order!.price.toString() : '',
+            element.totalPrice.toString(),
             style: const TextStyle(fontSize: 16),
           ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Text('Product :${element.companyProduct!.product!.name}'.tr),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Flexible(
+                    child: Text(
+                      element.order!.descripation ?? '',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   Text('orderdes-title'.tr),

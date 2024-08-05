@@ -5,4 +5,5 @@ abstract class IUsersDataRepository {
   Future<bool> regierterUser(UserModel object);
   Future<bool> deleteUser(int id);
   Future<bool> updateUser(UserModel object);
+  Future<bool> acceptUser(int id, bool accept);
 }

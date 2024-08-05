@@ -12,6 +12,7 @@ class ProductDonation {
   bool? isAccept;
   bool? isCompany;
   bool? isCencal;
+  String? commintCencal;
   int? amount;
   ProductDonation(
       {this.companyProduct,
@@ -19,6 +20,7 @@ class ProductDonation {
       this.isAccept,
       this.isCencal,
       this.isCompany,
+      this.commintCencal,
       this.donationId,
       this.donation,
       this.amount,
@@ -28,6 +30,7 @@ class ProductDonation {
     amount = json['amount'] == null ? 0 : int.parse(json['amount'].toString());
     isAccept = json['isAccept'];
     isCompany = json['isCompany'];
+    commintCencal = json['commintCencal'] ?? '';
     isCencal = json['isCencal'];
     totalPrice = json['totalPrice'] == null
         ? 1
@@ -44,6 +47,7 @@ class ProductDonation {
     json['companyProduct'] = companyProduct?.toJson();
     json['companyProductId'] = companyProductId;
     json['donationId'] = donationId;
+    json['commintCencal'] = commintCencal ?? '';
     json['isCencal'] = isCencal ?? false;
     json['isCompany'] = isCompany ?? false;
     json['isAccept'] = isAccept ?? false;

@@ -234,7 +234,7 @@
     "last-order-charity": " Order Charity",
     "all-donation-company": "all Donation Company",
     "allCharity": "all Charity",
-    "order-type": "order-type",
+    "order-type": "Order Type",
     "charity-goals": "charity-goals",
     "user-sub": "All users Subscraption",
     "sign-user": "SignUp As User",
@@ -247,7 +247,16 @@
     "all-status": "Order Status",
     "new-price": "New Price",
     "two-order": "You Cannot Make Order from many Company",
-    "company-exp-pro": "Expired products"
+    "company-exp-pro": "Expired products",
+    "Accept": "Accept",
+    "Search": "Search",
+    "charity-accept": "Charity Accept",
+    "choos-detail": "Choose More Details",
+    "comp-deal": "Company Deal With",
+    "account-value": "Your Account Value",
+    "deposit-process": "Deposit Process",
+    "dep-title": "The withdrawal will be from your bank account to be deposited into your account here.",
+    "bank-num": "Bank account number"
   },
   "ar_AR": {
     "title": "تطبيق رائع",
@@ -497,6 +506,15 @@
     "all-status": "حالات الطلب",
     "new-price": "السعر الجديد",
     "two-order": "لا يمكنك الطلب من اكثر من شركة",
-    "company-exp-pro": "منتجات منتهية الصلاحية"
+    "company-exp-pro": "منتجات منتهية الصلاحية",
+    "Accept": "قبول",
+    "Search": "بحث",
+    "charity-accept": "قبول الجمعية",
+    "choos-detail": "اختر المزيد من التفاصيل",
+    "comp-deal": "الشركات تم التعامل معها",
+    "account-value": "قيمة حسابك",
+    "deposit-process": "عملية الايداع",
+    "dep-title": "سيتم السحب من حسابك البنكي ليتم إيداعه في حسابك هنا.",
+    "bank-num": "رقم الحساب"
   }
 }

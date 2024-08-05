@@ -9,9 +9,11 @@ import 'package:marketing_surplus/shared/service/auth_service.dart';
 import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
 
+import '../../../../shared/service/notification_service.dart';
 import '../../../../shared/widgets/empty_screen.dart';
 import '../../../../shared/widgets/single_item_product.dart';
 import '../../../data/model/company_product.dart';
+import '../../../data/model/notification_charity.dart';
 import '../../../data/model/order_type.dart';
 import '../../admin/data/charity_repo.dart';
 
@@ -22,9 +24,12 @@ class CharityController extends GetxController {
   final allCharity = <Charity>[].obs;
   final orderTypes = <OrderType>[].obs;
   final lastOrderCharity = <Donation>[].obs;
+  final lastOrderCharityJustCharity = <Donation>[].obs;
   final products = <CompanyProduct>[].obs;
   final toPayProduct = <CompanyProduct>[].obs;
   final isLoading = false.obs;
+  final notAccept = ''.obs;
+  final isProcces = false.obs;
   @override
   void onInit() {
     getData();
@@ -48,11 +53,31 @@ class CharityController extends GetxController {
     }
   }
 
-  Future<void> updateDonation(
-      int id, bool status, bool isCencal, bool isCompany) async {
+  Future<void> updateDonation(int id, bool status, bool isCencal,
+      bool isCompany, String type, Charity charity, int proId) async {
     var result = await OrderService()
-        .updateStatusDonation(id, status, isCencal, isCompany);
+        .updateStatusDonation(id, status, isCencal, isCompany, notAccept.value);
     if (result) {
+      if (status && !isCencal) {
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Company Accept',
+            isRead: false,
+            message:
+                'Company Accept $type for Charity: id${charity.id} name${charity.name}',
+            productDonationId: proId);
+        await NotificationService().addNotificationCahrity(notif);
+      } else if (!status && isCencal) {
+        print('Hello for cancel');
+        var notif = NotificationCharity(
+            createdAt: DateTime.now(),
+            type: 'Company Not Accept',
+            isRead: false,
+            message:
+                'Company Not Accept $type for Charity: id${charity.id} name${charity.name} for ${notAccept.value}',
+            productDonationId: proId);
+        await NotificationService().addNotificationCahrity(notif);
+      }
       Overlayment.dismissAll();
       getData();
     }
@@ -90,18 +115,24 @@ class CharityController extends GetxController {
                     ),
                     Obx(() => toPayProduct.isEmpty
                         ? SizedBox.shrink()
-                        : Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: ElevatedButton(
-                                  onPressed: () async {
-                                    await saveOrderDonation(charity.id!);
-                                    Overlayment.dismissLast();
-                                  },
-                                  child: Text('Donation')),
-                            ),
-                          )),
+                        : isProcces.value
+                            ? Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.purple.shade200)),
+                                      onPressed: () async {
+                                        await saveOrderDonation(charity);
+                                        Overlayment.dismissLast();
+                                      },
+                                      child: Text('Donation')),
+                                ),
+                              )
+                            : SizedBox.shrink()),
                     Obx(() => Column(
                         children: toPayProduct
                             .map((element) => Padding(
@@ -148,11 +179,12 @@ class CharityController extends GetxController {
   }
 
   Future<void> saveOrderDonation(
-    int charityId,
+    Charity charityId,
   ) async {
+    isProcces.value = true;
     var productDonation = <ProductDonation>[];
     var donation = Donation(
-      charityId: charityId,
+      charityId: charityId.id,
       createdAt: DateTime.now(),
       orderTypeId: 2,
     );
@@ -165,7 +197,18 @@ class CharityController extends GetxController {
           amount: element.amountApp,
           totalPrice: total));
     }
-    await OrderService().saveDonation(donation, productDonation);
+    var result = await OrderService().saveDonation(donation, productDonation);
+    isProcces.value = false;
+    for (var element in result) {
+      var notif = NotificationCharity(
+          createdAt: DateTime.now(),
+          type: 'Company Create Donation',
+          isRead: false,
+          message:
+              'Company Create Donation for Charity: id${charityId.id!} name${charityId.name} ',
+          productDonationId: element);
+      await NotificationService().addNotificationCahrity(notif);
+    }
     toPayProduct.clear();
   }
 
@@ -186,8 +229,17 @@ class CharityController extends GetxController {
   }
 
   Future<void> getAllDonation(int id) async {
+    product.clear();
     var data = await OrderService().getAllDonation(idCh: id);
-    product.assignAll(data);
+    for (var element in data) {
+      print('999999999999999999 ${element.id}');
+    }
+    var items =
+        data.where((p0) => p0.companyProduct!.company!.id! == getCompanyId());
+    for (var element in items) {
+      print('888888888888888888888 ${element.id}');
+    }
+    product.assignAll(items);
   }
 
   Future<void> getCharities() async {
@@ -205,6 +257,12 @@ class CharityController extends GetxController {
     final result = await OrderService().getAllDonationForCompany(id);
 
     lastOrderCharity.assignAll(result);
+    for (var e in result) {
+      if (!lastOrderCharityJustCharity
+          .any((element) => element.charity!.id == e.charity!.id)) {
+        lastOrderCharityJustCharity.add(e);
+      }
+    }
     print(
         '-------------------getAllDonationForCompany with ${result.length}--------------------');
     isLoading.value = false;

@@ -45,6 +45,11 @@ class MainCompanyPage extends GetView<HomeController> {
                                           .toInt())
                                       .withOpacity(0.5),
                                   child: ListTile(
+                                    subtitle: Text(
+                                      element.subscription!.user!.name ?? '',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
                                     title: Row(
                                       children: [
                                         Row(
@@ -74,15 +79,6 @@ class MainCompanyPage extends GetView<HomeController> {
                                         ),
                                         Text(
                                           element.rate!.description ?? '',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          element.subscription!.user!.name ??
-                                              '',
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
@@ -223,7 +219,16 @@ class MainCompanyPage extends GetView<HomeController> {
                                 textInputType: TextInputType.number,
                               ),
                               TextFieldWidget(
-                                validator: controller.forceValue,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'requird';
+                                  } else {
+                                    if (int.parse(value) < 1) {
+                                      return 'Entre Real Value';
+                                    }
+                                  }
+                                  return null;
+                                },
                                 label: 'amoutth-title'.tr,
                                 onChanged: (value) {
                                   controller.amount.value = int.parse(value);

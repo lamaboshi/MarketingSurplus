@@ -43,6 +43,12 @@ class LastOrderCharityDetails extends GetView<ProfileController> {
                     ))
               ],
             ),
+            if (productDonation!.donation!.orderTypeId != null)
+              getRow('Order Type',
+                  getType(productDonation!.donation!.orderTypeId!)),
+            if (productDonation!.donation!.createdAt != null)
+              getRow('Created At',
+                  productDonation!.donation!.createdAt.toString()),
             if (productDonation!.companyProduct!.product != null)
               getRow('namepro-title',
                   productDonation!.companyProduct!.product!.name ?? ''),
@@ -98,52 +104,72 @@ class LastOrderCharityDetails extends GetView<ProfileController> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Wrap(children: [
-                        Chip(
-                            label: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            'from Company ${productDonation!.isCompany!}',
-                            style: TextStyle(color: Colors.purple.shade200),
-                          ),
-                        )),
-                        Chip(
-                            label: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            'isAccept ${productDonation!.isAccept!}',
-                            style: TextStyle(color: Colors.purple.shade200),
-                          ),
-                        )),
-                        Chip(
-                            label: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            'isCencal ${productDonation!.isCencal!}',
-                            style: TextStyle(color: Colors.purple.shade200),
-                          ),
-                        )),
-                        Chip(
-                            label: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            'isWaiting ${(!productDonation!.isCencal! && !productDonation!.isAccept!)}',
-                            style: TextStyle(color: Colors.purple.shade200),
-                          ),
-                        ))
+                        if (productDonation!.isCompany!)
+                          Chip(
+                              label: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'from Company ${productDonation!.isCompany!}',
+                              style: TextStyle(color: Colors.purple.shade200),
+                            ),
+                          )),
+                        if (productDonation!.isAccept!)
+                          Chip(
+                              label: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'isAccept ${productDonation!.isAccept!}',
+                              style: TextStyle(color: Colors.purple.shade200),
+                            ),
+                          )),
+                        if (productDonation!.isCencal!)
+                          Chip(
+                              label: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'isCencal ${productDonation!.isCencal!}',
+                              style: TextStyle(color: Colors.purple.shade200),
+                            ),
+                          )),
+                        if (!productDonation!.isCencal! &&
+                            !productDonation!.isAccept!)
+                          Chip(
+                              label: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              'isWaiting ${(!productDonation!.isCencal! && !productDonation!.isAccept!)}',
+                              style: TextStyle(color: Colors.purple.shade200),
+                            ),
+                          ))
                       ]),
                     ))
               ],
             ),
+            if (productDonation!.commintCencal != null &&
+                productDonation!.commintCencal!.trim().isNotEmpty)
+              getRow('Cancel Reson', productDonation!.commintCencal!),
             getRow('amount-title', productDonation!.amount.toString()),
             getRow('price-title', productDonation!.totalPrice.toString()),
-            getRow('dontain PayPrice :',
-                productDonation!.donation!.pricePay.toString())
+            if (getPriceDontation() &&
+                productDonation!.donation!.pricePay != null)
+              getRow('dontain PayPrice :',
+                  productDonation!.donation!.pricePay.toString()),
+            if (getPriceDontation() &&
+                productDonation!.donation!.percentage != null)
+              getRow('Percentage :',
+                  ' ${productDonation!.donation!.percentage.toString()}%')
           ],
         ),
       ),
     );
   }
 
+  String getType(int id) =>
+      controller.orderTypes.where((p0) => p0.id == id).first.name ?? '';
+  // 1 for normal
+  //2 for donation
+  //3 for ACh
+  bool getPriceDontation() => productDonation!.donation!.orderTypeId == 3;
   Widget getRow(String title, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -10,6 +10,7 @@ import '../../../data/model/product.dart';
 class ProductController extends GetxController {
   final keyForm = GlobalKey<FormState>();
   final stringPickImage = ''.obs;
+  final errorData = ''.obs;
   final amount = 0.obs;
   final newProduct = Product(
           name: 'test',
@@ -27,8 +28,14 @@ class ProductController extends GetxController {
   }
 
   Future<bool> updateProduct() async {
+    if (stringPickImage.value.trim().isNotEmpty) {
+      newProduct.value.image =
+          Utility.dataFromBase64String(stringPickImage.value);
+    }
+
     var result = await OrderService().updateProduct(newProduct.value);
     if (result) {
+      stringPickImage.value = '';
       Overlayment.dismissLast();
       onInit();
     }

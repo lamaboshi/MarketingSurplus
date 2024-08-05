@@ -76,7 +76,7 @@ class SettingProfileView extends GetView<SettingProfileController> {
                 ? controller.auth.getTypeEnum() == Auth.user
                     ? [
                         'accdea-title'.tr,
-                        'My Acount'.tr,
+                        'account'.tr,
                         'vou-title'.tr,
                         'del-title'.tr
                       ]
@@ -89,7 +89,7 @@ class SettingProfileView extends GetView<SettingProfileController> {
                 : [
                     'accdea-title'.tr,
                     'order-type'.tr,
-                    'Company Deal With'.tr,
+                    'comp-deal'.tr,
                     'del-title'.tr
                   ],
             onTabs: [
