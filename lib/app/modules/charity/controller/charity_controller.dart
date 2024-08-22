@@ -115,24 +115,21 @@ class CharityController extends GetxController {
                     ),
                     Obx(() => toPayProduct.isEmpty
                         ? SizedBox.shrink()
-                        : isProcces.value
-                            ? Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStatePropertyAll(
-                                                  Colors.purple.shade200)),
-                                      onPressed: () async {
-                                        await saveOrderDonation(charity);
-                                        Overlayment.dismissLast();
-                                      },
-                                      child: Text('Donation')),
-                                ),
-                              )
-                            : SizedBox.shrink()),
+                        : Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Colors.purple.shade200)),
+                                  onPressed: () async {
+                                    await saveOrderDonation(charity);
+                                    Overlayment.dismissLast();
+                                  },
+                                  child: Text('Donation')),
+                            ),
+                          )),
                     Obx(() => Column(
                         children: toPayProduct
                             .map((element) => Padding(

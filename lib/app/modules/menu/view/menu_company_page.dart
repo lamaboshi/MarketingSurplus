@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/home/controller/home_controller.dart';
@@ -19,6 +20,14 @@ class MenuCompanyPage extends GetView<co.MenuController> {
         ? Center(child: CircularProgressIndicator())
         : Column(
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    onPressed: () {
+                      controller.onInit();
+                    },
+                    icon: Icon(Icons.refresh)),
+              ),
               SectionWidget(
                 flex: 1,
                 icon: Icons.new_label,

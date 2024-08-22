@@ -16,18 +16,18 @@ class ProfileDetails extends GetView<SettingProfileController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        body: Column(
-          children: [
-            Card(
-                elevation: 5,
-                margin: EdgeInsets.zero,
-                color: Colors.purple.shade100,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(60),
-                  bottomRight: Radius.circular(60),
-                )),
-                child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Card(
+                  elevation: 5,
+                  margin: EdgeInsets.zero,
+                  color: Colors.purple.shade100,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(60),
+                    bottomRight: Radius.circular(60),
+                  )),
                   child: SizedBox(
                     height: 120,
                     width: Get.width,
@@ -74,28 +74,28 @@ class ProfileDetails extends GetView<SettingProfileController> {
                                 color: Colors.white,
                               ))
                         ]),
+                  )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => controller.authType.value == Auth.user
+                            ? const UserProfileDetails()
+                            : controller.authType.value == Auth.comapny
+                                ? const ProfileDetailsCompany()
+                                : controller.authType.value == Auth.charity
+                                    ? const ProfileDetailsChertiy()
+                                    : const SizedBox(),
+                      )
+                    ],
                   ),
-                )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(
-                      () => controller.authType.value == Auth.user
-                          ? const UserProfileDetails()
-                          : controller.authType.value == Auth.comapny
-                              ? const ProfileDetailsCompany()
-                              : controller.authType.value == Auth.charity
-                                  ? const ProfileDetailsChertiy()
-                                  : const SizedBox(),
-                    )
-                  ],
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: controller.isNotEdit.value
@@ -127,26 +127,22 @@ class UserProfileDetails extends GetView<SettingProfileController> {
       () => SingleChildScrollView(
         child: Column(
           children: [
-            Positioned(
-              bottom: 0,
-              right: Get.width / 2.5,
-              child: Card(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.purple.shade100, width: 4),
-                    borderRadius: const BorderRadius.all(Radius.circular(80))),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: controller.stringPickImage.value.isNotEmpty
-                        ? Utility.imageFromBase64String(
-                            controller.stringPickImage.value, null, null)
-                        : Utility.getImage(
-                            base64StringPh: controller.user.value.image,
-                            link: null),
-                  ),
+            Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.purple.shade100, width: 4),
+                  borderRadius: const BorderRadius.all(Radius.circular(80))),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: controller.stringPickImage.value.isNotEmpty
+                      ? Utility.imageFromBase64String(
+                          controller.stringPickImage.value, null, null)
+                      : Utility.getImage(
+                          base64StringPh: controller.user.value.image,
+                          link: null),
                 ),
               ),
             ),

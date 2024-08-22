@@ -50,6 +50,7 @@ class SettingProfileController extends GetxController {
   final stringPickImage = ''.obs;
   final listTextTabToggle = ["عربي", "English"];
   RxInt tabTextIndexSelected = 0.obs;
+
   final isLoading = false.obs;
   void toggle(int index) {
     tabTextIndexSelected.value = index;

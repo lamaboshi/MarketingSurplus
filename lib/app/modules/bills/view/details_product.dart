@@ -77,22 +77,46 @@ class DetailsProduct extends GetView<BillsController> {
                                                               controller.food1
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.food1P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             } else if (e.keys
                                                                     .first ==
                                                                 'Pickles') {
                                                               controller.food2
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.food2P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             } else if (e.keys
                                                                     .first ==
                                                                 'Salt') {
                                                               controller.food3
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.food3P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             } else {
                                                               controller.food4
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.food4P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             }
                                                           } else if (typeId ==
                                                               3) {
@@ -101,16 +125,34 @@ class DetailsProduct extends GetView<BillsController> {
                                                               controller.cloth1
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.cloth1P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             } else if (e.keys
                                                                     .first ==
                                                                 'Color') {
                                                               controller.cloth2
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.cloth2P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             } else {
                                                               controller.cloth3
                                                                       .value =
                                                                   r.keys.first;
+                                                              controller.cloth3P
+                                                                      .value =
+                                                                  int.parse(r
+                                                                      .values
+                                                                      .first
+                                                                      .toString());
                                                             }
                                                           }
                                                         },
@@ -144,7 +186,14 @@ class DetailsProduct extends GetView<BillsController> {
                 if (typeId == 4) {
                   controller.descr.assign(id!,
                       'Ketchup :${controller.food1.value},Pickles :${controller.food2.value}, Salt :${controller.food3.value} French fries :${controller.food4.value}');
-                  ;
+                  controller.totalPriceDetails.value = controller.food1P.value +
+                      controller.food2P.value +
+                      controller.food3P.value +
+                      controller.food4P.value;
+                  controller.food1P.value = 0;
+                  controller.food2P.value = 0;
+                  controller.food3P.value = 0;
+                  controller.food4P.value = 0;
                   controller.food1.value = '';
                   controller.food2.value = '';
                   controller.food3.value = '';
@@ -152,6 +201,14 @@ class DetailsProduct extends GetView<BillsController> {
                 } else if (typeId == 3) {
                   controller.descr.assign(id!,
                       'Size :${controller.cloth1.value},Color :${controller.cloth2.value}, Fabric Type :${controller.cloth3.value}');
+
+                  controller.totalPriceDetails.value =
+                      controller.cloth1P.value +
+                          controller.cloth2P.value +
+                          controller.cloth3P.value;
+                  controller.cloth1P.value = 0;
+                  controller.cloth2P.value = 0;
+                  controller.cloth3P.value = 0;
                   controller.food1.value = '';
                   controller.cloth1.value = '';
                   controller.cloth2.value = '';

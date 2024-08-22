@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -71,17 +72,15 @@ class HomeController extends GetxController {
   final amount = 0.obs;
   final companyRepo = CompanyRepository();
   final select = ['drop-all', 'drop-sub'];
-
+  final toLogIn = false.obs;
   @override
   void onInit() {
     selectType.value = CompanyTypeModel();
     getData();
-    Future.delayed(const Duration(milliseconds: 500), () async {
+    getIsAccept();
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
       await getNotification();
     });
-    // Future.delayed(const Duration(seconds: 3), () async {
-    //   await logInToAdminAccept();
-    // });
 
     getPosts();
     getAllCompanyType();
@@ -89,6 +88,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getNotification() async {
+    if (!auth.isAuth()) return;
     if (auth.getTypeEnum() == Auth.user) {
       var data = await NotificationService().getNotifications();
       allUserNotification.assignAll(data);
@@ -207,7 +207,6 @@ class HomeController extends GetxController {
       isloading.value = false;
       return;
     }
-
     if (auth.getTypeEnum() == Auth.user) {
       final userId = (auth.getDataFromStorage() as UserModel).id!;
 
@@ -224,7 +223,6 @@ class HomeController extends GetxController {
         sortList(data, isAllData: isAllData);
       }
     }
-
     isloading.value = false;
   }
 
@@ -335,30 +333,31 @@ class HomeController extends GetxController {
   }
 
   bool getIsAccept() {
-    if (auth.getTypeEnum() == Auth.user) {
-      var data = (auth.getDataFromStorage() as UserModel);
-
-      if (data.isAccept!) return true;
-    } else if (auth.getTypeEnum() == Auth.charity) {
-      var data = (auth.getDataFromStorage() as Charity);
-      if (data.isAccept!) return true;
-    } else if (auth.getTypeEnum() == Auth.comapny) {
-      var data = (auth.getDataFromStorage() as Company);
-      if (data.isAccept!) return true;
+    toLogIn.value = false;
+    if (auth.isAuth()) {
+      if (auth.getTypeEnum() == Auth.user) {
+        var data = (auth.getDataFromStorage() as UserModel);
+        toLogIn.value = data.isAccept!;
+      } else if (auth.getTypeEnum() == Auth.charity) {
+        var data = (auth.getDataFromStorage() as Charity);
+        toLogIn.value = data.isAccept!;
+      } else if (auth.getTypeEnum() == Auth.comapny) {
+        var data = (auth.getDataFromStorage() as Company);
+        toLogIn.value = data.isAccept!;
+      }
     } else {
-      if (auth.getDataFromStorage() == null) return true;
+      toLogIn.value = true;
     }
-    return false;
+
+    return toLogIn.value;
   }
 
   Future<void> logInToAdminAccept() async {
     if (!getIsAccept()) {
-      auth.stroge.deleteDataByKey('type');
-      auth.stroge.deleteDataByKey('AuthData');
-
       if (auth.getTypeEnum() == Auth.comapny) {
         var data = (auth.getDataFromStorage() as Company);
         onInit();
+        isNew();
         await auth.logIn(data.email!, data.password!);
       } else if (auth.getTypeEnum() == Auth.charity) {
         var data = (auth.getDataFromStorage() as Charity);

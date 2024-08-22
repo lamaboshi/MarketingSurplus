@@ -31,6 +31,7 @@ class ProfileController extends GetxController {
           newPrice: 100)
       .obs;
   final amount = 0.obs;
+  final hiCompany = ''.obs;
   int randomValue() => rng.nextInt(12);
   final details = <Map>[].obs;
   final value = 0.obs;
@@ -53,6 +54,7 @@ class ProfileController extends GetxController {
     getData();
     getsaveOrder();
     value.value = randomValue();
+    isNew();
     super.onInit();
   }
 
@@ -90,6 +92,14 @@ class ProfileController extends GetxController {
           .where((element) => element.product!.isExpiration == true)
           .toList();
       products.addAll(exparItems);
+    }
+  }
+
+  void isNew() {
+    var isNewData = auth.stroge.containsKey('regierterComp');
+    if (isNewData) {
+      hiCompany.value =
+          'Hello Welcome To -Clout- You should Add your own PayMethods From Settings and Your Product to reach orders from Customer ,there help page to help you  -Welcome Again-';
     }
   }
 

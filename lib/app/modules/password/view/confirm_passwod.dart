@@ -70,6 +70,7 @@ class Confirmpassword extends GetView<PasswordController> {
                         () => Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            validator: controller.validatePassword,
                             keyboardType: TextInputType.text,
                             controller: controller.userPasswordController,
                             obscureText: !controller.passwordVisible.value,
@@ -105,6 +106,7 @@ class Confirmpassword extends GetView<PasswordController> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             keyboardType: TextInputType.text,
+                            validator: controller.validatePassword,
                             controller: controller.userPasswordController1,
                             obscureText: !controller.passwordVisible1.value,
                             onChanged: (value) {

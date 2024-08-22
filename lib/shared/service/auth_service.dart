@@ -73,6 +73,9 @@ class AuthService {
           queryParameters: {"email": email, "password": password});
       print(result.data);
       if (result.statusCode == 200) {
+        stroge.deleteDataByKey('type');
+        stroge.deleteDataByKey('AuthData');
+
         switch (result.data['type']) {
           case 'user':
             var data =
@@ -95,11 +98,32 @@ class AuthService {
         }
       }
     } catch (e) {
-      Overlayment.show(OverWindow.simple(
-          alignment: Alignment.center,
-          yesMessage: null,
-          canCancel: false,
-          message: 'There Error With LogIn Please check Again'));
+      Overlayment.show(OverPanel(
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Error LogIn',
+            style: TextStyle(
+                color: Colors.purple.shade200, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text('There Error With LogIn Please check Again'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () {
+                  Overlayment.dismissLast();
+                },
+                child: Text(
+                  'done'.tr,
+                  style: TextStyle(color: Colors.white),
+                )),
+          )
+        ],
+      )));
     }
 
     return null;

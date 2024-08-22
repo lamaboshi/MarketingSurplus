@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marketing_surplus/app/data/model/company_product.dart';
 import 'package:marketing_surplus/app/data/model/company_product_dto.dart';
@@ -44,8 +45,23 @@ class CompanyController extends GetxController {
   }
 
   Future<void> addToBasket(CompanyProduct product) async {
-    await auth.addToBasket(product);
-    count.value = await getCount();
+    var data = await auth.getDataBasket();
+    if (data.isEmpty ||
+        data.any((element) => element.company!.id == product.company!.id)) {
+      await auth.addToBasket(product);
+      count.value = await getCount();
+    } else {
+      var snackBar = SnackBar(
+          duration: Duration(seconds: 1),
+          content: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Text(
+              'You Cannot Make Order from many Company',
+              style: TextStyle(color: Colors.purple.shade200, fontSize: 18),
+            ),
+          ));
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+    }
   }
 
   Future<void> getAllProduct(int companyId) async {

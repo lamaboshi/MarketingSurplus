@@ -25,14 +25,21 @@ class BillsController extends GetxController {
   final orderStatus = OrderStutas.none.obs;
   final notAccept = ''.obs;
   final descr = {0: ''}.obs;
+  final totalPriceDetails = 0.obs;
   final food1 = ''.obs;
   final food2 = ''.obs;
   final food3 = ''.obs;
   final food4 = ''.obs;
+  final food1P = 0.obs;
+  final food2P = 0.obs;
+  final food3P = 0.obs;
+  final food4P = 0.obs;
   final cloth1 = ''.obs;
   final cloth2 = ''.obs;
   final cloth3 = ''.obs;
-
+  final cloth1P = 0.obs;
+  final cloth2P = 0.obs;
+  final cloth3P = 0.obs;
   @override
   void onInit() {
     getData();
@@ -42,6 +49,7 @@ class BillsController extends GetxController {
 
   Future<void> getOrder() async {
     final result = await OrderDataRepository().getOrderDetails();
+    result.sort((a, b) => a.order!.createdAt!.compareTo(b.order!.createdAt!));
     orderProducts.assignAll(result);
     print('data in Bills ${result.length}');
   }

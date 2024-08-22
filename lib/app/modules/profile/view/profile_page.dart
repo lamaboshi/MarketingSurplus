@@ -68,6 +68,27 @@ class ProfileView extends GetView<ProfileController> {
             )
           : Column(
               children: [
+                Obx(() => controller.hiCompany.value.trim().isNotEmpty
+                    ? Card(
+                        color: Colors.blueAccent,
+                        child: InkWell(
+                          onTap: () {
+                            controller.auth.stroge
+                                .deleteDataByKey('regierterComp');
+                            controller.hiCompany.value = '';
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              controller.hiCompany.value,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink()),
                 SectionWidget(
                   flex: 1,
                   icon: Icons.local_fire_department_rounded,
@@ -116,88 +137,90 @@ class ProfileView extends GetView<ProfileController> {
                                   Overlayment.show(OverDialog(
                                       child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: controller.details
-                                                .map((element) => Column(
-                                                      children: [
-                                                        Wrap(
-                                                          alignment:
-                                                              WrapAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Wrap(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          5),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text('old-price'
-                                                                          .tr),
-                                                                      Text(
-                                                                          ' ${element.entries.first.key}'),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          5),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text('tot-price'
-                                                                          .tr),
-                                                                      Text(
-                                                                          ' ${element.entries.first.value}'),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(5),
-                                                              child: Wrap(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: controller.details
+                                                  .map((element) => Column(
+                                                        children: [
+                                                          Wrap(
+                                                            alignment:
+                                                                WrapAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Wrap(
                                                                 children: [
-                                                                  Text('result'
-                                                                      .tr),
-                                                                  Text(
-                                                                      ' ${(element.entries.first.key - element.entries.first.value)}'),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            5),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Text('old-price'
+                                                                            .tr),
+                                                                        Text(
+                                                                            ' ${element.entries.first.key}'),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            5),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Text('tot-price'
+                                                                            .tr),
+                                                                        Text(
+                                                                            ' ${element.entries.first.value}'),
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Divider(
-                                                          color: Colors.grey,
-                                                        )
-                                                      ],
-                                                    ))
-                                                .toList(),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child: Wrap(
+                                                                  children: [
+                                                                    Text('result'
+                                                                        .tr),
+                                                                    Text(
+                                                                        ' ${(element.entries.first.key - element.entries.first.value)}'),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Divider(
+                                                            color: Colors.grey,
+                                                          )
+                                                        ],
+                                                      ))
+                                                  .toList(),
+                                            ),
                                           ),
-                                        ),
-                                        Divider(
-                                          color: Colors.purple.shade200,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text('all-save'.tr),
-                                            Text(
-                                                ' ${controller.saved.value.toString()}'),
-                                          ],
-                                        )
-                                      ],
+                                          Divider(
+                                            color: Colors.purple.shade200,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text('all-save'.tr),
+                                              Text(
+                                                  ' ${controller.saved.value.toString()}'),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   )));
                                 }),

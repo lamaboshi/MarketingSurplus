@@ -5,6 +5,7 @@ import 'package:marketing_surplus/app/data/model/order_Product.dart';
 import 'package:marketing_surplus/app/modules/profile/controller/profile_controller.dart';
 import 'package:overlayment/overlayment.dart';
 
+import '../../../../shared/date_extation.dart';
 import '../../../../shared/service/order_service.dart';
 import '../../../../shared/widgets/empty_screen.dart';
 import '../../bills/view/order_details_page.dart';
@@ -102,6 +103,21 @@ class LastOrderUser extends GetView<ProfileController> {
                   ),
                 ],
               ),
+              if (element.order!.createdAt != null)
+                Row(
+                  children: [
+                    Text('Created At'.tr),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(
+                      child: Text(
+                        getFormattedDate(element.order!.createdAt),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               const SizedBox(
                 height: 8,
               ),

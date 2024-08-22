@@ -64,7 +64,7 @@ class Charity {
     json['password'] = password;
     json['associationLicense'] = associationLicense;
     json['image'] = image == null ? null : Uint8List.fromList(image!);
-    json['qrCode'] = image == null ? null : Uint8List.fromList(qrCode!);
+    json['qrCode'] = qrCode == null ? null : Uint8List.fromList(qrCode!);
 
     return json;
   }

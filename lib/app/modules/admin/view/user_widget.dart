@@ -122,10 +122,10 @@ class UserWidget extends GetView<AdminController> {
                   fontWeight: FontWeight.bold, color: Colors.purple))))
       .toList()
     ..addAll([
-      DataColumn(
-          label: Text('edit-title'.tr,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.purple))),
+      // DataColumn(
+      //     label: Text('edit-title'.tr,
+      //         style: const TextStyle(
+      //             fontWeight: FontWeight.bold, color: Colors.purple))),
       DataColumn(
           label: Text('delete-title'.tr,
               style: const TextStyle(
@@ -145,15 +145,17 @@ class UserWidget extends GetView<AdminController> {
                 style: const TextStyle(color: Colors.purple))),
             DataCell(Text(element.email.toString(),
                 style: const TextStyle(color: Colors.purple))),
+            // DataCell(IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.edit,
+            //     color: Colors.blueGrey,
+            //   ),
+            // )),
             DataCell(IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.blueGrey,
-              ),
-            )),
-            DataCell(IconButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.deleteUsr(element.id!);
+              },
               icon: const Icon(Icons.delete, color: Colors.red),
             )),
             DataCell(IconButton(

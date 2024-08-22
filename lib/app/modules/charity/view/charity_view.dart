@@ -18,11 +18,18 @@ class CharityView extends GetView<CharityController> {
   const CharityView({super.key});
   @override
   Widget build(BuildContext context) {
-    controller.getData();
     return Obx(() => controller.isLoading.value
         ? const Center(child: CircularProgressIndicator())
         : Column(
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    onPressed: () {
+                      controller.onInit();
+                    },
+                    icon: Icon(Icons.refresh)),
+              ),
               SectionWidget(
                   flex: 1,
                   icon: Icons.local_fire_department_rounded,

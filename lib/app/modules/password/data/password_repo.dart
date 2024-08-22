@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlayment/overlayment.dart';
 
 import '../model/rest_password.dart';
 import 'adapter/password_adapter.dart';
@@ -13,6 +15,25 @@ class PasswordRepository implements IPasswordRepository {
         await _dio.get('/api/Auth/GetEmail', queryParameters: {"email": email});
     if (result.statusCode == 200) {
       return RestPassword.fromJson(result.data as Map<String, dynamic>);
+    } else {
+      Overlayment.show(OverPanel(
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Erorr',
+              style: TextStyle(
+                  color: Colors.purple.shade200, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Un valid Email'),
+          ),
+        ],
+      )));
     }
     return null;
   }

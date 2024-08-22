@@ -99,7 +99,7 @@ class AdminController extends GetxController {
   ];
   final charityColumnSelect = ''.obs;
   final typeColumn = ['ID', 'Type Name', 'Description'];
-  final methodColumn = ['ID', 'Name'];
+  final methodColumn = ['ID', 'Name', 'CompanyID'];
   final orderTypeColumn = ['ID', 'Name'];
   final rateColumn = ['ID', 'Rate Number', 'Description'];
   final typeRsource = Resource.non.obs;
@@ -203,13 +203,30 @@ class AdminController extends GetxController {
     await getAllcharitys();
   }
 
+  Future<void> deleteCharity(
+    int id,
+  ) async {
+    await CharityRepository().deleteCharity(id);
+    await getAllcharitys();
+  }
+
   Future<void> acceptCompany(int id, bool accept) async {
     await CompanyRepository().acceptCompany(id, accept);
     await getAllCompany();
   }
 
+  Future<void> deleteCompany(int id) async {
+    await CompanyRepository().deleteCompany(id);
+    await getAllCompany();
+  }
+
   Future<void> acceptUser(int id, bool accept) async {
     await UsersDataRepository().acceptUser(id, accept);
+    await getAllUsers();
+  }
+
+  Future<void> deleteUsr(int id) async {
+    await UsersDataRepository().deleteUser(id);
     await getAllUsers();
   }
 

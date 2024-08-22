@@ -14,7 +14,8 @@ class OrderType {
     final Map<String, dynamic> json = <String, dynamic>{};
     json['id'] = id ?? 0;
     json['name'] = name;
-    json['isAccept'] = isAccept;
+    json['isAccept'] = isAccept ?? false;
+    json['percentage'] = 0;
     return json;
   }
 }

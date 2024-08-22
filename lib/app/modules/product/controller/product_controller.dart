@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:overlayment/overlayment.dart';
 
+import '../../../../shared/service/auth_service.dart';
 import '../../../../shared/service/order_service.dart';
 import '../../../../shared/service/util.dart';
 import '../../../data/model/product.dart';
@@ -11,6 +12,7 @@ class ProductController extends GetxController {
   final keyForm = GlobalKey<FormState>();
   final stringPickImage = ''.obs;
   final errorData = ''.obs;
+  final auth = Get.find<AuthService>();
   final amount = 0.obs;
   final newProduct = Product(
           name: 'test',

@@ -6,6 +6,7 @@ import 'package:marketing_surplus/shared/service/auth_service.dart';
 import 'package:overlayment/overlayment.dart';
 
 import '../../../../shared/service/util.dart';
+import '../../../../shared/widgets/auth_bottom_sheet.dart';
 import '../../../../shared/widgets/textfield_widget.dart';
 import '../../../data/model/company_product.dart';
 
@@ -741,9 +742,13 @@ class ProductView extends GetView<ProductController> {
       ),
       bottomNavigationBar: Get.find<AuthService>().getTypeEnum() == Auth.comapny
           ? InkWell(
-              onTap: () {
-                onTap!();
-                Overlayment.dismissLast();
+              onTap: () async {
+                if (!controller.auth.isAuth()) {
+                  await AuthBottomSheet().modalBottomSheet(context);
+                } else {
+                  onTap!();
+                  Overlayment.dismissLast();
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -817,9 +822,13 @@ class ProductView extends GetView<ProductController> {
                 ),
               ))
           : InkWell(
-              onTap: () {
-                onTap!();
-                Overlayment.dismissLast();
+              onTap: () async {
+                if (!controller.auth.isAuth()) {
+                  await AuthBottomSheet().modalBottomSheet(context);
+                } else {
+                  onTap!();
+                  Overlayment.dismissLast();
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

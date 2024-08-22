@@ -14,7 +14,8 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return !controller.getIsAccept()
+    controller.getIsAccept();
+    return Obx(() => !controller.toLogIn.value
         ? Scaffold(
             appBar: AppBar(
               actions: [
@@ -55,6 +56,17 @@ class HomeView extends GetView<HomeController> {
                     color: Colors.purple.shade200,
                     size: 52,
                   ),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.purple.shade200)),
+                      onPressed: () {
+                        controller.logInToAdminAccept();
+                      },
+                      child: Text(
+                        'Check Accept',
+                        style: TextStyle(color: Colors.white),
+                      ))
                 ],
               ),
             ),
@@ -137,12 +149,24 @@ class HomeView extends GetView<HomeController> {
                           badgeContent: Obx(() => Text(controller.auth
                                       .getTypeEnum() ==
                                   Auth.user
-                              ? controller.allUserNotification.length.toString()
+                              ? controller.allUserNotification
+                                  .where((p0) => !p0.type!.contains('User'))
+                                  .length
+                                  .toString()
                               : controller.auth.getTypeEnum() == Auth.charity
-                                  ? controller.allCharityNotification.length
+                                  ? controller.allCharityNotification
+                                      .where(
+                                          (p0) => !p0.type!.contains('Charity'))
+                                      .length
                                       .toString()
-                                  : (controller.allCharityNotification.length +
-                                          controller.allUserNotification.length)
+                                  : (controller.allCharityNotification
+                                              .where((p0) =>
+                                                  !p0.type!.contains('Company'))
+                                              .length +
+                                          controller.allUserNotification
+                                              .where((p0) =>
+                                                  !p0.type!.contains('Company'))
+                                              .length)
                                       .toString())),
                           badgeStyle:
                               badg.BadgeStyle(badgeColor: Colors.blueAccent),
@@ -153,7 +177,7 @@ class HomeView extends GetView<HomeController> {
                         )),
                   )
                 ],
-                title: Row(
+                title: Wrap(
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -214,7 +238,9 @@ class HomeView extends GetView<HomeController> {
                     ),
                     BottomNavigationBarItem(
                         icon: Icon(Icons.restaurant_menu, size: 30.0),
-                        label: 'newly-title'.tr),
+                        label: controller.auth.getTypeEnum() == Auth.comapny
+                            ? 'Orders'
+                            : 'newly-title'.tr),
                     BottomNavigationBarItem(
                         icon: Icon(
                             controller.auth.getTypeEnum() == Auth.comapny
@@ -229,6 +255,6 @@ class HomeView extends GetView<HomeController> {
                         label: 'account'.tr),
                   ]),
             ),
-          );
+          ));
   }
 }

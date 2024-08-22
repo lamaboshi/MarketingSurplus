@@ -102,85 +102,94 @@ class CompanyView extends GetView<CompanyController> {
                                         ),
                                         InkWell(
                                             onTap: () {
-                                              Overlayment.show(OverDialog(
-                                                  child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      'Rate to ${controller.companyName.value}',
-                                                      style: TextStyle(
-                                                          fontSize: 18),
+                                              if (controller
+                                                      .dto.value.subscription !=
+                                                  null) {
+                                                Overlayment.show(OverDialog(
+                                                    child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        'Rate to ${controller.companyName.value}',
+                                                        style: TextStyle(
+                                                            fontSize: 18),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  RatingBar.builder(
-                                                    initialRating:
-                                                        controller.rate.value,
-                                                    itemSize: 22,
-                                                    minRating: 0,
-                                                    direction: Axis.horizontal,
-                                                    unratedColor: Colors.black,
-                                                    itemCount: 5,
-                                                    itemBuilder: (context, _) =>
-                                                        const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    ),
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                      controller.rate.value =
-                                                          rating;
-                                                    },
-                                                  ),
-                                                  TextFieldWidget(
-                                                    onChanged: (value) {
-                                                      controller.rateDes.value =
-                                                          value;
-                                                    },
-                                                    textInputType: TextInputType
-                                                        .emailAddress,
-                                                    label: 'Description'.tr,
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () async {
-                                                        await controller.addRate(
-                                                            Rate(
-                                                                rateNumber:
-                                                                    controller
-                                                                        .rate
-                                                                        .value
-                                                                        .toInt(),
-                                                                description:
-                                                                    controller
-                                                                        .rateDes
-                                                                        .value),
-                                                            controller
-                                                                .dto
-                                                                .value
-                                                                .subscription!
-                                                                .id!);
-                                                        Get.find<
-                                                                HomeController>()
-                                                            .onInit();
-                                                        Overlayment
-                                                            .dismissAll();
-                                                        Get.back();
+                                                    RatingBar.builder(
+                                                      initialRating:
+                                                          controller.rate.value,
+                                                      itemSize: 22,
+                                                      minRating: 0,
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      unratedColor:
+                                                          Colors.black,
+                                                      itemCount: 5,
+                                                      itemBuilder:
+                                                          (context, _) =>
+                                                              const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      onRatingUpdate: (rating) {
+                                                        print(rating);
+                                                        controller.rate.value =
+                                                            rating;
                                                       },
-                                                      child: Chip(
-                                                          backgroundColor:
-                                                              Colors.purple
-                                                                  .shade200,
-                                                          label: const Text(
-                                                            'Save',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ))),
-                                                ],
-                                              )));
+                                                    ),
+                                                    TextFieldWidget(
+                                                      onChanged: (value) {
+                                                        controller.rateDes
+                                                            .value = value;
+                                                      },
+                                                      textInputType:
+                                                          TextInputType
+                                                              .emailAddress,
+                                                      label: 'Description'.tr,
+                                                    ),
+                                                    InkWell(
+                                                        onTap: () async {
+                                                          await controller.addRate(
+                                                              Rate(
+                                                                  rateNumber:
+                                                                      controller
+                                                                          .rate
+                                                                          .value
+                                                                          .toInt(),
+                                                                  description:
+                                                                      controller
+                                                                          .rateDes
+                                                                          .value),
+                                                              controller
+                                                                  .dto
+                                                                  .value
+                                                                  .subscription!
+                                                                  .id!);
+                                                          Get.find<
+                                                                  HomeController>()
+                                                              .onInit();
+                                                          Overlayment
+                                                              .dismissAll();
+                                                          Get.back();
+                                                        },
+                                                        child: Chip(
+                                                            backgroundColor:
+                                                                Colors.purple
+                                                                    .shade200,
+                                                            label: const Text(
+                                                              'Save',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ))),
+                                                  ],
+                                                )));
+                                              }
                                             },
                                             child: Text('Add Rate'))
                                       ],
@@ -243,53 +252,56 @@ class CompanyView extends GetView<CompanyController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      controller.dto.value.companyProduct!
-                                              .company!.name ??
-                                          '',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 19,
-                                          color: Colors.purple.shade300),
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    SizedBox(
-                                      height: 60,
-                                      child: Row(
-                                        children: [
-                                          Flexible(
-                                              child: Text(controller
-                                                      .dto
-                                                      .value
-                                                      .companyProduct!
-                                                      .company!
-                                                      .description ??
-                                                  ''))
-                                        ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.dto.value.companyProduct!
+                                                .company!.name ??
+                                            '',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 19,
+                                            color: Colors.purple.shade300),
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      SizedBox(
+                                        height: 60,
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                                child: Text(controller
+                                                        .dto
+                                                        .value
+                                                        .companyProduct!
+                                                        .company!
+                                                        .description ??
+                                                    ''))
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'itemcomp-title'.tr,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.purple.shade200),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'itemcomp-title'.tr,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.purple.shade200),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Expanded(

@@ -8,8 +8,10 @@ class OrderTypeRepositry extends IOrderTypeRepositry {
 
   @override
   Future<bool> addOrderType(OrderType orderType) async {
+    print(orderType.toJson());
     var result = await _dio.post('/api/OrderType/AddOrderType',
         data: orderType.toJson());
+    print('-----------------Done Add--------------------');
     return result.statusCode == 200;
   }
 

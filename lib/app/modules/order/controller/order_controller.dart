@@ -11,6 +11,7 @@ import 'package:marketing_surplus/app/data/model/order_type.dart';
 import 'package:marketing_surplus/app/data/model/pay_method.dart';
 import 'package:marketing_surplus/app/data/model/product_donation.dart';
 import 'package:marketing_surplus/app/data/model/notification.dart' as n;
+import 'package:marketing_surplus/app/modules/bills/controller/bills_controller.dart';
 
 import 'package:marketing_surplus/shared/service/order_service.dart';
 import 'package:overlayment/overlayment.dart';
@@ -67,6 +68,8 @@ class OrderController extends GetxController {
       print((price * element.amountApp!));
       totalPrice.value = totalPrice.value + (price * element.amountApp!);
     }
+    totalPrice.value =
+        totalPrice.value + Get.find<BillsController>().totalPriceDetails.value;
   }
 
   Future<void> getOrderType() async {
@@ -93,18 +96,9 @@ class OrderController extends GetxController {
   Future<void> saveOrder() async {
     isProssing.value = true;
 
-    var account = auth.stroge.getData('account');
-    if (account == null || double.parse(account) < totalPrice.value) {
-      Overlayment.dismissLast();
-      var snackBar = const SnackBar(
-          content: Text('You don\'t have Mony place Dispost in Setting'));
-      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
-      return;
-    }
     var data = await Get.find<AuthService>().getDataBasket();
-
     var rng = Random().nextInt(10000);
-    order.value.name = '#$rng';
+    order.value.name = 'Order #$rng';
     order.value.descripation = order.value.descripation ?? '  ';
     order.value.payMethodId = selectedPayMethod.value.id;
     order.value.price = totalPrice.value;
@@ -113,13 +107,20 @@ class OrderController extends GetxController {
     if (selectedPayMethod.value.payMethodId == 3 ||
         selectedPayMethod.value.payMethod!.name!.trim() ==
             'App Account'.trim()) {
+      var account = auth.stroge.getData('account');
+      if (account == null || double.parse(account) < totalPrice.value) {
+        Overlayment.dismissLast();
+        var snackBar = const SnackBar(
+            content: Text('You don\'t have Mony place Dispost in Setting'));
+        ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+        return;
+      }
       auth.stroge.deleteDataByKey('account');
       print('****************Account  ${account}');
       var newAccount = double.parse(account) - totalPrice.value;
       print('****************newAccount  ${newAccount}');
       auth.stroge.saveData('account', newAccount.toString());
     }
-
     var orderProduct = <OrderProduct>[];
     for (var element in data) {
       var total = element.product!.newPrice! * element.amountApp!;
@@ -128,25 +129,25 @@ class OrderController extends GetxController {
           amount: element.amountApp,
           totalPrice: total.toInt()));
     }
-
     var result = await OrderService().saveOrder(order.value, orderProduct);
     isProssing.value = false;
-
     for (var element in result) {
       var notif = n.Notification(
           createdAt: DateTime.now(),
           type: 'User Create',
           isRead: false,
           message:
-              'User Create Order Name ${order.value.name} for Company: id${data.first.company!.id} name${data.first.company!.name}',
+              'User Create Order Name ${order.value.name} by ProductId $element  for Company: id${data.first.company!.id} name${data.first.company!.name}',
           orderProductId: element);
       await NotificationService().addNotification(notif);
     }
-
     await Get.find<ProfileController>().getData();
     Overlayment.dismissLast();
   }
 
+  // 1 for normal
+  //2 for donation
+  //3 for ACh
   Future<void> saveOrderDonation() async {
     isProssing.value = true;
     var productDonation = <ProductDonation>[];
@@ -154,9 +155,7 @@ class OrderController extends GetxController {
     var data = await Get.find<AuthService>().getDataBasket();
     donation.value.orderTypeId = selectedType.value.id;
     donation.value.createdAt = DateTime.now();
-    // 1 for normal
-    //2 for donation
-    //3 for ACh
+
     if (donation.value.orderTypeId != 3) {
       for (var element in data) {
         var value = element.product!.newPrice! * element.amountApp!;
@@ -181,15 +180,11 @@ class OrderController extends GetxController {
         await NotificationService().addNotificationCahrity(notif);
       }
     } else {
-      print(
-          '///////////////////////////////////////////////////////////////////////////////////');
-      var valueInt2 = totalPrice.value;
-
-      var payTo = (valueInt2 * (1 - (selectPers.value / 100)));
+      var payTo = (totalPrice.value * (1 - (selectPers.value / 100)));
       donation.value.pricePay = payTo;
       donation.value.percentage = double.tryParse(selectPers.value.toString());
       print(
-          'total ${valueInt2} pricePay ${donation.value.pricePay}  percentage ${donation.value.percentage}');
+          'total ${totalPrice.value} pricePay ${donation.value.pricePay}  percentage ${donation.value.percentage}');
       for (var element in data) {
         var value = element.product!.newPrice! * element.amountApp!;
         var total = value.toInt();

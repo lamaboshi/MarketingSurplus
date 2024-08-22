@@ -43,27 +43,38 @@ class OrderBillsWidget extends GetView<SettingProfileController> {
           )
         : controller.auth.getTypeEnum() == Auth.charity
             ? controller.companyCharityWith.isEmpty
-                ? Text('No Company Found'.tr)
+                ? const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      EmptyData(),
+                    ],
+                  )
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(25),
-                        child: IconButton(
-                            onPressed: () {
-                              Overlayment.dismissLast();
-                            },
-                            icon: Icon(Icons.arrow_back)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'All Company'.tr,
-                          style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.purple.shade200,
-                              fontWeight: FontWeight.bold),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: IconButton(
+                                onPressed: () {
+                                  Overlayment.dismissLast();
+                                },
+                                icon: Icon(Icons.arrow_back)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'All Company'.tr,
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.purple.shade200,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox.shrink()
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(15),

@@ -15,27 +15,23 @@ class ProfileDetailsCompany extends GetView<SettingProfileController> {
       () => SingleChildScrollView(
         child: Column(
           children: [
-            Positioned(
-              bottom: 0,
-              right: Get.width / 2.5,
-              child: Card(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.purple.shade100, width: 4),
-                    borderRadius: const BorderRadius.all(Radius.circular(80))),
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: Obx(() => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: controller.stringPickImage.value.isNotEmpty
-                            ? Utility.imageFromBase64String(
-                                controller.stringPickImage.value, 70, 70)
-                            : Utility.getImage(
-                                base64StringPh: controller.company.value.image,
-                                link: controller.company.value.onlineImage),
-                      )),
-                ),
+            Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.purple.shade100, width: 4),
+                  borderRadius: const BorderRadius.all(Radius.circular(80))),
+              child: SizedBox(
+                width: 120,
+                height: 120,
+                child: Obx(() => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: controller.stringPickImage.value.isNotEmpty
+                          ? Utility.imageFromBase64String(
+                              controller.stringPickImage.value, 70, 70)
+                          : Utility.getImage(
+                              base64StringPh: controller.company.value.image,
+                              link: controller.company.value.onlineImage),
+                    )),
               ),
             ),
             controller.isNotEdit.value

@@ -29,7 +29,7 @@ class PayMethodView extends GetView<SettingProfileController> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Obx(() => Text(
-                      controller.account.value.toString(),
+                      '${controller.account.value.toString()} sy',
                       style: TextStyle(
                           color: Colors.purple.shade200, fontSize: 21),
                     )),
@@ -77,8 +77,22 @@ class PayMethodView extends GetView<SettingProfileController> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      controller.auth.stroge.saveData(
-                                          'account', controller.account.value);
+                                      if (controller.auth.stroge
+                                          .containsKey('account')) {
+                                        var oldVlaue = controller.auth.stroge
+                                            .getData('account');
+                                        var newValue = double.parse(oldVlaue!) +
+                                            controller.account.value;
+                                        controller.auth.stroge
+                                            .deleteDataByKey('account');
+                                        controller.auth.stroge
+                                            .saveData('account', newValue);
+                                      } else {
+                                        controller.auth.stroge.saveData(
+                                            'account',
+                                            controller.account.value);
+                                      }
+
                                       controller.getAmount();
                                       Overlayment.dismissLast();
                                     },
