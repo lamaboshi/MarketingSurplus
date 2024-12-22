@@ -20,16 +20,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var authToken =
-        'Basic ' + base64Encode(utf8.encode('11181042:60-dayfreetrial'));
+        'Basic ' + base64Encode(utf8.encode('11196515:60-dayfreetrial'));
 
-    Get.put(Dio(BaseOptions(
-      baseUrl: 'http://automtec-001-site1.htempurl.com',
-      headers: {'Authorization': authToken},
-      contentType: 'application/json; charset=UTF-8',
-    )));
     // Get.put(Dio(BaseOptions(
-    //   baseUrl: 'https://localhost:7092',
+    //   baseUrl: 'http://lxtorapp-001-site1.etempurl.com',
+    //   headers: {'Authorization': authToken},
+    //   contentType: 'application/json; charset=UTF-8',
     // )));
+    Get.put(Dio(BaseOptions(
+      baseUrl: 'https://localhost:7092',
+    )));
     Overlayment.navigationKey = Get.key;
     var storage = Get.put(StorageService());
     storage.init();
