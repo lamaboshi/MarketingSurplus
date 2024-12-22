@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var authToken =
         'Basic ' + base64Encode(utf8.encode('11196515:60-dayfreetrial'));
-
+//test
     // Get.put(Dio(BaseOptions(
     //   baseUrl: 'http://lxtorapp-001-site1.etempurl.com',
     //   headers: {'Authorization': authToken},
